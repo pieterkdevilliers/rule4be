@@ -11,3 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserNameField(serializers.Field):
     def to_representation(self, value):
         return value.username
+    
+class CurrentUserDefault(serializers.CurrentUserDefault):
+    def __call__(self):
+        return self.user.username
