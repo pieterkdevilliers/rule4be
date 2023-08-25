@@ -13,6 +13,6 @@ class Snapshot(models.Model):
     owner = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     area_of_life = models.ForeignKey('AreaOfLife', on_delete=models.CASCADE)
     body = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.body
