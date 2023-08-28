@@ -9,6 +9,7 @@ class AOLSerializer(serializers.Serializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     name = serializers.CharField(max_length=255)
     description = serializers.CharField(max_length=255)
+    id = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data):
         user = self.context['request'].user
