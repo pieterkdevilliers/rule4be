@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import AreaOfLife, Snapshot
@@ -15,13 +16,16 @@ def area_of_life_list(request):
     """
     Retrieves a list of all AOLs.
     """
+    print('area_of_life_list called')
     if request.method == 'GET':
-        queryset = AreaOfLife.objects.all()
+        print('GET')
+        print('Owner: ', request.user)
+        queryset = AreaOfLife.objects.filter(owner=request.user)
         serializer = AOLSerializer(queryset, many=True)
     elif request.method == 'POST':
         serializer = AOLSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(owner=request.user)
     
     return Response(serializer.data)
 
@@ -54,12 +58,12 @@ def snapshot_list(request):
     Retrieves a list of all AOLs.
     """
     if request.method == 'GET':
-        queryset = Snapshot.objects.all()
+        queryset = Snapshot.objects.filter(owner=request.user)
         serializer = SnapshotSerializer(queryset, many=True)
     elif request.method == 'POST':
         serializer = SnapshotSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(owner=request.user)
     
     return Response(serializer.data)
 
@@ -91,7 +95,6 @@ def today_snapshot_list(request, pk):
     """
     Retrieves a list of all snapshots for today's date.
     """
-
     today = timezone.now().date()
     yesterday = today - timezone.timedelta(days=1)
     last_week = today - timezone.timedelta(days=7)
@@ -101,7 +104,7 @@ def today_snapshot_list(request, pk):
     today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
 
     if today_snapshot:
-        queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk)
+        queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk, owner=request.user)
         serializer = SnapshotSerializer(queryset, many=True)
 
         return Response(serializer.data)
