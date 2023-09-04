@@ -18,8 +18,6 @@ def area_of_life_list(request):
     """
     print('area_of_life_list called')
     if request.method == 'GET':
-        print('GET')
-        print('Owner: ', request.user)
         queryset = AreaOfLife.objects.filter(owner=request.user)
         serializer = AOLSerializer(queryset, many=True)
     elif request.method == 'POST':
