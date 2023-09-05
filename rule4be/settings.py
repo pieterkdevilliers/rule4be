@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -155,7 +159,7 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-    'JWT_SECRET_KEY': 'e471553b-8bd5-4ab2-80a7-9141aec003a1',  # Change this to a secure, secret key.
+    'JWT_SECRET_KEY': os.environ.get('JWT_SECRET_KEY'),  # Change this to a secure, secret key.
     'JWT_ALGORITHM': 'HS256',
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # Adjust the token expiration time as needed.
