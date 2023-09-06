@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 import datetime
 import os
 from dotenv import load_dotenv
@@ -26,6 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-6w^%mwq*))j+(gyz&(++dvfp%tac(r3zsek(@z6%=polo$@203"
+
+development = os.environ.get('DEVELOPMENT')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -107,12 +110,19 @@ WSGI_APPLICATION = "rule4be.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if development:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
 
 
 # Password validation
