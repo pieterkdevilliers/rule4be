@@ -1,0 +1,1 @@
+web: gunicorn rule4be.wsgi --log-file -
