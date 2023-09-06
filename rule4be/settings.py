@@ -25,10 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6w^%mwq*))j+(gyz&(++dvfp%tac(r3zsek(@z6%=polo$@203"
 
-development = os.environ.get('DEVELOPMENT')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -110,19 +107,15 @@ WSGI_APPLICATION = "rule4be.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if development:
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-
-    DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
-    }
+}
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -181,7 +174,7 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_SECRET_KEY': os.environ.get('JWT_SECRET_KEY'),  # Change this to a secure, secret key.
-    'JWT_ALGORITHM': 'HS256',
+    'JWT_ALGORITHM': os.environ.get('JWT_ALGORITHM'),
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # Adjust the token expiration time as needed.
 }
