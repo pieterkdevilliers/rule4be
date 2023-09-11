@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
     'rule4be-fc4445b7e11b.herokuapp.com',
     '127.0.0.1',
     'localhost',
+    'rule4.app',
 ]
 
 
@@ -165,6 +166,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://rule4-943c9feeb754.herokuapp.com",
+    "https://rule4.app",
 ]
 
 REST_FRAMEWORK = {
