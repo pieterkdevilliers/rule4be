@@ -39,6 +39,9 @@ def user_register(request):
 
 @csrf_exempt
 def login_view(request):
+    '''
+    Login for react-native app
+    '''
     if request.method == 'POST':
         # Parse the request body as JSON
         data = json.loads(request.body)
@@ -53,7 +56,8 @@ def login_view(request):
         if user is not None:
             # Authentication successful
             login(request, user)
-            return JsonResponse({'message': 'Login successful'})
+            user_id = user.id  # Get the user's ID
+            return JsonResponse({'message': 'Login successful', 'user_id': user_id})
         else:
             # Authentication failed
             return JsonResponse({'message': 'Login failed'}, status=401)
