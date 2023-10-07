@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'rule4.app',
+    '192.168.68.120'
 ]
 
 
