@@ -1,0 +1,21 @@
+{% extends 'rule4be/main.html' %}
+
+{% block content %}
+<h1>Today for specific AOL</h1>
+
+<ul>
+    {% for snapshot in api_data %}
+    <li>
+        <strong>Body:</strong> {{ snapshot.body }}<br>
+        <strong>AOL:</strong> {{ snapshot.area_of_life }}<br>
+        <strong>Owner:</strong> {{ snapshot.owner }}<br>
+        <strong>Created:</strong> {{ snapshot.created }}<br>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- Display the result of the login attempt -->
+<div id="login-result"></div>
+
+{% endblock %}
+```
