@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import AreaOfLife, Snapshot
 from .serializers import AOLSerializer, SnapshotSerializer
+from django.contrib.auth.models import User
 
 # Create your views here.
 @api_view(['GET', 'POST'])
@@ -16,6 +17,7 @@ def area_of_life_list(request):
     """
     Retrieves a list of all AOLs.
     """
+    
     if request.method == 'GET':
         queryset = AreaOfLife.objects.filter(owner=request.user)
         serializer = AOLSerializer(queryset, many=True)
@@ -92,6 +94,7 @@ def today_snapshot_list(request, pk):
     """
     Retrieves a list of all snapshots for today's date.
     """
+    request.user = User.objects.get(id=request.session.get('user_id'))
     today = timezone.now().date()
     yesterday = today - timezone.timedelta(days=1)
     last_week = today - timezone.timedelta(days=7)

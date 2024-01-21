@@ -1,0 +1,28 @@
+{% extends 'rule4be/main.html' %}
+
+{% block content %}
+<h1>AOLS</h1>
+
+<ul>
+    {% for area_of_life in api_data %}
+    <li>
+        <form hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="submit" hx-target="#login-form"
+            id="login-form">
+            {% csrf_token %}
+            <input type="hidden" name="area_of_life" value="{{ area_of_life.id }}">
+            <input type="hidden" name="user" value="{{ request.user.id }}">
+            <strong>Name:</strong> {{ area_of_life.name }}<br>
+            <strong>Description:</strong> {{ area_of_life.description }}<br>
+            <strong>ID:</strong> {{ area_of_life.id }}<br>
+            <strong>Owner:</strong> {{ area_of_life.owner }}<br>
+            <button type="submit">Add a snapshot</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- Display the result of the login attempt -->
+<div id="login-result"></div>
+
+{% endblock %}
+```
