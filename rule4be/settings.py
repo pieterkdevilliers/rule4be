@@ -56,6 +56,8 @@ INSTALLED_APPS = [
 
 
     "snapshots",
+    "rule4be",
+    "users",
 
     # 'allauth',
     # 'allauth.account',
