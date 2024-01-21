@@ -71,7 +71,7 @@ def load_aols_page(request):
         return JsonResponse({'message': 'Access token not found'}, status=401)
 
     # Make an API call using the access token
-    api_endpoint = 'area_of_life_list'
+    api_endpoint = 'https://rule4be-fc4445b7e11b.herokuapp.com/snapshots/api/v1/aols'
     headers = {'Authorization': f'Bearer {access_token}'}
 
     try:
@@ -95,7 +95,6 @@ def load_today_snapshot_page(request, pk):
     if not access_token:
         return JsonResponse({'message': 'Access token not found'}, status=401)
     
-    aol_id = pk
 
     request.user = User.objects.get(id=request.session.get('user_id'))
     today = timezone.now().date()
@@ -107,20 +106,21 @@ def load_today_snapshot_page(request, pk):
     today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
 
     if today_snapshot:
-        queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk, owner=request.user)
-        serializer = SnapshotSerializer(queryset, many=True)
+        try:
+            queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk, owner=request.user)
+            serializer = SnapshotSerializer(queryset, many=True)
+        
+            api_data = serializer.data
+
+            context = {
+                        'api_data': api_data,
+                        }
+
+            return render(request, 'rule4be/today.html', context)
     
-        api_data = serializer.data
-
-        context = {
-                    'api_data': api_data,
-                    }
-
-        return render(request, 'rule4be/today.html', context)
-    
-
+        except requests.exceptions.RequestException as e:
         # Handle request errors, e.g., network issues, server errors
-    return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
+            return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
 
 
 

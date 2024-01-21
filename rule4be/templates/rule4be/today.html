@@ -2,6 +2,13 @@
 
 {% block content %}
 <h1>Today for specific AOL</h1>
+<form hx-get="{% url 'load_aols_page' %}" hx-trigger="submit" hx-target="#login-form" id="login-form">
+    {% csrf_token %}
+    <!-- Include the necessary input fields for login -->
+    <input type="hidden" name="user" value="{{ request.user.id }}">
+    <button type="submit">View AOLs</button>
+    </div>
+</form>
 
 <ul>
     {% for snapshot in api_data %}
