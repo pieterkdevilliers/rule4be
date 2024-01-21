@@ -17,7 +17,6 @@ def area_of_life_list(request):
     """
     Retrieves a list of all AOLs.
     """
-    
     if request.method == 'GET':
         queryset = AreaOfLife.objects.filter(owner=request.user)
         serializer = AOLSerializer(queryset, many=True)
