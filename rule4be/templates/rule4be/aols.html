@@ -1,11 +1,12 @@
 {% extends 'rule4be/main.html' %}
+{% load static %}
 
 {% block content %}
-<h1>AOLS</h1>
+<h1>AOLS - List of user's AOLs</h1>
 
-<ul>
-    {% for area_of_life in api_data %}
-    <li>
+<div class="aol-container">
+    {% for area_of_life in aols %}
+    <div class="aol-item">
         <form hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="submit" hx-target="#login-form"
             id="login-form">
             {% csrf_token %}
@@ -17,12 +18,41 @@
             <strong>Owner:</strong> {{ area_of_life.owner }}<br>
             <button type="submit">Add a snapshot</button>
         </form>
-    </li>
+
+        <!-- Display snapshots for the current AOL -->
+        <div>
+            <h2>Snapshots</h2>
+            {% for snapshot in area_of_life.snapshots.last_year %}
+            <div class="snapshot-item">
+                <strong>Last Year:</strong> {{ snapshot }}
+            </div>
+            {% endfor %}
+            {% for snapshot in area_of_life.snapshots.last_month %}
+            <div class="snapshot-item">
+                <strong>Last Month:</strong> {{ snapshot }}
+            </div>
+            {% endfor %}
+            {% for snapshot in area_of_life.snapshots.last_week %}
+            <div class="snapshot-item">
+                <strong>Last Week:</strong> {{ snapshot }}
+            </div>
+            {% endfor %}
+            {% for snapshot in area_of_life.snapshots.yesterday %}
+            <div class="snapshot-item">
+                <strong>Last Yesterday:</strong> {{ snapshot }}
+            </div>
+            {% endfor %}
+            {% for snapshot in area_of_life.snapshots.today %}
+            <div class="snapshot-item">
+                <strong>Last Today:</strong> {{ snapshot }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
 
 <!-- Display the result of the login attempt -->
 <div id="login-result"></div>
 
 {% endblock %}
-```
