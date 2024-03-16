@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
+from datetime import datetime
 from snapshots.models import Snapshot
 from snapshots.serializers import SnapshotSerializer
 import json
@@ -16,7 +17,6 @@ def load_login_page(request):
     Loads the login page for PWA
     '''
     if request.method == 'POST':
-        print('POST request received')
         username = request.POST.get('username')
         password = request.POST.get('password')
 
@@ -38,52 +38,46 @@ def load_login_page(request):
             user_id = user.id
             user = User.objects.get(id=user_id).username
 
-            # Make an API call using the access token
-            api_endpoint = 'https://rule4be-fc4445b7e11b.herokuapp.com/snapshots/api/v1/aols'
-            headers = {'Authorization': f'Bearer {access_token}'}
+            aols = request.user.areaoflife_set.all()
 
-            try:
-                response = requests.get(api_endpoint, headers=headers)
-                response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
-                api_data = response.json()
+            context = {
+                    'aols': aols,
+                    }
 
-                context = {
-                        'api_data': api_data,
-                        }
-
-                return render(request, 'rule4be/aols.html', context)
-            except requests.exceptions.RequestException as e:
-        # Handle request errors, e.g., network issues, server errors
-                return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
+            return render(request, 'rule4be/aols.html', context)
         else:
             return JsonResponse({'message': 'Login failed'}, status=401)
 
     return render(request, 'rule4be/login.html')
+
 
 @login_required
 def load_aols_page(request):
     '''
     Loads the AOLs page for PWA
     '''
-    access_token = request.session.get('access_token')
-
-    if not access_token:
-        return JsonResponse({'message': 'Access token not found'}, status=401)
-
-    # Make an API call using the access token
-    api_endpoint = 'https://rule4be-fc4445b7e11b.herokuapp.com/snapshots/api/v1/aols'
-    headers = {'Authorization': f'Bearer {access_token}'}
-
-    try:
-        response = requests.get(api_endpoint, headers=headers)
-        response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
-        api_data = response.json()
-
-        return render(request, 'rule4be/aols.html', {'api_data': api_data})
+    aols = request.user.areaoflife_set.all()
+    today = datetime.now().strftime('%Y-%m-%d')
+    yesterday = (datetime.now() - timezone.timedelta(days=1)).strftime('%Y-%m-%d')
+    last_week = (datetime.now() - timezone.timedelta(days=7)).strftime('%Y-%m-%d')
+    last_month = (datetime.now() - relativedelta(months=1)).strftime('%Y-%m-%d')
+    last_year = (datetime.now() - relativedelta(years=1)).strftime('%Y-%m-%d')
     
-    except requests.exceptions.RequestException as e:
-        # Handle request errors, e.g., network issues, server errors
-        return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
+    for aol in aols:
+        aol.snapshots = {
+            'today' : Snapshot.objects.filter(created=today, area_of_life=aol),
+            'yesterday' : Snapshot.objects.filter(created=yesterday, area_of_life=aol),
+            'last_week' : Snapshot.objects.filter(created=last_week, area_of_life=aol),
+            'last_month' : Snapshot.objects.filter(created=last_month, area_of_life=aol),
+            'last_year' : Snapshot.objects.filter(created=last_year, area_of_life=aol),
+        }
+
+    context = {
+        'aols': aols,
+    }
+
+    return render(request, 'rule4be/aols.html', context)
+
 
 @login_required
 def load_today_snapshot_page(request, pk):
@@ -91,12 +85,13 @@ def load_today_snapshot_page(request, pk):
     Loads the today snapshot page for PWA
     '''
     access_token = request.session.get('access_token')
+    print('pk:', pk)
 
     if not access_token:
         return JsonResponse({'message': 'Access token not found'}, status=401)
     
 
-    request.user = User.objects.get(id=request.session.get('user_id'))
+    # request.user = User.objects.get(id=request.session.get('user_id'))
     today = timezone.now().date()
     yesterday = today - timezone.timedelta(days=1)
     last_week = today - timezone.timedelta(days=7)
@@ -104,6 +99,7 @@ def load_today_snapshot_page(request, pk):
     last_year = today - relativedelta(years=1)
 
     today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
+    print(today_snapshot)
 
     if today_snapshot:
         try:
@@ -121,6 +117,11 @@ def load_today_snapshot_page(request, pk):
         except requests.exceptions.RequestException as e:
         # Handle request errors, e.g., network issues, server errors
             return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
+    else:
+        context = {
+                        'today_snapshot': today_snapshot,
+                        }
+        return render(request, 'rule4be/today.html', context)
 
 
 
