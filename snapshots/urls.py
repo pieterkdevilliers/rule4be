@@ -16,8 +16,4 @@ urlpatterns = [
     path('api/v1/aols/<int:pk>', views.area_of_life_detail, name='area_of_life_detail'),
     path('api/v1/snapshots/<int:pk>', views.snapshot_detail, name='snapshot_detail'),
 
-    path('api/v1/user-register/', user_views.user_register, name='user_register'),
-    path('api/v1/app-login/', user_views.login_view, name='login_view'),
-    
-
 ]

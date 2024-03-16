@@ -16,7 +16,9 @@ def load_login_page(request):
     '''
     Loads the login page for PWA
     '''
+    
     if request.method == 'POST':
+
         username = request.POST.get('username')
         password = request.POST.get('password')
 
@@ -47,8 +49,22 @@ def load_login_page(request):
             return render(request, 'rule4be/aols.html', context)
         else:
             return JsonResponse({'message': 'Login failed'}, status=401)
+    
+    elif request.session.get('access_token'):
 
-    return render(request, 'rule4be/login.html')
+        user_id = request.session.get('user_id')
+        user = User.objects.get(id=user_id).username
+
+        aols = request.user.areaoflife_set.all()
+
+        context = {
+                'aols': aols,
+                }
+        
+        return render(request, 'rule4be/aols.html', context)
+    else:
+
+        return render(request, 'rule4be/login.html')
 
 
 @login_required
@@ -79,22 +95,67 @@ def load_aols_page(request):
     return render(request, 'rule4be/aols.html', context)
 
 
-@login_required
-def load_today_snapshot_page(request, pk):
-    '''
-    Loads the today snapshot page for PWA
-    '''
-    access_token = request.session.get('access_token')
-    print('pk:', pk)
+# @login_required
+# def load_today_snapshot_page(request, pk):
+#     '''
+#     Loads the today snapshot page for PWA
+#     '''
+#     print('load_today_snapshot_page')
+#     access_token = request.session.get('access_token')
+#     print('pk:', pk)
 
-    if not access_token:
-        return JsonResponse({'message': 'Access token not found'}, status=401)
+#     if not access_token:
+#         return JsonResponse({'message': 'Access token not found'}, status=401)
     
 
-    # request.user = User.objects.get(id=request.session.get('user_id'))
+#     # request.user = User.objects.get(id=request.session.get('user_id'))
+#     today = timezone.now().date()
+#     yesterday = today - timezone.timedelta(days=1)
+#     last_week = today - timezone.timedelta(days=7)
+#     last_month = today - relativedelta(months=1)
+#     last_year = today - relativedelta(years=1)
+
+#     today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
+#     print(today_snapshot)
+
+#     if today_snapshot:
+#         try:
+#             queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk, owner=request.user)
+#             serializer = SnapshotSerializer(queryset, many=True)
+        
+#             api_data = serializer.data
+
+#             context = {
+#                         'api_data': api_data,
+#                         }
+
+#             return render(request, 'rule4be/today.html', context)
+    
+#         except requests.exceptions.RequestException as e:
+#         # Handle request errors, e.g., network issues, server errors
+#             return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
+#     else:
+#         context = {
+#                         'today_snapshot': today_snapshot,
+#                         }
+#         return render(request, 'rule4be/today.html', context)
+
+
+from django.utils import timezone
+import datetime
+
+@login_required
+def load_today_snapshot_page(request, pk):
+    '''Loads the today snapshot page for PWA'''
+    print('load_today_snapshot_page')
+    access_token = request.session.get('access_token')
+    print('pk:', pk)
+    if not access_token:
+        return JsonResponse({'message': 'Access token not found'}, status=401)
+
     today = timezone.now().date()
-    yesterday = today - timezone.timedelta(days=1)
-    last_week = today - timezone.timedelta(days=7)
+    yesterday = today - datetime.timedelta(days=1)
+    last_week = today - datetime.timedelta(days=7)
     last_month = today - relativedelta(months=1)
     last_year = today - relativedelta(years=1)
 
@@ -103,30 +164,34 @@ def load_today_snapshot_page(request, pk):
 
     if today_snapshot:
         try:
-            queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk, owner=request.user)
-            serializer = SnapshotSerializer(queryset, many=True)
-        
-            api_data = serializer.data
+            queryset = Snapshot.objects.filter(
+                created__in=[today, yesterday, last_week, last_month, last_year],
+                area_of_life=pk,
+                owner=request.user
+            )
+            serialized_data = []
+            for snapshot in queryset:
+                snapshot_data = SnapshotSerializer(snapshot).data
+                created_date = snapshot.created
+                if created_date == today:
+                    snapshot_data['relative_date'] = "Today"
+                elif created_date == yesterday:
+                    snapshot_data['relative_date'] = "Yesterday"
+                elif created_date == last_week:
+                    snapshot_data['relative_date'] = "Last Week"
+                elif created_date == last_month:
+                    snapshot_data['relative_date'] = "Last Month"
+                elif created_date == last_year:
+                    snapshot_data['relative_date'] = "Last Year"
+                else:
+                    snapshot_data['relative_date'] = created_date
+                serialized_data.append(snapshot_data)
 
-            context = {
-                        'api_data': api_data,
-                        }
-
+            context = {'api_data': serialized_data}
             return render(request, 'rule4be/today.html', context)
-    
         except requests.exceptions.RequestException as e:
-        # Handle request errors, e.g., network issues, server errors
+            # Handle request errors, e.g., network issues, server errors
             return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
     else:
-        context = {
-                        'today_snapshot': today_snapshot,
-                        }
+        context = {'today_snapshot': today_snapshot}
         return render(request, 'rule4be/today.html', context)
-
-
-
-
-
-    
-
-

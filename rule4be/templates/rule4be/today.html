@@ -1,30 +1,19 @@
 {% extends 'rule4be/main.html' %}
 
 {% block content %}
-<h1>Today for specific AOL</h1>
-<form hx-get="{% url 'load_aols_page' %}" hx-trigger="submit" hx-target="#login-form" id="login-form">
-    {% csrf_token %}
-    <!-- Include the necessary input fields for login -->
-    <input type="hidden" name="user" value="{{ request.user.id }}">
-    <button type="submit">View AOLs</button>
-    </div>
-</form>
 
 <div>
     {% for snapshot in api_data %}
-    <div>
-        <strong>Body:</strong> {{ snapshot.body }}<br>
-        <strong>AOL:</strong> {{ snapshot.area_of_life }}<br>
-        <strong>Owner:</strong> {{ snapshot.owner }}<br>
-        <strong>Created:</strong> {{ snapshot.created }}<br>
+    <div class="snapshot-item">
+        <h4>{{ snapshot.relative_date }}:</h4>
+        <p>{{ snapshot.body }}</p>
+
     </div>
+    <br>
     {% endfor %}
 </div>
-
-
 
 <!-- Display the result of the login attempt -->
 <div id="login-result"></div>
 
 {% endblock %}
-```
