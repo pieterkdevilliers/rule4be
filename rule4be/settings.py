@@ -36,7 +36,13 @@ ALLOWED_HOSTS = [
     'localhost',
     'rule4.app',
     '192.168.68.120'
+]
+
+TRUSTED_ORIGINS = [
     'https://rule4.app',
+    'http://localhost:3000',
+    'https://rule4-943c9feeb754.herokuapp.com'
+    'http://localhost:8000',
 ]
 
 
