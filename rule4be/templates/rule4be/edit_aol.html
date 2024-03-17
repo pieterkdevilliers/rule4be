@@ -1,0 +1,26 @@
+{% extends 'rule4be/main.html' %}
+
+{% block content %}
+<h1>Create AOL</h1>
+
+
+<form hx-post="{% url 'create_aol' %}" hx-trigger="submit" hx-target="#create-form" id="create-form">
+    {% csrf_token %}
+    <!-- Include the necessary input fields -->
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" value="{{ form.instance.name }}" required>
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        <textarea type="text" name="description" id="description" required>{{ form.instance.description }}</textarea>
+    </div>
+    <div>
+        <button type="submit">Update AOL</button>
+    </div>
+</form>
+
+<!-- Display the result of the login attempt -->
+<div id="login-result"></div>
+
+{% endblock %}

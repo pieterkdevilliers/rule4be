@@ -3,22 +3,46 @@
 
 {% block content %}
 <h1>AOLS - List of user's AOLs</h1>
+<div>
+    <div id="create-form"></div>
+    <button hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"
+        hx-target="#create-form" hx-trigger="click" hx-swap="outerHTML">
+        <strong>
+            <h1>+</h1>
+        </strong>
+    </button>
+</div>
 
 <div class="aol-container">
     {% for area_of_life in aols %}
 
     <div class="aol-item">
-        <form hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="load"
-            hx-target="#today-{{ area_of_life.id }}" id="login-form">
+        <div id="create-form-{{ area_of_life.id }}"></div>
+        <button hx-get="{% url 'create_snapshot' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
+            hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click" hx-swap="outerHTML">
+            <strong>
+                <h1>+</h1>
+            </strong>
+        </button>
+        <h1>{{ area_of_life.name }}</h1>
+        <p>{{ area_of_life.description }}</p>
+        <button hx-get="{% url 'edit_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
+            hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click" hx-swap="outerHTML">
+            <strong>
+                <h1>Edit</h1>
+            </strong>
+        </button>
+        <button hx-get="{% url 'delete_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
+            hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click" hx-swap="outerHTML">
+            <strong>
+                <h1>-</h1>
+            </strong>
+        </button>
+        <div hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="load"
+            hx-target="#today-{{ area_of_life.id }}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html">
 
-            {% csrf_token %}
+        </div>
 
-            <input type="hidden" name="area_of_life" value="{{ area_of_life.id }}">
-            <input type="hidden" name="user" value="{{ request.user.id }}">
-            <h1>{{ area_of_life.name }}</h1>
-            <p>{{ area_of_life.description }}</p>
-            <button type="submit">Add a snapshot</button>
-        </form>
         <br>
 
         <div id="today-{{ area_of_life.id }}"></div>
