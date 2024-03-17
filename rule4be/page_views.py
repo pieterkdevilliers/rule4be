@@ -176,9 +176,7 @@ def create_aol(request):
 
 @login_required
 def edit_aol(request, aol_id):
-    '''
-    Edits an Area of Life
-    '''
+    ''' Edits an Area of Life '''
     aol = AreaOfLife.objects.get(id=aol_id)
     if request.method == 'POST':
         form = AreaOfLifeForm(request.POST, instance=aol)
@@ -189,7 +187,6 @@ def edit_aol(request, aol_id):
             return JsonResponse({'message': 'Invalid form data'}, status=400)
     else:
         form = AreaOfLifeForm(instance=aol)
-
         return render(request, 'rule4be/edit_aol.html', {'form': form, 'aol_id': aol_id})
 
 
