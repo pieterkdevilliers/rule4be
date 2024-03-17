@@ -4,7 +4,7 @@
 <h1>Create AOL</h1>
 
 
-<form hx-post="{% url 'create_aol' %}" hx-trigger="submit" hx-target="#create-form" id="create-form">
+<form hx-post="{% url 'edit_aol' aol_id %}" hx-trigger="submit" hx-target="#create-form" id="create-form">
     {% csrf_token %}
     <!-- Include the necessary input fields -->
     <div>
