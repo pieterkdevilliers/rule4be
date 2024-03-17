@@ -36,6 +36,9 @@ ALLOWED_HOSTS = [
     'localhost',
     'rule4.app',
     '192.168.68.120',
+]
+
+CSRF_TRUSTED_ORIGINS = [
     'https://rule4.app',
 ]
 
