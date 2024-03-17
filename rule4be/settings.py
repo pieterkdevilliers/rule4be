@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'rule4be-fc4445b7e11b.herokuapp.com',
@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'rule4.app',
     '192.168.68.120'
+    'https://rule4.app',
 ]
 
 
