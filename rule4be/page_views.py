@@ -11,6 +11,8 @@ from datetime import datetime
 from snapshots.models import Snapshot
 from snapshots.serializers import SnapshotSerializer
 import json
+from snapshots.models import AreaOfLife, Snapshot
+from snapshots.forms import AreaOfLifeForm, SnapshotForm
 
 def load_login_page(request):
     '''
@@ -95,61 +97,13 @@ def load_aols_page(request):
     return render(request, 'rule4be/aols.html', context)
 
 
-# @login_required
-# def load_today_snapshot_page(request, pk):
-#     '''
-#     Loads the today snapshot page for PWA
-#     '''
-#     print('load_today_snapshot_page')
-#     access_token = request.session.get('access_token')
-#     print('pk:', pk)
-
-#     if not access_token:
-#         return JsonResponse({'message': 'Access token not found'}, status=401)
-    
-
-#     # request.user = User.objects.get(id=request.session.get('user_id'))
-#     today = timezone.now().date()
-#     yesterday = today - timezone.timedelta(days=1)
-#     last_week = today - timezone.timedelta(days=7)
-#     last_month = today - relativedelta(months=1)
-#     last_year = today - relativedelta(years=1)
-
-#     today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
-#     print(today_snapshot)
-
-#     if today_snapshot:
-#         try:
-#             queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk, owner=request.user)
-#             serializer = SnapshotSerializer(queryset, many=True)
-        
-#             api_data = serializer.data
-
-#             context = {
-#                         'api_data': api_data,
-#                         }
-
-#             return render(request, 'rule4be/today.html', context)
-    
-#         except requests.exceptions.RequestException as e:
-#         # Handle request errors, e.g., network issues, server errors
-#             return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
-#     else:
-#         context = {
-#                         'today_snapshot': today_snapshot,
-#                         }
-#         return render(request, 'rule4be/today.html', context)
-
-
 from django.utils import timezone
 import datetime
 
 @login_required
 def load_today_snapshot_page(request, pk):
     '''Loads the today snapshot page for PWA'''
-    print('load_today_snapshot_page')
     access_token = request.session.get('access_token')
-    print('pk:', pk)
     if not access_token:
         return JsonResponse({'message': 'Access token not found'}, status=401)
 
@@ -160,7 +114,6 @@ def load_today_snapshot_page(request, pk):
     last_year = today - relativedelta(years=1)
 
     today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
-    print(today_snapshot)
 
     if today_snapshot:
         try:
@@ -195,3 +148,80 @@ def load_today_snapshot_page(request, pk):
     else:
         context = {'today_snapshot': today_snapshot}
         return render(request, 'rule4be/today.html', context)
+
+
+############################################################################################################
+# CRUD Views
+############################################################################################################
+    
+@login_required
+def create_aol(request):
+    '''
+    Creates a new Area of Life
+    '''
+    if request.method == 'POST':
+        form = AreaOfLifeForm(request.POST)
+        if form.is_valid():
+            aol = form.save(commit=False)
+            aol.owner = request.user
+            aol.save()
+            return JsonResponse({'message': 'Area of life created successfully'})
+        else:
+            return JsonResponse({'message': 'Invalid form data'}, status=400)
+    else:
+        form = AreaOfLifeForm()
+
+        return render(request, 'rule4be/create_aol.html', {'form': form})
+
+
+@login_required
+def edit_aol(request, aol_id):
+    '''
+    Edits an Area of Life
+    '''
+    aol = AreaOfLife.objects.get(id=aol_id)
+    if request.method == 'POST':
+        form = AreaOfLifeForm(request.POST, instance=aol)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'message': 'Area of life updated successfully'})
+        else:
+            return JsonResponse({'message': 'Invalid form data'}, status=400)
+    else:
+        form = AreaOfLifeForm(instance=aol)
+
+        return render(request, 'rule4be/edit_aol.html', {'form': form, 'aol_id': aol_id})
+
+
+@login_required
+def delete_aol(request, aol_id):
+    ''' Deletes an Area of Life '''
+    if request.method == 'POST':
+        aol = AreaOfLife.objects.get(id=aol_id)
+        aol.delete()
+        return JsonResponse({'message': 'Area of life deleted successfully'})
+    else:
+        aol = AreaOfLife.objects.get(id=aol_id)
+        return render(request, 'rule4be/delete_aol.html', {'aol': aol})
+    
+
+@login_required
+def create_snapshot(request, aol_id):
+    '''
+    Creates a new Snapshot
+    '''
+    aol = AreaOfLife.objects.get(id=aol_id)
+    if request.method == 'POST':
+        form = SnapshotForm(request.POST)
+        if form.is_valid():
+            snapshot = form.save(commit=False)
+            snapshot.owner = request.user
+            snapshot.area_of_life = aol
+            snapshot.save()
+            return JsonResponse({'message': 'Snapshot created successfully'})
+        else:
+            return JsonResponse({'message': 'Invalid form data'}, status=400)
+    else:
+        form = SnapshotForm()
+
+        return render(request, 'rule4be/create_snapshot.html', {'form': form, 'aol_id': aol_id})

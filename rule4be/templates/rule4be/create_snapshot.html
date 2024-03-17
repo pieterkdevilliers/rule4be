@@ -1,0 +1,23 @@
+{% extends 'rule4be/main.html' %}
+
+{% block content %}
+<h1>Create Snapshot</h1>
+
+
+<form hx-post="{% url 'create_snapshot' aol_id %}" hx-trigger="submit" hx-target="#create-form" id="create-form">
+    {% csrf_token %}
+    <!-- Include the necessary input fields -->
+    <div>
+        <label for="body">Snapshot Details:</label>
+        <textarea type="text" name="body" id="body" required></textarea>
+    </div>
+    <div>
+        <button type="submit">Add Snapshot</button>
+    </div>
+</form>
+
+<!-- Display the result of the login attempt -->
+<div id="login-result"></div>
+
+{% endblock %}
+```

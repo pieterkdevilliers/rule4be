@@ -1,0 +1,19 @@
+{% extends 'rule4be/main.html' %}
+
+{% block content %}
+<h1>Confirm Deletion</h1>
+
+<p>Are you sure you want to delete the Area of Life: "{{ aol.name }}"?</p>
+
+<form hx-post="{% url 'delete_aol' aol.id %}" hx-trigger="submit" hx-target="#delete-result" id="delete-form">
+    {% csrf_token %}
+    <div>
+        <button type="submit">Yes, Delete</button>
+        <a href="{% url 'load_login_page' %}">Cancel</a>
+    </div>
+</form>
+
+<div id="delete-result"></div>
+
+
+{% endblock %}
