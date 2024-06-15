@@ -153,7 +153,7 @@ def load_today_snapshot_page(request, pk):
     '''Loads the today snapshot page for PWA'''
     access_token = request.session.get('access_token')
     if not access_token:
-        return JsonResponse({'message': 'Access token not found'}, status=401)
+        return HttpResponse('Access token not found')
 
     today = timezone.now().date()
     yesterday = today - datetime.timedelta(days=1)
@@ -168,7 +168,7 @@ def load_today_snapshot_page(request, pk):
             queryset = Snapshot.objects.filter(
                 created__in=[today, yesterday, last_week, last_month, last_year],
                 area_of_life=pk,
-                owner=request.user
+                owner=request.user,
             )
             serialized_data = []
             for snapshot in queryset:
@@ -189,10 +189,11 @@ def load_today_snapshot_page(request, pk):
                 serialized_data.append(snapshot_data)
 
             context = {'api_data': serialized_data}
+
             return render(request, 'rule4be/today.html', context)
         except requests.exceptions.RequestException as e:
             # Handle request errors, e.g., network issues, server errors
-            return JsonResponse({'message': f'Error: {str(e)}'}, status=500)
+            return HttpResponse( f'Error: {str(e)}')
     else:
         context = {'today_snapshot': today_snapshot}
         return render(request, 'rule4be/today.html', context)

@@ -10,14 +10,14 @@
 
         {% if snapshot.image %}
         <div>
-            <img src="{{ snapshot.image.url }}" alt="Snapshot Image" style="max-width: 100%;">
+            <img src="{{ snapshot.image }}" alt="Snapshot Image" style="max-width: 100%;">
         </div>
         {% endif %}
 
         {% if snapshot.video %}
         <div>
             <video controls style="max-width: 100%;">
-                <source src="{{ snapshot.video.url }}" type="video/mp4">
+                <source src="{{ snapshot.video }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
