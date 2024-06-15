@@ -2,42 +2,38 @@
 {% load static %}
 
 {% block content %}
-<h1>AOLS - List of user's AOLs</h1>
-<a href="{% url 'logout_view' %}">Logout</a>
-<div>
+<h1 class="font-semibold text-2xl">AOLS - List of user's AOLs</h1>
+<div class="mt-10">
     <div id="create-form"></div>
-    <button hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"
-        hx-target="#create-form" hx-trigger="click" hx-swap="outerHTML">
-        <strong>
-            <h1>+</h1>
-        </strong>
+    <button
+        hx-get="{% url 'create_aol' %}"
+        hx-headers='{"Content-Type":"text/html"}'
+        hx-accept="text/html"
+        hx-trigger="click"
+        hx-target="#create-form"
+        hx-swap="outerHTML">
+            <i class="icon icon--add"></i>
     </button>
 </div>
 
-<div class="aol-container">
+<div class="aol-container flex gap-4">
     {% for area_of_life in aols %}
 
-    <div class="aol-item">
+    <div class="aol-item card">
         <div id="create-form-{{ area_of_life.id }}"></div>
         <button hx-get="{% url 'create_snapshot' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
             hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click" hx-swap="outerHTML">
-            <strong>
-                <h1>+</h1>
-            </strong>
+            <i class="icon icon--add"></i>
         </button>
         <h1>{{ area_of_life.name }}</h1>
         <p>{{ area_of_life.description }}</p>
         <button hx-get="{% url 'edit_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
             hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click" hx-swap="outerHTML">
-            <strong>
-                <h1>Edit</h1>
-            </strong>
+            <i class="icon icon--edit"></i>
         </button>
         <button hx-get="{% url 'delete_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
             hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click" hx-swap="outerHTML">
-            <strong>
-                <h1>-</h1>
-            </strong>
+            <i class="icon icon--delete"></i>
         </button>
         <div hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="load"
             hx-target="#today-{{ area_of_life.id }}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html">
@@ -49,10 +45,19 @@
         <div id="today-{{ area_of_life.id }}"></div>
         <!-- Display snapshots for the current AOL -->
     </div>
+
     {% endfor %}
 </div>
+<button
+    id="alpineTest"
+    class="border border-gray-300 bg-gray-100 p-2 rounded-md mt-4"
+    x-data>Alpine should replace this text</button>
 
 <!-- Display the result of the login attempt -->
 <div id="login-result"></div>
-
+<script>
+    document.getElementById('alpineTest').addEventListener('click', function() {
+        document.getElementById('alpineTest').innerText = 'Alpine replaced this text';
+    });
+</script>
 {% endblock %}
