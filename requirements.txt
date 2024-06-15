@@ -157,7 +157,6 @@ nibabel==5.1.0
 nipype==1.8.6
 numpy==1.26.3
 oauthlib==3.2.2
-openai==1.11.1
 packaging==23.2
 parsel==1.9.1
 parso==0.8.3
@@ -189,8 +188,6 @@ pyasn1-modules==0.3.0
 pycosat==0.6.3
 pycparser==2.21
 pycryptodome==3.20.0
-pydantic==2.6.1
-pydantic_core==2.16.2
 pydeck==0.8.1b0
 PyDispatcher==2.0.7
 pydot==1.4.2
@@ -276,7 +273,6 @@ wordcloud==1.9.2
 wrapt==1.16.0
 xgboost==1.7.5
 yarl==1.9.2
-ydata-profiling==4.2.0
 yellowbrick==1.5
 ziggeo==2.30
 zipp==3.15.0
