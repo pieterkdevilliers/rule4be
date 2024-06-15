@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 import requests
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.decorators import login_required
@@ -50,7 +50,7 @@ def load_login_page(request):
 
             return render(request, 'rule4be/aols.html', context)
         else:
-            return JsonResponse({'message': 'Login failed'}, status=401)
+            return HttpResponse('Login failed')
     
     elif request.session.get('access_token'):
 
@@ -165,9 +165,9 @@ def create_aol(request):
             aol = form.save(commit=False)
             aol.owner = request.user
             aol.save()
-            return JsonResponse({'message': 'Area of life created successfully'})
+            return HttpResponse('Area of life created successfully')
         else:
-            return JsonResponse({'message': 'Invalid form data'}, status=400)
+            return HttpResponse('Invalid form data')
     else:
         form = AreaOfLifeForm()
 
@@ -182,9 +182,9 @@ def edit_aol(request, aol_id):
         form = AreaOfLifeForm(request.POST, instance=aol)
         if form.is_valid():
             form.save()
-            return JsonResponse({'message': 'Area of life updated successfully'})
+            return HttpResponse('Area of life updated successfully')
         else:
-            return JsonResponse({'message': 'Invalid form data'}, status=400)
+            return HttpResponse('Invalid form data')
     else:
         form = AreaOfLifeForm(instance=aol)
         return render(request, 'rule4be/edit_aol.html', {'form': form, 'aol_id': aol_id})
@@ -196,7 +196,7 @@ def delete_aol(request, aol_id):
     if request.method == 'POST':
         aol = AreaOfLife.objects.get(id=aol_id)
         aol.delete()
-        return JsonResponse({'message': 'Area of life deleted successfully'})
+        return HttpResponse('Area of life deleted successfully')
     else:
         aol = AreaOfLife.objects.get(id=aol_id)
         return render(request, 'rule4be/delete_aol.html', {'aol': aol})
@@ -215,9 +215,9 @@ def create_snapshot(request, aol_id):
             snapshot.owner = request.user
             snapshot.area_of_life = aol
             snapshot.save()
-            return JsonResponse({'message': 'Snapshot created successfully'})
+            return HttpResponse('Snapshot created successfully')
         else:
-            return JsonResponse({'message': 'Invalid form data'}, status=400)
+            return HttpResponse('Invalid form data')
     else:
         form = SnapshotForm()
 

@@ -176,9 +176,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:8000",
     "https://rule4-943c9feeb754.herokuapp.com",
     "https://rule4.app",
-    "rule4.app",
 ]
 
 REST_FRAMEWORK = {
