@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 import requests
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -13,6 +13,46 @@ from snapshots.serializers import SnapshotSerializer
 import json
 from snapshots.models import AreaOfLife, Snapshot
 from snapshots.forms import AreaOfLifeForm, SnapshotForm
+
+def load_signup_page(request):
+    '''
+    Loads the sign-up page for PWA
+    '''
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+        if not User.objects.filter(username=username).exists():
+            user = User.objects.create_user(username=username, password=password, email=email)
+            user.save()
+
+            # Automatically log in the user after sign-up
+            login(request, user)
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+
+            # Set tokens in session
+            request.session['access_token'] = access_token
+            request.session['refresh_token'] = refresh_token
+            request.session['user_id'] = user.id
+
+            aols = request.user.areaoflife_set.all()
+
+            context = {
+                    'aols': aols,
+                    }
+
+            return render(request, 'rule4be/aols.html', context)
+        else:
+            return HttpResponse('Username already exists')
+    else:
+        return render(request, 'rule4be/signup.html')
+    
 
 def load_login_page(request):
     '''
@@ -67,6 +107,14 @@ def load_login_page(request):
     else:
 
         return render(request, 'rule4be/login.html')
+
+
+def logout_view(request):
+    '''
+    Logs out the user and redirects to the login page
+    '''
+    logout(request)
+    return redirect('load_login_page')
 
 
 @login_required

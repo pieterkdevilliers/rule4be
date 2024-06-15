@@ -3,6 +3,7 @@
 
 {% block content %}
 <h1>AOLS - List of user's AOLs</h1>
+<a href="{% url 'logout_view' %}">Logout</a>
 <div>
     <div id="create-form"></div>
     <button hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"

@@ -8,6 +8,8 @@ urlpatterns = [
     path('snapshots/', include('snapshots.urls')),
     path('api/v1/', include('snapshots.urls')),
     path('', page_views.load_login_page, name='load_login_page'),
+    path('signup/', page_views.load_signup_page, name='signup'),
+    path('logout/', page_views.logout_view, name='logout_view'),
     path('aols/', page_views.load_aols_page, name='load_aols_page'),
     path('today/<int:pk>', page_views.load_today_snapshot_page, name='load_today_snapshot_page'),
 
