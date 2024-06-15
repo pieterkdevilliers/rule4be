@@ -4,12 +4,21 @@
 <h1>Create Snapshot</h1>
 
 
-<form hx-post="{% url 'create_snapshot' aol_id %}" hx-trigger="submit" hx-target="#create-form" id="create-form">
+<form hx-post="{% url 'create_snapshot' aol_id %}" hx-trigger="submit" hx-target="#create-form" id="create-form"
+    enctype="multipart/form-data">
     {% csrf_token %}
     <!-- Include the necessary input fields -->
     <div>
         <label for="body">Snapshot Details:</label>
         <textarea type="text" name="body" id="body" required></textarea>
+    </div>
+    <div>
+        <label for="image">Upload Image:</label>
+        <input type="file" name="image" id="image" accept="image/*">
+    </div>
+    <div>
+        <label for="video">Upload Video:</label>
+        <input type="file" name="video" id="video" accept="video/*">
     </div>
     <div>
         <button type="submit">Add Snapshot</button>
