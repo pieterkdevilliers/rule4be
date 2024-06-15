@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "dev": "tailwindcss --input static/tailwind/tailwind-input.css --output static/css/tailwind/tailwind-output.css --watch"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.3.6"
+  },
+  "dependencies": {
+    "alpinejs": "^3.13.8"
+  },
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ]
+}
