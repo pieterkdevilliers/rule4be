@@ -9,4 +9,4 @@ class AreaOfLifeForm(forms.ModelForm):
 class SnapshotForm(forms.ModelForm):
     class Meta:
         model = Snapshot
-        fields = ['body']
+        fields = ['body', 'image', 'video']

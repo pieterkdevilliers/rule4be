@@ -179,7 +179,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "https://rule4-943c9feeb754.herokuapp.com",
     "https://rule4.app",
+<<<<<<< HEAD
 
+=======
+>>>>>>> staging
 ]
 
 REST_FRAMEWORK = {

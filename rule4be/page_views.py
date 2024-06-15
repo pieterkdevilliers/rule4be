@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 import requests
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -13,6 +13,46 @@ from snapshots.serializers import SnapshotSerializer
 import json
 from snapshots.models import AreaOfLife, Snapshot
 from snapshots.forms import AreaOfLifeForm, SnapshotForm
+
+def load_signup_page(request):
+    '''
+    Loads the sign-up page for PWA
+    '''
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+        if not User.objects.filter(username=username).exists():
+            user = User.objects.create_user(username=username, password=password, email=email)
+            user.save()
+
+            # Automatically log in the user after sign-up
+            login(request, user)
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+
+            # Set tokens in session
+            request.session['access_token'] = access_token
+            request.session['refresh_token'] = refresh_token
+            request.session['user_id'] = user.id
+
+            aols = request.user.areaoflife_set.all()
+
+            context = {
+                    'aols': aols,
+                    }
+
+            return render(request, 'rule4be/aols.html', context)
+        else:
+            return HttpResponse('Username already exists')
+    else:
+        return render(request, 'rule4be/signup.html')
+    
 
 def load_login_page(request):
     '''
@@ -50,7 +90,7 @@ def load_login_page(request):
 
             return render(request, 'rule4be/aols.html', context)
         else:
-            return JsonResponse({'message': 'Login failed'}, status=401)
+            return HttpResponse('Login failed')
     
     elif request.session.get('access_token'):
 
@@ -67,6 +107,14 @@ def load_login_page(request):
     else:
 
         return render(request, 'rule4be/login.html')
+
+
+def logout_view(request):
+    '''
+    Logs out the user and redirects to the login page
+    '''
+    logout(request)
+    return redirect('load_login_page')
 
 
 @login_required
@@ -165,9 +213,9 @@ def create_aol(request):
             aol = form.save(commit=False)
             aol.owner = request.user
             aol.save()
-            return JsonResponse({'message': 'Area of life created successfully'})
+            return HttpResponse('Area of life created successfully')
         else:
-            return JsonResponse({'message': 'Invalid form data'}, status=400)
+            return HttpResponse('Invalid form data')
     else:
         form = AreaOfLifeForm()
 
@@ -182,9 +230,9 @@ def edit_aol(request, aol_id):
         form = AreaOfLifeForm(request.POST, instance=aol)
         if form.is_valid():
             form.save()
-            return JsonResponse({'message': 'Area of life updated successfully'})
+            return HttpResponse('Area of life updated successfully')
         else:
-            return JsonResponse({'message': 'Invalid form data'}, status=400)
+            return HttpResponse('Invalid form data')
     else:
         form = AreaOfLifeForm(instance=aol)
         return render(request, 'rule4be/edit_aol.html', {'form': form, 'aol_id': aol_id})
@@ -196,7 +244,7 @@ def delete_aol(request, aol_id):
     if request.method == 'POST':
         aol = AreaOfLife.objects.get(id=aol_id)
         aol.delete()
-        return JsonResponse({'message': 'Area of life deleted successfully'})
+        return HttpResponse('Area of life deleted successfully')
     else:
         aol = AreaOfLife.objects.get(id=aol_id)
         return render(request, 'rule4be/delete_aol.html', {'aol': aol})
@@ -207,18 +255,18 @@ def create_snapshot(request, aol_id):
     '''
     Creates a new Snapshot
     '''
-    aol = AreaOfLife.objects.get(id=aol_id)
+    aol = get_object_or_404(AreaOfLife, id=aol_id)
     if request.method == 'POST':
-        form = SnapshotForm(request.POST)
+        form = SnapshotForm(request.POST, request.FILES)
         if form.is_valid():
             snapshot = form.save(commit=False)
             snapshot.owner = request.user
             snapshot.area_of_life = aol
             snapshot.save()
-            return JsonResponse({'message': 'Snapshot created successfully'})
+            return HttpResponse('Snapshot created successfully')
         else:
-            return JsonResponse({'message': 'Invalid form data'}, status=400)
+            return HttpResponse('Invalid form data')
     else:
         form = SnapshotForm()
 
-        return render(request, 'rule4be/create_snapshot.html', {'form': form, 'aol_id': aol_id})
+    return render(request, 'rule4be/create_snapshot.html', {'form': form, 'aol_id': aol_id})
