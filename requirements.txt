@@ -51,7 +51,6 @@ distlib==0.3.7
 distro==1.9.0
 dj-database-url==2.1.0
 Django==4.2.7
-django-allauth==0.59.0
 django-appconf==1.0.6
 django-ckeditor-5==0.2.12
 django-cors-headers==4.3.1
@@ -196,7 +195,7 @@ pydeck==0.8.1b0
 PyDispatcher==2.0.7
 pydot==1.4.2
 Pygments==2.17.2
-PyJWT==2.8.0
+PyJWT
 pylint==2.17.1
 Pympler==1.0.1
 PyMuPDF==1.23.8
