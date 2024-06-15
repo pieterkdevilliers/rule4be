@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 import requests
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -255,9 +255,9 @@ def create_snapshot(request, aol_id):
     '''
     Creates a new Snapshot
     '''
-    aol = AreaOfLife.objects.get(id=aol_id)
+    aol = get_object_or_404(AreaOfLife, id=aol_id)
     if request.method == 'POST':
-        form = SnapshotForm(request.POST)
+        form = SnapshotForm(request.POST, request.FILES)
         if form.is_valid():
             snapshot = form.save(commit=False)
             snapshot.owner = request.user
@@ -269,4 +269,4 @@ def create_snapshot(request, aol_id):
     else:
         form = SnapshotForm()
 
-        return render(request, 'rule4be/create_snapshot.html', {'form': form, 'aol_id': aol_id})
+    return render(request, 'rule4be/create_snapshot.html', {'form': form, 'aol_id': aol_id})
