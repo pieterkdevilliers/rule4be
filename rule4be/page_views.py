@@ -165,8 +165,8 @@ def load_today_snapshot_page(request, pk):
         return HttpResponse('Access token not found')
 
     today = timezone.now().date()
-    yesterday = today - datetime.timedelta(days=1)
-    last_week = today - datetime.timedelta(days=7)
+    yesterday = today - timedelta(days=1)
+    last_week = today - timedelta(days=7)
     last_month = today - relativedelta(months=1)
     last_year = today - relativedelta(years=1)
 
