@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 import requests
 from django.shortcuts import render, redirect, get_object_or_404
@@ -7,25 +8,28 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime, timedelta
 from snapshots.models import Snapshot
 from snapshots.serializers import SnapshotSerializer
 import json
 from snapshots.models import AreaOfLife, Snapshot
 from snapshots.forms import AreaOfLifeForm, SnapshotForm
+from rule4be.ses import send_custom_email
+
 
 def load_signup_page(request):
     '''
     Loads the sign-up page for PWA
     '''
-    
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         email = request.POST.get('email')
 
         if not User.objects.filter(username=username).exists():
-            user = User.objects.create_user(username=username, password=password, email=email)
+            user = User.objects.create_user(
+                username=username, password=password, email=email)
             user.save()
 
             # Automatically log in the user after sign-up
@@ -41,24 +45,29 @@ def load_signup_page(request):
             request.session['refresh_token'] = refresh_token
             request.session['user_id'] = user.id
 
+            # Send a welcome email
+            subject = 'Welcome to Rule4!'
+            body = 'Thank you for signing up for Rule4. We are glad to have you!'
+            send_custom_email(subject, body, user.email)
+
             aols = request.user.areaoflife_set.all()
 
             context = {
-                    'aols': aols,
-                    }
+                'aols': aols,
+            }
 
             return render(request, 'rule4be/aols.html', context)
         else:
             return HttpResponse('Username already exists')
     else:
         return render(request, 'rule4be/signup.html')
-    
+
 
 def load_login_page(request):
     '''
     Loads the login page for PWA
     '''
-    
+
     if request.method == 'POST':
 
         username = request.POST.get('username')
@@ -85,13 +94,13 @@ def load_login_page(request):
             aols = request.user.areaoflife_set.all()
 
             context = {
-                    'aols': aols,
-                    }
+                'aols': aols,
+            }
 
             return render(request, 'rule4be/aols.html', context)
         else:
             return HttpResponse('Login failed')
-    
+
     elif request.session.get('access_token'):
 
         user_id = request.session.get('user_id')
@@ -100,9 +109,9 @@ def load_login_page(request):
         aols = request.user.areaoflife_set.all()
 
         context = {
-                'aols': aols,
-                }
-        
+            'aols': aols,
+        }
+
         return render(request, 'rule4be/aols.html', context)
     else:
 
@@ -124,18 +133,21 @@ def load_aols_page(request):
     '''
     aols = request.user.areaoflife_set.all()
     today = datetime.now().strftime('%Y-%m-%d')
-    yesterday = (datetime.now() - timezone.timedelta(days=1)).strftime('%Y-%m-%d')
-    last_week = (datetime.now() - timezone.timedelta(days=7)).strftime('%Y-%m-%d')
-    last_month = (datetime.now() - relativedelta(months=1)).strftime('%Y-%m-%d')
+    yesterday = (datetime.now() - timezone.timedelta(days=1)
+                 ).strftime('%Y-%m-%d')
+    last_week = (datetime.now() - timezone.timedelta(days=7)
+                 ).strftime('%Y-%m-%d')
+    last_month = (datetime.now() - relativedelta(months=1)
+                  ).strftime('%Y-%m-%d')
     last_year = (datetime.now() - relativedelta(years=1)).strftime('%Y-%m-%d')
-    
+
     for aol in aols:
         aol.snapshots = {
-            'today' : Snapshot.objects.filter(created=today, area_of_life=aol),
-            'yesterday' : Snapshot.objects.filter(created=yesterday, area_of_life=aol),
-            'last_week' : Snapshot.objects.filter(created=last_week, area_of_life=aol),
-            'last_month' : Snapshot.objects.filter(created=last_month, area_of_life=aol),
-            'last_year' : Snapshot.objects.filter(created=last_year, area_of_life=aol),
+            'today': Snapshot.objects.filter(created=today, area_of_life=aol),
+            'yesterday': Snapshot.objects.filter(created=yesterday, area_of_life=aol),
+            'last_week': Snapshot.objects.filter(created=last_week, area_of_life=aol),
+            'last_month': Snapshot.objects.filter(created=last_month, area_of_life=aol),
+            'last_year': Snapshot.objects.filter(created=last_year, area_of_life=aol),
         }
 
     context = {
@@ -144,9 +156,6 @@ def load_aols_page(request):
 
     return render(request, 'rule4be/aols.html', context)
 
-
-from django.utils import timezone
-import datetime
 
 @login_required
 def load_today_snapshot_page(request, pk):
@@ -161,12 +170,14 @@ def load_today_snapshot_page(request, pk):
     last_month = today - relativedelta(months=1)
     last_year = today - relativedelta(years=1)
 
-    today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
+    today_snapshot = Snapshot.objects.filter(
+        created__in=[today], area_of_life=pk)
 
     if today_snapshot:
         try:
             queryset = Snapshot.objects.filter(
-                created__in=[today, yesterday, last_week, last_month, last_year],
+                created__in=[today, yesterday,
+                             last_week, last_month, last_year],
                 area_of_life=pk,
                 owner=request.user,
             )
@@ -193,7 +204,7 @@ def load_today_snapshot_page(request, pk):
             return render(request, 'rule4be/today.html', context)
         except requests.exceptions.RequestException as e:
             # Handle request errors, e.g., network issues, server errors
-            return HttpResponse( f'Error: {str(e)}')
+            return HttpResponse(f'Error: {str(e)}')
     else:
         context = {'today_snapshot': today_snapshot}
         return render(request, 'rule4be/today.html', context)
@@ -202,7 +213,7 @@ def load_today_snapshot_page(request, pk):
 ############################################################################################################
 # CRUD Views
 ############################################################################################################
-    
+
 @login_required
 def create_aol(request):
     '''
@@ -249,7 +260,7 @@ def delete_aol(request, aol_id):
     else:
         aol = AreaOfLife.objects.get(id=aol_id)
         return render(request, 'rule4be/delete_aol.html', {'aol': aol})
-    
+
 
 @login_required
 def create_snapshot(request, aol_id):
