@@ -2,6 +2,7 @@
 boto3==1.29.7
 botocore==1.32.7
 django-storages==1.14.2
+django-ses==2.0.0
 
 asgiref==3.7.2
 certifi==2023.7.22
