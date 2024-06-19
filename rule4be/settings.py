@@ -14,6 +14,9 @@ from pathlib import Path
 import dj_database_url
 import datetime
 import os
+import logging
+import logging.config
+from django.core.mail.backends.console import EmailBackend
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
@@ -96,19 +99,21 @@ ROOT_URLCONF = "rule4be.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        # Adjust 'templates' if your directory structure is different
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = "rule4be.wsgi.application"
 
@@ -172,7 +177,8 @@ STATICFILES_DIRS = [
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'us-east-1')  # Change if your bucket is in a different region
+# Change if your bucket is in a different region
+AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'us-east-1')
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
 AWS_S3_OBJECT_PARAMETERS = {
@@ -188,6 +194,19 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_LOCATION = 'media'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# settings.py
+
+# Email settings
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'us-east-1'
+# e.g., email.us-east-1.amazonaws.com
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+
+# Optional settings
+# (default; safety factor applied to rate limits to stay below the AWS SES maximum send rate)
+AWS_SES_AUTO_THROTTLE = 0.5
+DEFAULT_FROM_EMAIL = 'info@rule4.app'
 
 
 # Default primary key field type
@@ -209,10 +228,41 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-    'JWT_SECRET_KEY': os.environ.get('JWT_SECRET_KEY'),  # Change this to a secure, secret key.
+    # Change this to a secure, secret key.
+    'JWT_SECRET_KEY': os.environ.get('JWT_SECRET_KEY'),
     'JWT_ALGORITHM': os.environ.get('JWT_ALGORITHM'),
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # Adjust the token expiration time as needed.
+    # Adjust the token expiration time as needed.
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
 
 
+# # Configure logging
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#         'myapp.custom_email_logger': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     },
+# }
+
+# # Apply logging configuration
+# logging.config.dictConfig(LOGGING)
+
+# # Define a logger for custom email sending
+# logger = logging.getLogger('rule4be.custom_email_logger')
