@@ -174,6 +174,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Adjust the path as necessary
 ]
 
+
 USE_S3 = config('USE_S3')
 
 if USE_S3 == 'TRUE':
