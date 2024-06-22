@@ -43,7 +43,7 @@
 		content: "\f067";
 	}
 	.fa-edit:before {
-		content: "\f044";
+		content: "\f303";
 	}
 	.fa-trash:before {
 		content: "\f1f8";
@@ -829,7 +829,7 @@
 
 	/* Cards - General */
 	.card {
-		@apply bg-white rounded-3xl border p-5;
+		@apply bg-white rounded-xl border p-5;
 	}
 	.card__header {
 		@apply flex justify-center items-center;

@@ -1,7 +1,5 @@
-{% extends 'rule4be/main.html' %}
 
-{% block content %}
-<h1>Create AOL</h1>
+<h1>Edit AOL</h1>
 
 
 <form hx-post="{% url 'edit_aol' aol_id %}" hx-trigger="submit" hx-target="#create-form" id="create-form">
@@ -22,5 +20,3 @@
 
 <!-- Display the result of the login attempt -->
 <div id="login-result"></div>
-
-{% endblock %}
