@@ -10,10 +10,12 @@ import logging.config
 from django.core.mail.backends.console import EmailBackend
 from dotenv import load_dotenv
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+env = environ.Env()
+environ.Env.read_env()  # Reads .env file
+
+# Example usage
+DEBUG = env.bool('DEBUG', default=False)
+
 
 load_dotenv()  # take environment variables from .env.
 
@@ -118,14 +120,32 @@ WSGI_APPLICATION = "rule4be.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
+
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+development = os.environ.get('DEVELOPMENT')
+
+if development:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
+else:
+
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
 
 
 # Password validation
