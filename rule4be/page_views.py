@@ -15,6 +15,7 @@ import json
 from snapshots.models import AreaOfLife, Snapshot
 from snapshots.forms import AreaOfLifeForm, SnapshotForm
 from rule4be.ses import send_custom_email
+from users.models import UserProfile
 
 
 def load_signup_page(request):
@@ -31,6 +32,13 @@ def load_signup_page(request):
             user = User.objects.create_user(
                 username=username, password=password, email=email)
             user.save()
+
+            # Create a user profile
+            user_profile = UserProfile.objects.create(
+                user=user,
+                trial_end_date=(datetime.now() + timezone.timedelta(days=30)),
+            )
+            user_profile.save()
 
             # Automatically log in the user after sign-up
             login(request, user)
@@ -214,10 +222,12 @@ def load_today_snapshot_page(request, pk):
 def load_user_profile(request):
     '''Loads the user profile page for PWA'''
     user = request.user
+    profile = UserProfile.objects.get(user=user)
     page_title = f'{user.username}\'s Profile'
     context = {
         'user': user,
         'page_title': page_title,
+        'profile': profile,
     }
     return render(request, 'rule4be/profile.html', context)
 

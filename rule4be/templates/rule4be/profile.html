@@ -1,7 +1,17 @@
 {% extends 'rule4be/main.html' %}
 
 {% block content %}
-<h1>{{page_title}}</h1>
+<h1>Your Profile Details</h1>
+<p>Username: {{profile}}</p>
+<p>Trial Start Date: {{profile.sign_up_date}}</p>
+<p>Trial End Date: {{profile.trial_end_date}}</p>
+<p>Account Status: {{profile.account_status}}</p>
+{% if profile.subscription_activation_date %}
+<p>Subscription Activation Date: {{profile.subscription_activation_date}}</p>
+{% endif %}
+{% if profile.subscription_cancellation_date %}
+<p>Subscription Cancellation Date: {{profile.subscription_cancellation_date}}</p>
+{% endif %}
 
 <a href="{% url 'load_aols_page' %}">Back</a>
 

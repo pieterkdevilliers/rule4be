@@ -16,11 +16,11 @@ class UserProfile(models.Model):
     '''
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     sign_up_date = models.DateField(auto_now_add=True)
-    trial_end_date = models.DateField()
+    trial_end_date = models.DateField(null=True, blank=True)
     account_status = models.CharField(
-        max_length=50, choices=ACCOUNT_STATUS, default='getting_started')
-    subscription_activation_date = models.DateField()
-    subscription_cancellation_date = models.DateField()
+        max_length=50, choices=ACCOUNT_STATUS, default='active_trial')
+    subscription_activation_date = models.DateField(null=True, blank=True)
+    subscription_cancellation_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return str(self.user)
