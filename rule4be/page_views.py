@@ -210,6 +210,18 @@ def load_today_snapshot_page(request, pk):
         return render(request, 'rule4be/today.html', context)
 
 
+@login_required
+def load_user_profile(request):
+    '''Loads the user profile page for PWA'''
+    user = request.user
+    page_title = f'{user.username}\'s Profile'
+    context = {
+        'user': user,
+        'page_title': page_title,
+    }
+    return render(request, 'rule4be/profile.html', context)
+
+
 ############################################################################################################
 # CRUD Views
 ############################################################################################################
