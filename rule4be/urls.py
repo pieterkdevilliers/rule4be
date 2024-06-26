@@ -17,6 +17,8 @@ urlpatterns = [
          name='load_today_snapshot_page'),
     path('load-user-profile', page_views.load_user_profile,
          name='load_user_profile'),
+    path('load-trial-expired-page', page_views.load_trial_expired_page,
+         name='load_trial_expired_page'),
 
     path('create-aol/', page_views.create_aol, name='create_aol'),
     path('edit-aol/<int:aol_id>', page_views.edit_aol, name='edit_aol'),

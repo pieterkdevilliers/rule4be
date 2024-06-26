@@ -82,32 +82,45 @@ def load_login_page(request):
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-
-            # Generate JWT tokens
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-            refresh_token = str(refresh)
-
-            # Set tokens in session
-            request.session['access_token'] = access_token
-            request.session['refresh_token'] = refresh_token
-            request.session['user_id'] = user.id
-
-            user_id = user.id
-            user = User.objects.get(id=user_id).username
-
-            aols = request.user.areaoflife_set.all()
-
-            context = {
-                'aols': aols,
-            }
-
-            return render(request, 'rule4be/aols.html', context)
+        profile = UserProfile.objects.get(user=user)
+        account_status = profile.account_status
+        context = {
+            'profile': profile,
+        }
+        if account_status == 'expired_trial':
+            return render(request, 'rule4be/trial_expired.html', context)
         else:
-            return HttpResponse('Login failed')
+
+            if user is not None:
+                login(request, user)
+
+                # Generate JWT tokens
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+                refresh_token = str(refresh)
+
+                # Set tokens in session
+                request.session['access_token'] = access_token
+                request.session['refresh_token'] = refresh_token
+                request.session['user_id'] = user.id
+
+                user_id = user.id
+                user = User.objects.get(id=user_id).username
+
+                aols = request.user.areaoflife_set.all()
+
+                today = timezone.now().date()
+                yesterday = today - timedelta(days=1)
+                if profile.trial_end_date == yesterday:
+                    profile.account_status = 'expired_trial'
+                    profile.save()
+
+                context = {
+                    'aols': aols,
+                }
+                return render(request, 'rule4be/aols.html', context)
+            else:
+                return HttpResponse('Login failed')
 
     elif request.session.get('access_token'):
 
@@ -168,6 +181,7 @@ def load_aols_page(request):
 @login_required
 def load_today_snapshot_page(request, pk):
     '''Loads the today snapshot page for PWA'''
+    print('load_today_snapshot_page')
     access_token = request.session.get('access_token')
     if not access_token:
         return HttpResponse('Access token not found')
@@ -188,7 +202,7 @@ def load_today_snapshot_page(request, pk):
                              last_week, last_month, last_year],
                 area_of_life=pk,
                 owner=request.user,
-            )
+            ).order_by('-created')
             serialized_data = []
             for snapshot in queryset:
                 snapshot_data = SnapshotSerializer(snapshot).data
@@ -230,6 +244,20 @@ def load_user_profile(request):
         'profile': profile,
     }
     return render(request, 'rule4be/profile.html', context)
+
+
+@login_required
+def load_trial_expired_page(request):
+    '''Loads the trial expired page for PWA'''
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+    page_title = 'TRIAL EXPIRED'
+    context = {
+        'user': user,
+        'page_title': page_title,
+        'profile': profile,
+    }
+    return render(request, 'rule4be/trial_expired.html', context)
 
 
 ############################################################################################################
