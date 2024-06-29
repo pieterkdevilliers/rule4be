@@ -127,6 +127,7 @@ def collect_stripe_webhook(request) -> JsonResponse:
     webhook_secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
     signature = request.META["HTTP_STRIPE_SIGNATURE"]
     payload = request.body
+    # print(f'{payload = }')
 
     try:
         event = stripe.Webhook.construct_event(
@@ -174,4 +175,10 @@ def _update_record(webhook_event) -> None:
         )
         checkout_record.has_access = False
         checkout_record.save()
+
+        user_profile = UserProfile.objects.get(
+            user=checkout_record.user)
+        user_profile.account_status = 'cancelled_subscription'
+        user_profile.subscription_cancellation_date = date.today()
+        user_profile.save()
         print('✋ Subscription canceled: %s', data_object.id)
