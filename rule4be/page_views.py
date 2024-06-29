@@ -80,47 +80,53 @@ def load_login_page(request):
 
         username = request.POST.get('username')
         password = request.POST.get('password')
+        print(username, password)
 
         user = authenticate(request, username=username, password=password)
+        print(user)
         profile = UserProfile.objects.get(user=user)
         account_status = profile.account_status
         context = {
             'profile': profile,
         }
-        if account_status == 'expired_trial':
-            return render(request, 'rule4be/trial_expired.html', context)
-        else:
+        # if account_status == 'expired_trial' or account_status == 'cancelled_subscription':
+        #     return render(request, 'rule4be/trial_expired.html', context)
+        # else:
 
-            if user is not None:
-                login(request, user)
+        if user is not None:
+            login(request, user)
 
-                # Generate JWT tokens
-                refresh = RefreshToken.for_user(user)
-                access_token = str(refresh.access_token)
-                refresh_token = str(refresh)
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
 
-                # Set tokens in session
-                request.session['access_token'] = access_token
-                request.session['refresh_token'] = refresh_token
-                request.session['user_id'] = user.id
+            # Set tokens in session
+            request.session['access_token'] = access_token
+            request.session['refresh_token'] = refresh_token
+            request.session['user_id'] = user.id
 
-                user_id = user.id
-                user = User.objects.get(id=user_id).username
+            user_id = user.id
+            user = User.objects.get(id=user_id).username
 
-                aols = request.user.areaoflife_set.all()
+            aols = request.user.areaoflife_set.all()
 
-                today = timezone.now().date()
-                yesterday = today - timedelta(days=1)
-                if profile.trial_end_date == yesterday:
-                    profile.account_status = 'expired_trial'
-                    profile.save()
+            today = timezone.now().date()
+            yesterday = today - timedelta(days=1)
+            if profile.trial_end_date == yesterday:
+                profile.account_status = 'expired_trial'
+                profile.save()
 
-                context = {
-                    'aols': aols,
-                }
-                return render(request, 'rule4be/aols.html', context)
+            context = {
+                'aols': aols,
+                'profile': profile,
+            }
+            if account_status == 'expired_trial' or account_status == 'cancelled_subscription':
+                return render(request, 'rule4be/trial_expired.html', context)
             else:
-                return HttpResponse('Login failed')
+                return render(request, 'rule4be/aols.html', context)
+        else:
+            return HttpResponse('Login failed')
 
     elif request.session.get('access_token'):
 
