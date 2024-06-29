@@ -49,9 +49,7 @@ def success(request) -> HttpResponse:
     user_profile.save()
 
     customers = stripe.Customer.list(email=request.user.email).data
-    print(f'{customers = }')
     if customers:
-        print('customers')
         stripe_customer_id = customers[0].id
         instance = CheckoutSessionRecord.objects.get(
             stripe_checkout_session_id=stripe_checkout_session_id
@@ -129,6 +127,7 @@ def collect_stripe_webhook(request) -> JsonResponse:
     webhook_secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
     signature = request.META["HTTP_STRIPE_SIGNATURE"]
     payload = request.body
+    # print(f'{payload = }')
 
     try:
         event = stripe.Webhook.construct_event(
@@ -142,54 +141,6 @@ def collect_stripe_webhook(request) -> JsonResponse:
     _update_record(event)
 
     return JsonResponse({'status': 'success'})
-
-
-# def _update_record(webhook_event) -> None:
-#     """
-#     We update our database record based on the webhook event.
-
-#     Use these events to update your database records.
-#     You could extend this to send emails, update user records, set up different access levels, etc.
-#     """
-#     data_object = webhook_event['data']['object']
-#     event_type = webhook_event['type']
-
-#     if event_type == 'checkout.session.completed':
-#         print('checkout.session.completed')
-#         checkout_record = CheckoutSessionRecord.objects.get(
-#             stripe_checkout_session_id=data_object['id']
-#         )
-#         checkout_record.has_access = True
-#         checkout_record.save()
-#         print('🔔 Payment succeeded!')
-
-#     elif event_type == 'customer.subscription.created':
-#         print('🎟️ Subscription created')
-
-#     elif event_type == 'customer.subscription.updated':
-#         print('✍️ Subscription updated')
-#         if data_object['status'] == 'canceled':
-#             print('✋ Subscription canceled: %s', data_object.id)
-#             customer_email = data_object['email']
-#             customer_user = User.objects.get(email=customer_email)
-#             user_profile = UserProfile.objects.get(user=customer_user)
-#             user_profile.account_status = 'cancelled_subscription'
-#             user_profile.subscription_cancellation_date = date.today()
-#             user_profile.save()
-#             checkout_record = models.CheckoutSessionRecord.objects.get(
-#                 stripe_customer_id=data_object['customer']
-#             )
-#             checkout_record.has_access = False
-#             checkout_record.save()
-#             print('✋ Subscription canceled: %s', data_object.id)
-#         else:
-#             print('✍️ Subscription updated')
-#         print('✍️ Subscription updated')
-
-#     elif event_type == 'customer.subscription.deleted':
-#         checkout_record.has_access = False
-#         checkout_record.save()
-#         print('✋ Subscription canceled: %s', data_object.id)
 
 
 def _update_record(webhook_event) -> None:
@@ -224,4 +175,10 @@ def _update_record(webhook_event) -> None:
         )
         checkout_record.has_access = False
         checkout_record.save()
+
+        user_profile = UserProfile.objects.get(
+            user=checkout_record.user)
+        user_profile.account_status = 'cancelled_subscription'
+        user_profile.subscription_cancellation_date = date.today()
+        user_profile.save()
         print('✋ Subscription canceled: %s', data_object.id)
