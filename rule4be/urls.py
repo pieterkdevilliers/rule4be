@@ -1,4 +1,4 @@
-from . import page_views
+from . import page_views, stripe_views
 from django.contrib import admin
 from django.urls import path, include
 
@@ -27,6 +27,20 @@ urlpatterns = [
     path('delete-aol/<int:aol_id>', page_views.delete_aol, name='delete_aol'),
     path('create-snapshot/<int:aol_id>',
          page_views.create_snapshot, name='create_snapshot'),
+
+    ##############################
+    # Stripe Payment Integration #
+    ##############################
+
+    path('subscribe/', stripe_views.subscribe, name='subscribe'),
+    path('cancel/', stripe_views.cancel, name='cancel'),
+    path('success/', stripe_views.success, name='success'),
+    path('create-checkout-session/', stripe_views.create_checkout_session,
+         name='create-checkout-session'),
+    path('direct-to-customer-portal/', stripe_views.direct_to_customer_portal,
+         name='direct-to-customer-portal'),
+    path('collect-stripe-webhook/', stripe_views.collect_stripe_webhook,
+         name='collect-stripe-webhook'),
 
 ]
 if settings.DEBUG:
