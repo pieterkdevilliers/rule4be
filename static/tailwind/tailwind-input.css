@@ -251,6 +251,9 @@
 	.icon--share {
 		@apply fa-light fa-share-from-square text-blue-500;
 	}
+	.icon--user {
+		@apply fa-light fa-user text-blue-500;
+	}
 
 	/* Data Attributes */
 	[data-open-crud-modal]:hover {
@@ -753,6 +756,14 @@
 		@apply mt-10;
 	}
 
+	/* Cards - General */
+	.card {
+		@apply bg-white rounded-xl border-2 p-5;
+	}
+	.card__header {
+		@apply flex justify-center items-center;
+	}
+
 	/* Card Layouts */
 	.card-layout :is(.card-count-1, .card-count-2) {
 		@apply w-full sm:w-1/2;
@@ -771,45 +782,42 @@
 	.card-layout .card-count-3:nth-of-type(2) {
 		@apply mx-auto sm:mx-3;
 	}
-	.card {
-		@apply pb-5 bg-white max-w-full lg:max-w-sm w-full;
-	}
+
 	.card:not(:first-of-type) {
 		@apply mt-5 sm:mt-0;
 	}
 	.card:hover {
 		@apply bg-white;
 	}
-	.card:nth-child(1) .card__header {
-		@apply bg-blue-500;
+	.card:nth-child(1) {
+		@apply border-blue-200;
 	}
-	.card:nth-child(2) .card__header {
-		@apply bg-orange-400;
+	.card:nth-child(2) {
+		@apply border-orange-200;
 	}
-	.card:nth-child(3) .card__header {
-		@apply bg-green-200;
+	.card:nth-child(3) {
+		@apply border-green-200;
 	}
-	.card:nth-child(4) .card__header {
-		@apply bg-amber-800;
+	.card:nth-child(4) {
+		@apply border-amber-200;
 	}
-	.card:nth-child(5) .card__header {
-		@apply bg-slate-400;
+	.card:nth-child(5) {
+		@apply border-slate-300;
 	}
-	.card:nth-child(6) .card__header {
-		@apply bg-gray-50;
-		@apply bg-red-400;
+	.card:nth-child(6) {
+		@apply border-red-200;
 	}
-	.card:nth-child(7) .card__header {
-		@apply bg-slate-700;
+	.card:nth-child(7) {
+		@apply border-slate-400;
 	}
-	.card:nth-child(8) .card__header {
-		@apply bg-purple-400;
+	.card:nth-child(8) {
+		@apply border-purple-300;
 	}
-	.card:nth-child(9) .card__header {
-		@apply bg-yellow-300;
+	.card:nth-child(9) {
+		@apply border-yellow-300;
 	}
-	.card:nth-child(10) .card__header {
-		@apply bg-rose-400;
+	.card:nth-child(10) {
+		@apply border-rose-400;
 	}
 	.card__header {
 		@apply w-full relative bg-gray-200 h-[60px] rounded-t-lg;
@@ -825,14 +833,6 @@
 	}
 	.card__text {
 		@apply w-4/5 border-t border-black mt-5 pt-5;
-	}
-
-	/* Cards - General */
-	.card {
-		@apply bg-white rounded-xl border p-5;
-	}
-	.card__header {
-		@apply flex justify-center items-center;
 	}
 
 	/* === Privacy Policy & Terms === */

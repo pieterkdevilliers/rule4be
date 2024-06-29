@@ -1,18 +1,24 @@
 <div>
     {% for snapshot in api_data %}
-    <div class="snapshot-item">
-        <h4>{{ snapshot.relative_date }}:</h4>
+    <div class="snapshot-item border border-gray-100 rounded-md p-3 hover:bg-[#fdfdfd] transition-all">
+        <h4 class="font-semibold">{{ snapshot.relative_date }}:</h4>
         <p>{{ snapshot.body }}</p>
 
         {% if snapshot.image %}
         <div>
-            <img src="{{ snapshot.image }}" alt="Snapshot Image" style="max-width: 100%;">
+            <img 
+                data-snapshot-image
+                class="mx-auto rounded-md my-3"
+                src="{{ snapshot.image }}"
+                alt="Snapshot Image">
         </div>
         {% endif %}
 
         {% if snapshot.video %}
         <div>
-            <video controls style="max-width: 100%;">
+            <video
+                class="rounded-md mx-auto my-3"
+                controls style="max-width: 100%;">
                 <source src="{{ snapshot.video }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -23,6 +29,20 @@
     {% endfor %}
 </div>
 
+<script>
+    document.addEventListener('htmx:afterSettle', function () {
+        document.querySelectorAll('[data-snapshot-image]').forEach(function (element) {
+            console.log('Image loaded');
+            let imageWidth = element.naturalWidth;
+            let imageHeight = element.naturalHeight;
+            let imageSrc = element.getAttribute('src');
+            if (imageWidth/imageHeight == 1) {
+                console.log(imageSrc + ' is square')
+                element.style.maxWidth = '100px';
+            } else {
+                console.log(imageSrc + ' is not square')
+            }
+        });
+    });
+</script>
 
-<!-- Display the result of the login attempt -->
-<div id="login-result"></div>
