@@ -49,9 +49,7 @@ def success(request) -> HttpResponse:
     user_profile.save()
 
     customers = stripe.Customer.list(email=request.user.email).data
-    print(f'{customers = }')
     if customers:
-        print('customers')
         stripe_customer_id = customers[0].id
         instance = CheckoutSessionRecord.objects.get(
             stripe_checkout_session_id=stripe_checkout_session_id
