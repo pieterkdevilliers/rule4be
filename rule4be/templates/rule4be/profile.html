@@ -15,5 +15,12 @@
 
 <a href="{% url 'load_aols_page' %}">Back</a>
 
+<!--      Go to stripe customer portal to let user manage subscription. -->
+<form action="{%  url  'direct-to-customer-portal' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" id="session-id" name="session_id" value="" />
+    <button id="checkout-and-portal-button" type="submit">Manage your billing information</button>
+</form>
+
 {% endblock %}
 ```
