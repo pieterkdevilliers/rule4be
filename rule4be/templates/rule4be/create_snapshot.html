@@ -1,27 +1,103 @@
-
-<h1>Create Snapshot</h1>
-
-
-<form hx-post="{% url 'create_snapshot' aol_id %}" hx-trigger="submit" hx-target="#create-form" id="create-form"
-    enctype="multipart/form-data">
-    {% csrf_token %}
-    <!-- Include the necessary input fields -->
-    <div>
-        <label for="body">Snapshot Details:</label>
-        <textarea type="text" name="body" id="body" required></textarea>
+<div class="card-form__container mt-5 border rounded-md p-3 shadow-inner">
+    <div
+        data-create-snapshot-form
+        data-aol-id="{{ aol_id }}"
+        class="card-form__form">
+        <h1 class="form__title">Create a Snapshot</h1>
+        <form 
+            data-aol-id="{{ aol_id }}"
+            id="create-form"
+            class="modal-form"
+            hx-post="{% url 'create_snapshot' aol_id %}"
+            hx-trigger="submit"
+            hx-target=".status__message"
+            enctype="multipart/form-data"
+            x-init="requiredFieldIndicator()"
+            x-data="{ ...formValidator(), uploading: false }"
+            @submit="uploading = true">
+            {% csrf_token %}
+            <!-- Include the necessary input fields -->
+            <div class="form__label-field">
+                <label class="form__label" for="body">Snapshot Details:</label>
+                <textarea class="form__input" type="text" name="body" id="body" required></textarea>
+                <div data-invalid-feedback="" class="invalid-feedback"></div>
+            </div>
+            <div x-init="customFileUpload()">
+                <div class="form__label-field">
+                    <label class="form__label file__label" for="image">Upload Image:</label>
+                    <div class="file-upload__container">
+                        <div class="file-upload">
+                            <input class="file-input image-file-input" type="file" name="image" id="image" accept="image/*">
+                            <button
+                                class="upload-button image-upload-button button button--small"
+                                type="button">
+                                Choose file
+                            </button>
+                            <span class="file-name image-file-name">No file chosen</span>
+                        </div>
+                        <div data-invalid-feedback="" class="invalid-feedback" x-text="imageError"></div>
+                    </div>
+                </div>
+                <div class="form__label-field">
+                    <label class="form__label file__label" for="video">Upload Video:</label>
+                    <div class="file-upload__container">
+                        <div class="file-upload">
+                            <input class="file-input video-file-input" type="file" name="video" id="video" accept="video/*">
+                            <button
+                                class="upload-button video-upload-button button button--small"
+                                type="button">
+                                Choose file
+                            </button>
+                            <span class="file-name video-file-name">No file chosen</span>
+                        </div>
+                        <div data-invalid-feedback="" class="invalid-feedback" x-text="videoError"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 flex justify-between items-center">
+                <button class="ms-auto button button--primary" type="submit">Add Snapshot</button>
+            </div>
+        </form>
     </div>
-    <div>
-        <label for="image">Upload Image:</label>
-        <input type="file" name="image" id="image" accept="image/*">
+    <div
+        data-status-toast-{{ aol_id }}
+        id="statusToast"
+        class="status__message toast-container bg-green-50 text-lg font-medium text-center rounded-lg p-3 w-full max-w-[300px] hidden">
+        <div class="toast copy-text-toast bg-green-50" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body text-center fs-4 p-3">
+                {% if message %}
+                {{ message }}
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div>
-        <label for="video">Upload Video:</label>
-        <input type="file" name="video" id="video" accept="video/*">
-    </div>
-    <div>
-        <button type="submit">Add Snapshot</button>
-    </div>
-</form>
+</div>
 
-<!-- Display the result of the login attempt -->
-<div id="login-result"></div>
+<!-- Handle statusToast -->
+<script>
+    $(document).ready(function() {
+        // Bind htmx:afterOnLoad event listener to the form
+        $('[data-create-snapshot-form]').on('htmx:afterOnLoad', function() {
+            const formAolId = $(this).data('aol-id');
+            const snapshotButton = $('[data-button-aol-id="' + formAolId + '"]');
+            console.log('formAolId: ' + formAolId);
+            console.log('snapshotButton: ' + snapshotButton);
+            // Opens the toast
+            $('[data-status-toast-{{ aol_id }}]').fadeIn(300, function() {
+                $('[data-create-snapshot-form]').addClass('hidden');
+                $(this).removeClass('hidden');
+            });
+            // Closes the toast after 2 seconds & reloads the page
+            setTimeout(function() {
+                $('[data-status-toast-{{ aol_id }}]').fadeOut(300, function() {
+                    $(this).addClass('hidden');
+                    $(snapshotButton).click();
+                    $('[data-snapshot-today-trigger]').click();
+                });
+            }, 2000);
+        });
+
+        // htmx.logAll();
+    });
+
+</script>
