@@ -6,15 +6,21 @@
     <h1 class="font-semibold text-3xl">Areas of Life</h1>
     <div class="ms-5">
         <div id="create-form"></div>
-        <button hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"
-            hx-trigger="click" hx-target="#create-form" hx-swap="outerHTML">
+        <button
+            data-open-crud-modal
+            hx-get="{% url 'create_aol' %}"
+            hx-headers='{"Content-Type":"text/html"}'
+            hx-accept="text/html"
+            hx-trigger="click"
+            hx-target="#crudModalContent"
+            hx-swap="innerHTML">
             <i class="icon icon--add text-lg"></i>
         </button>
     </div>
     <div class="ms-auto"><a href="{% url 'load_user_profile' %}"><i class="icon--user text-lg"></i></a></div>
 </div>
 
-<div class="aol-container grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 px-5">
+<div class="aol-container grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 px-5" x-data="{ openForm: null }">
     {% for area_of_life in aols %}
 
     <div class="aol-item card shadow-md">
@@ -42,13 +48,29 @@
                 </div>
             </div>
         </div>
-        <button
-            class="bg-white aspect-square w-[28px] h-[28px] p-2 rounded-full border border-gray-100 flex justify-center items-center mt-4 shadow-sm hover:shadow-none transition-all"
-            hx-get="{% url 'create_snapshot' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
-            hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click" hx-swap="outerHTML">
-            <i class="icon icon--add m-0 aspect-square"></i>
-        </button>
-        <div id="create-form-{{ area_of_life.id }}"></div>
+        <div x-data="{ open: false }">
+            <button
+                data-load-snapshot-form
+                data-button-aol-id="{{ area_of_life.id }}"
+                id="create-snapshot-{{ area_of_life.id }}"
+                class="bg-white aspect-square w-[28px] h-[28px] p-2 rounded-full border border-gray-100 flex justify-center items-center mt-4 shadow-sm hover:shadow-none transition-all"
+                @click="openForm = openForm === {{ area_of_life.id }} ? null : {{ area_of_life.id }}"
+                hx-get="{% url 'create_snapshot' area_of_life.id %}"
+                hx-headers='{"Content-Type":"text/html"}'
+                hx-accept="text/html"
+                hx-target="#create-form-{{ area_of_life.id }}"
+                hx-trigger="click"
+                hx-swap="innerHTML"
+                >
+                <i class="icon icon--add m-0 aspect-square"></i>
+            </button>
+            <div
+                id="create-form-{{ area_of_life.id }}"
+                x-show="openForm === {{ area_of_life.id }}"
+                x-transition
+                >
+            </div>
+        </div>
         <div
             data-snapshot-today
             hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}"
@@ -57,6 +79,14 @@
             hx-headers='{"Content-Type":"text/html"}'
             hx-accept="text/html">
 
+        </div>
+        <div
+            data-snapshot-today-trigger
+            hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}"
+            hx-trigger="click"
+            hx-target="#today-{{ area_of_life.id }}"
+            hx-headers='{"Content-Type":"text/html"}'
+            hx-accept="text/html">
         </div>
 
         <br>

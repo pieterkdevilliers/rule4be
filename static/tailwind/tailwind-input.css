@@ -4,6 +4,7 @@
 
 @layer base {
 	html {
+		color: #475569;
 		font-family: "Source Sans 3", sans-serif;
 		font-size: 14px;
 		font-weight: 300;
@@ -330,13 +331,10 @@
 	}
 	.modal-form .form__title,
 	.card .form__title {
-		@apply text-2xl font-medium;
+		@apply text-xl font-medium;
 	}
 	.modal-form .form__title {
 		@apply max-w-[75%];
-	}
-	.card form {
-		@apply pt-5;
 	}
 	.form-group {
 		@apply mt-5;
@@ -392,7 +390,7 @@
 		@apply border rounded-lg px-2 py-1 w-full;
 	}
 	.form__label-field .form__input {
-		@apply relative border-gray-400  text-gray-600 focus:text-black-700 focus:border-gray-800;
+		@apply relative border-gray-400  text-gray-600 focus:text-slate-800 focus:border-gray-800;
 	}
 	form label {
 		@apply flex w-full items-end;
@@ -401,7 +399,7 @@
 		@apply text-red-500 text-sm ms-auto me-2;
 	}
 	.form__label-field .invalid-feedback {
-		@apply text-red-300 text-sm h-4 empty:h-0 mt-2 mb-3 transition-all;
+		@apply text-red-500 text-sm h-4 empty:h-0 mt-2 mb-3 transition-all;
 	}
 	.form__submit {
 		@apply mt-5;
@@ -422,7 +420,7 @@
 		@apply ms-3;
 	}
 	.upload-button {
-		@apply border border-blue-500 rounded-md px-3 py-2 flex items-center justify-center;
+		@apply border border-green-500 bg-green-500 text-white hover:bg-white hover:text-green-500 transition-all rounded-md px-3 py-2 flex items-center justify-center;
 	}
 	.modal-form p {
 		@apply mt-3;
@@ -434,7 +432,10 @@
 
 	/* == Buttons & Navigation == */
 	.button {
-		@apply rounded-md px-5 py-2 flex items-center leading-none;
+		@apply rounded-md px-5 py-2 flex items-center leading-none font-medium;
+	}
+	.button--primary {
+		@apply bg-blue-500 border-blue-500 text-white;
 	}
 	.button--primary,
 	.button--primary i,
@@ -445,7 +446,7 @@
 		@apply border;
 	}
 	.button--primary:hover {
-		@apply bg-white transition-all;
+		@apply bg-white text-blue-500 transition-all;
 	}
 	.button--primary:hover i {
 		@apply text-blue-500;
