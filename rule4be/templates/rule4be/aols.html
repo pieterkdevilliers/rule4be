@@ -4,15 +4,15 @@
 {% block content %}
 <div class="flex justify-start items-center">
     <h1 class="font-semibold text-3xl">Areas of Life</h1>
-    <div class="ms-5">
-        <div id="create-form"></div>
+    <div class="ms-5 relative">
+        <div id="create-form" class="absolute left-5 z-50"></div>
         <button
             data-open-crud-modal
             hx-get="{% url 'create_aol' %}"
             hx-headers='{"Content-Type":"text/html"}'
             hx-accept="text/html"
             hx-trigger="click"
-            hx-target="#crudModalContent"
+            hx-target="#create-form"
             hx-swap="innerHTML">
             <i class="icon icon--add text-lg"></i>
         </button>
@@ -29,22 +29,39 @@
                 <h1 class="font-semibold text-xl">{{ area_of_life.name }}</h1>
                 <p>{{ area_of_life.description }}</p>
             </div>
-            <div class="aol-tools relative" x-data="{ open: false}">
+            <div
+                class="aol-tools relative"
+                x-data="{ open: false}">
                 <button @click="open = ! open">
                     <i class="fa-regular fa-ellipsis-vertical text-lg text-blue-500"></i>
                 </button>
-                <div class="flex justify-between items-center gap-x-4 bg-white p-2 rounded-md shadow border border-gray-100 absolute -top-12 -right-4"
-                    x-show="open" x-transition @click.away="open = false">
-                    <button hx-get="{% url 'edit_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
-                        hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click"
-                        hx-swap="outerHTML">
-                        <i class="icon icon--edit"></i>
-                    </button>
-                    <button hx-get="{% url 'delete_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}'
-                        hx-accept="text/html" hx-target="#create-form-{{ area_of_life.id }}" hx-trigger="click"
-                        hx-swap="outerHTML">
-                        <i class="icon icon--delete"></i>
-                    </button>
+                <div
+                    class="flex flex-col justify-between gap-x-4 bg-white p-2 rounded-md shadow border border-gray-100 absolute -top-12 -right-4"
+                    x-show="open"
+                    x-transition
+                    @click.away="open = false">
+                    <div class="flex justify-end items-center gap-x-4">
+                        <button
+                            class="ms-auto"
+                            hx-get="{% url 'edit_aol' area_of_life.id %}"
+                            hx-headers='{"Content-Type":"text/html"}'
+                            hx-accept="text/html"
+                            hx-trigger="click"
+                            hx-target="#aolCrudFormContainer-{{ area_of_life.id }}"
+                            hx-swap="innerHTML">
+                            <i class="icon icon--edit"></i>
+                        </button>
+                        <button
+                            hx-get="{% url 'delete_aol' area_of_life.id %}"
+                            hx-headers='{"Content-Type":"text/html"}'
+                            hx-accept="text/html"
+                            hx-trigger="click"
+                            hx-target="#aolCrudFormContainer-{{ area_of_life.id }}"
+                            hx-swap="innerHTML">
+                            <i class="icon icon--delete"></i>
+                        </button>
+                    </div>
+                    <div id="aolCrudFormContainer-{{ area_of_life.id }}"></div>
                 </div>
             </div>
         </div>
