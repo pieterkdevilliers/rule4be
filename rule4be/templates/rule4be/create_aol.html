@@ -1,22 +1,65 @@
-
-<h1>Create AOL</h1>
-
-
-<form hx-post="{% url 'create_aol' %}" hx-trigger="submit" hx-target="#create-form" id="create-form">
-    {% csrf_token %}
-    <!-- Include the necessary input fields -->
-    <div>
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" required>
+<div class="card-form__container border rounded-md p-3 shadow-md bg-white min-w-72">
+    <div
+        data-create-aol-form
+        class="modal-form">
+        <h1 class="form__title">Create an Area of Life</h1>
+        <form
+            id="create-form"
+            class="modal-form"
+            hx-post="{% url 'create_aol' %}"
+            hx-trigger="submit"
+            hx-target=".status__message"
+            x-init="requiredFieldIndicator()"
+            x-data="formValidator">
+            {% csrf_token %}
+            <!-- Include the necessary input fields -->
+            <div class="form__label-field">
+                <label class="form__label" for="name">Name:</label>
+                <input class="form__input" type="text" name="name" id="name" required>
+            </div>
+            <div class="form__label-field">
+                <label class="form__label" for="description">Description:</label>
+                <textarea class="form__input" type="text" name="description" id="description" required></textarea>
+            </div>
+            <div class="mt-5 flex justify-between items-center">
+                <button class="ms-auto button button--primary" type="submit">Add AOL</button>
+            </div>
+        </form>
     </div>
-    <div>
-        <label for="description">Description:</label>
-        <textarea type="text" name="description" id="description" required></textarea>
+    <div
+        data-status-toast-aol
+        id="statusToast"
+        class="status__message toast-container bg-green-50 text-lg font-medium text-center rounded-lg p-3 w-full max-w-[300px] hidden">
+        <div class="toast copy-text-toast bg-green-50" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body text-center fs-4 p-3">
+                {% if message %}
+                {{ message }}
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div>
-        <button type="submit">Add AOL</button>
-    </div>
-</form>
+</div>
 
-<!-- Display the result of the login attempt -->
-<div id="login-result"></div>
+<!-- Handle statusToast -->
+<script>
+    $(document).ready(function() {
+        // Bind htmx:afterOnLoad event listener to the form
+        $('[data-create-aol-form]').on('htmx:afterOnLoad', function() {
+            $('[data-create-aol-form]').addClass('hidden');
+            // Opens the toast
+            $('[data-status-toast-aol]').fadeIn(300, function() {
+                $(this).removeClass('hidden');
+            });
+            // Closes the toast after 2 seconds & reloads the page
+            setTimeout(function() {
+                $('[data-status-toast-aol]').fadeOut(300, function() {
+                    $(this).addClass('hidden');
+                    location.reload();
+                });
+            }, 2000);
+        });
+
+        // htmx.logAll();
+    });
+
+</script>
