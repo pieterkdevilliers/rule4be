@@ -1,14 +1,14 @@
-
-<h1>Confirm Deletion</h1>
-
-<p>Are you sure you want to delete the Area of Life: "{{ aol.name }}"?</p>
-
-<form hx-post="{% url 'delete_aol' aol.id %}" hx-trigger="submit" hx-target="#delete-result" id="delete-form">
-    {% csrf_token %}
-    <div>
-        <button type="submit">Yes, Delete</button>
-        <a href="{% url 'load_login_page' %}">Cancel</a>
-    </div>
-</form>
+<div class="card-form__container border rounded-md p-3 shadow-inner bg-white min-w-72">
+    <h1>Confirm Deletion</h1>
+    <p>Are you sure you want to delete the Area of Life: "{{ aol.name }}"?</p>
+    
+    <form hx-post="{% url 'delete_aol' aol.id %}" hx-trigger="submit" hx-target="#delete-result" id="delete-form">
+        {% csrf_token %}
+        <div>
+            <button type="submit">Yes, Delete</button>
+            <a href="{% url 'load_login_page' %}">Cancel</a>
+        </div>
+    </form>
+</div>
 
 <div id="delete-result"></div>

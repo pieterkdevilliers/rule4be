@@ -1375,12 +1375,24 @@ button[type="submit"]:disabled:hover {
   top: -3rem;
 }
 
+.left-3 {
+  left: 0.75rem;
+}
+
 .right-5 {
   right: 1.25rem;
 }
 
 .top-5 {
   top: 1.25rem;
+}
+
+.left-4 {
+  left: 1rem;
+}
+
+.left-5 {
+  left: 1.25rem;
 }
 
 .z-50 {
@@ -1419,6 +1431,10 @@ button[type="submit"]:disabled:hover {
 
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
 }
 
 .block {
@@ -1469,6 +1485,14 @@ button[type="submit"]:disabled:hover {
   width: 100%;
 }
 
+.min-w-64 {
+  min-width: 16rem;
+}
+
+.min-w-72 {
+  min-width: 18rem;
+}
+
 .max-w-\[300px\] {
   max-width: 300px;
 }
@@ -1499,6 +1523,10 @@ button[type="submit"]:disabled:hover {
 
 .justify-start {
   justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .justify-center {
