@@ -166,7 +166,20 @@ def load_aols_page(request):
                  ).strftime('%Y-%m-%d')
     last_month = (datetime.now() - relativedelta(months=1)
                   ).strftime('%Y-%m-%d')
-    last_year = (datetime.now() - relativedelta(years=1)).strftime('%Y-%m-%d')
+    three_months = (datetime.now() - relativedelta(months=3)
+                    ).strftime('%Y-%m-%d')
+    six_months = (datetime.now() - relativedelta(months=6)
+                  ).strftime('%Y-%m-%d')
+    last_year = (datetime.now() - relativedelta(years=1)
+                 ).strftime('%Y-%m-%d')
+    two_years = (datetime.now() - relativedelta(years=2)
+                 ).strftime('%Y-%m-%d')
+    three_years = (datetime.now() - relativedelta(years=3)
+                   ).strftime('%Y-%m-%d')
+    five_years = (datetime.now() - relativedelta(years=5)
+                  ).strftime('%Y-%m-%d')
+    ten_years = (datetime.now() - relativedelta(years=10)
+                 ).strftime('%Y-%m-%d')
 
     for aol in aols:
         aol.snapshots = {
@@ -174,7 +187,13 @@ def load_aols_page(request):
             'yesterday': Snapshot.objects.filter(created=yesterday, area_of_life=aol),
             'last_week': Snapshot.objects.filter(created=last_week, area_of_life=aol),
             'last_month': Snapshot.objects.filter(created=last_month, area_of_life=aol),
+            'three_months': Snapshot.objects.filter(created=three_months, area_of_life=aol),
+            'six_months': Snapshot.objects.filter(created=six_months, area_of_life=aol),
             'last_year': Snapshot.objects.filter(created=last_year, area_of_life=aol),
+            'two_years': Snapshot.objects.filter(created=two_years, area_of_life=aol),
+            'three_years': Snapshot.objects.filter(created=three_years, area_of_life=aol),
+            'five_years': Snapshot.objects.filter(created=five_years, area_of_life=aol),
+            'ten_years': Snapshot.objects.filter(created=ten_years, area_of_life=aol),
         }
 
     context = {
@@ -196,7 +215,13 @@ def load_today_snapshot_page(request, pk):
     yesterday = today - timedelta(days=1)
     last_week = today - timedelta(days=7)
     last_month = today - relativedelta(months=1)
+    three_months = today - relativedelta(months=3)
+    six_months = today - relativedelta(months=6)
     last_year = today - relativedelta(years=1)
+    two_years = today - relativedelta(years=2)
+    three_years = today - relativedelta(years=3)
+    five_years = today - relativedelta(years=5)
+    ten_years = today - relativedelta(years=10)
 
     today_snapshot = Snapshot.objects.filter(
         created__in=[today], area_of_life=pk)
@@ -205,7 +230,8 @@ def load_today_snapshot_page(request, pk):
         try:
             queryset = Snapshot.objects.filter(
                 created__in=[today, yesterday,
-                             last_week, last_month, last_year],
+                             last_week, last_month, three_months, six_months,
+                             last_year, two_years, three_years, five_years, ten_years],
                 area_of_life=pk,
                 owner=request.user,
             ).order_by('-created')
@@ -221,8 +247,20 @@ def load_today_snapshot_page(request, pk):
                     snapshot_data['relative_date'] = "Last Week"
                 elif created_date == last_month:
                     snapshot_data['relative_date'] = "Last Month"
+                elif created_date == three_months:
+                    snapshot_data['relative_date'] = "3 Months Ago"
+                elif created_date == six_months:
+                    snapshot_data['relative_date'] = "6 Months Ago"
                 elif created_date == last_year:
                     snapshot_data['relative_date'] = "Last Year"
+                elif created_date == two_years:
+                    snapshot_data['relative_date'] = "2 Years Ago"
+                elif created_date == three_years:
+                    snapshot_data['relative_date'] = "3 Years Ago"
+                elif created_date == five_years:
+                    snapshot_data['relative_date'] = "5 Years Ago"
+                elif created_date == ten_years:
+                    snapshot_data['relative_date'] = "10 Years Ago"
                 else:
                     snapshot_data['relative_date'] = created_date
                 serialized_data.append(snapshot_data)
