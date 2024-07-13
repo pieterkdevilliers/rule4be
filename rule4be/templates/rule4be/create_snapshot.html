@@ -3,7 +3,14 @@
         data-create-snapshot-form
         data-aol-id="{{ aol_id }}"
         class="card-form__form">
-        <h1 class="form__title">Create a Snapshot</h1>
+        <div class="form__header flex items-center">
+            <h1 class="form__title">Create a Snapshot</h1>
+            <i
+            data-close-crud-modal
+            class="icon--dismiss ms-auto text-lg cursor-pointer"
+            @click="$dispatch('close-form', {formId: 'snapshot-{{ aol_id }}'})"
+            ></i>
+        </div>
         <form 
             data-aol-id="{{ aol_id }}"
             id="create-form"
@@ -28,11 +35,7 @@
                     <div class="file-upload__container">
                         <div class="file-upload">
                             <input class="file-input image-file-input" type="file" name="image" id="image" accept="image/*">
-                            <button
-                                class="upload-button image-upload-button button button--small"
-                                type="button">
-                                Choose file
-                            </button>
+                            <button class="upload-button image-upload-button button button--small" type="button">Choose file</button>
                             <span class="file-name image-file-name">No file chosen</span>
                         </div>
                         <div data-invalid-feedback="" class="invalid-feedback" x-text="imageError"></div>
@@ -43,11 +46,7 @@
                     <div class="file-upload__container">
                         <div class="file-upload">
                             <input class="file-input video-file-input" type="file" name="video" id="video" accept="video/*">
-                            <button
-                                class="upload-button video-upload-button button button--small"
-                                type="button">
-                                Choose file
-                            </button>
+                            <button class="upload-button video-upload-button button button--small" type="button">Choose file</button>
                             <span class="file-name video-file-name">No file chosen</span>
                         </div>
                         <div data-invalid-feedback="" class="invalid-feedback" x-text="videoError"></div>
@@ -80,16 +79,15 @@
         $('[data-create-snapshot-form]').on('htmx:afterOnLoad', function() {
             const formAolId = $(this).data('aol-id');
             const snapshotButton = $('[data-button-aol-id="' + formAolId + '"]');
-            console.log('formAolId: ' + formAolId);
-            console.log('snapshotButton: ' + snapshotButton);
+
             // Opens the toast
-            $('[data-status-toast-{{ aol_id }}]').fadeIn(300, function() {
+            $('[data-status-toast-' + formAolId + ']').fadeIn(300, function() {
                 $('[data-create-snapshot-form]').addClass('hidden');
                 $(this).removeClass('hidden');
             });
             // Closes the toast after 2 seconds & reloads the page
             setTimeout(function() {
-                $('[data-status-toast-{{ aol_id }}]').fadeOut(300, function() {
+                $('[data-status-toast-' + formAolId + ']').fadeOut(300, function() {
                     $(this).addClass('hidden');
                     $(snapshotButton).click();
                     $('[data-snapshot-today-trigger]').click();
@@ -99,5 +97,4 @@
 
         // htmx.logAll();
     });
-
 </script>

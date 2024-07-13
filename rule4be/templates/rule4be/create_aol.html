@@ -1,10 +1,17 @@
-<div class="card-form__container border rounded-md p-3 shadow-md bg-white min-w-72">
+<div class="card-form__container border rounded-md p-3 shadow-md bg-white min-w-72" x-data>
     <div
         data-create-aol-form
         class="modal-form">
-        <h1 class="form__title">Create an Area of Life</h1>
+        <div class="form__header flex items-center">
+            <h1 class="form__title">Create an Area of Life</h1>
+            <i
+            data-close-crud-modal
+            class="icon--dismiss ms-auto text-lg cursor-pointer"
+            @click="$dispatch('close-form', {formId: 'create-aol'})"
+            ></i>
+        </div>
         <form
-            id="create-form"
+            id="create-aol-form"
             class="modal-form"
             hx-post="{% url 'create_aol' %}"
             hx-trigger="submit"
