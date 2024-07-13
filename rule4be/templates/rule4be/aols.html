@@ -4,117 +4,65 @@
 {% block content %}
 <div class="flex justify-start items-center">
     <h1 class="font-semibold text-3xl">Areas of Life</h1>
-    <div class="ms-5 relative">
-        <div id="create-form" class="absolute left-5 z-50"></div>
-        <button
-            data-open-crud-modal
-            hx-get="{% url 'create_aol' %}"
-            hx-headers='{"Content-Type":"text/html"}'
-            hx-accept="text/html"
-            hx-trigger="click"
-            hx-target="#create-form"
-            hx-swap="innerHTML">
+    <div class="ms-5 relative" x-data="{ open: false }" @close-form.window="if ($event.detail.formId === 'create-aol') open = false">
+        <button data-open-crud-modal @click="open = ! open" hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#create-aol-form" hx-swap="innerHTML">
             <i class="icon icon--add text-lg"></i>
         </button>
+        <div data-modal-form-container id="create-aol-form" class="absolute left-5 z-50" x-transition x-show="open"></div>
     </div>
     <div class="ms-auto"><a href="{% url 'load_user_profile' %}"><i class="icon--user text-lg"></i></a></div>
 </div>
 
-<div class="aol-container grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 px-5" x-data="{ openForm: null }">
+<div class="aol-container grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 px-5" x-data="{ openSnapshotForm: null }" @open-snapshot-form.window="openSnapshotForm = $event.detail.snapshotId">
     {% for area_of_life in aols %}
 
-    <div class="aol-item card shadow-md">
-        <div class="flex justify-between items-start">
-            <div class="aol-details">
-                <h1 class="font-semibold text-xl">{{ area_of_life.name }}</h1>
-                <p>{{ area_of_life.description }}</p>
-            </div>
-            <div
-                class="aol-tools relative"
-                x-data="{ open: false}">
-                <button @click="open = ! open">
-                    <i class="fa-regular fa-ellipsis-vertical text-lg text-blue-500"></i>
-                </button>
-                <div
-                    class="flex flex-col justify-between gap-x-4 bg-white p-2 rounded-md shadow border border-gray-100 absolute -top-12 -right-4"
-                    x-show="open"
-                    x-transition
-                    @click.away="open = false">
-                    <div class="flex justify-end items-center gap-x-4">
-                        <button
-                            class="ms-auto"
-                            hx-get="{% url 'edit_aol' area_of_life.id %}"
-                            hx-headers='{"Content-Type":"text/html"}'
-                            hx-accept="text/html"
-                            hx-trigger="click"
-                            hx-target="#aolCrudFormContainer-{{ area_of_life.id }}"
-                            hx-swap="innerHTML">
-                            <i class="icon icon--edit"></i>
-                        </button>
-                        <button
-                            hx-get="{% url 'delete_aol' area_of_life.id %}"
-                            hx-headers='{"Content-Type":"text/html"}'
-                            hx-accept="text/html"
-                            hx-trigger="click"
-                            hx-target="#aolCrudFormContainer-{{ area_of_life.id }}"
-                            hx-swap="innerHTML">
-                            <i class="icon icon--delete"></i>
-                        </button>
+    <div class="aol-item card shadow-md bg-custom-pattern">
+        <div class="card__header">
+            <div class="flex justify-between items-start">
+                <div class="aol-details">
+                    <h1 class="font-semibold text-2xl">{{ area_of_life.name }}</h1>
+                    <p>{{ area_of_life.description }}</p>
+                </div>
+                <div class="aol-tools relative" x-data="{ open: false }">
+                    <button @click="open = ! open">
+                        <i class="fa-regular fa-ellipsis-vertical text-lg text-blue-500"></i>
+                    </button>
+                    <div class="flex flex-col justify-between gap-x-4 bg-white p-2 rounded-md shadow border border-gray-100 absolute -top-12 -right-4" x-show="open" x-transition @click.away="open = false">
+                        <div class="flex justify-end items-center gap-x-4">
+                            <button class="ms-auto" hx-get="{% url 'edit_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#aolCrudFormContainer-{{ area_of_life.id }}" hx-swap="innerHTML">
+                                <i class="icon icon--edit"></i>
+                            </button>
+                            <button hx-get="{% url 'delete_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#aolCrudFormContainer-{{ area_of_life.id }}" hx-swap="innerHTML">
+                                <i class="icon icon--delete"></i>
+                            </button>
+                        </div>
+                        <div id="aolCrudFormContainer-{{ area_of_life.id }}"></div>
                     </div>
-                    <div id="aolCrudFormContainer-{{ area_of_life.id }}"></div>
                 </div>
             </div>
-        </div>
-        <div x-data="{ open: false }">
-            <button
-                data-load-snapshot-form
-                data-button-aol-id="{{ area_of_life.id }}"
-                id="create-snapshot-{{ area_of_life.id }}"
-                class="bg-white aspect-square w-[28px] h-[28px] p-2 rounded-full border border-gray-100 flex justify-center items-center mt-4 shadow-sm hover:shadow-none transition-all"
-                @click="openForm = openForm === {{ area_of_life.id }} ? null : {{ area_of_life.id }}"
-                hx-get="{% url 'create_snapshot' area_of_life.id %}"
-                hx-headers='{"Content-Type":"text/html"}'
-                hx-accept="text/html"
-                hx-target="#create-form-{{ area_of_life.id }}"
-                hx-trigger="click"
-                hx-swap="innerHTML"
-                >
+            <button data-load-snapshot-form data-button-aol-id="{{ area_of_life.id }}" id="create-snapshot-{{ area_of_life.id }}" class="create-snapshot-button bg-white aspect-square w-[28px] h-[28px] p-2 rounded-full border border-gray-100 flex justify-center items-center mt-4 shadow-sm hover:shadow-none transition-all" @click="$dispatch('open-snapshot-form', { snapshotId: openSnapshotForm === {{ area_of_life.id }} ? null : {{ area_of_life.id }} }); " hx-get="{% url 'create_snapshot' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#create-form-{{ area_of_life.id }}" hx-swap="innerHTML">
                 <i class="icon icon--add m-0 aspect-square"></i>
             </button>
-            <div
-                id="create-form-{{ area_of_life.id }}"
-                x-show="openForm === {{ area_of_life.id }}"
-                x-transition
-                >
-            </div>
+            <div id="create-form-{{ area_of_life.id }}" x-show="openSnapshotForm === {{ area_of_life.id }}" x-transition></div>
         </div>
-        <div
-            data-snapshot-today
-            hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}"
-            hx-trigger="load"
-            hx-target="#today-{{ area_of_life.id }}"
-            hx-headers='{"Content-Type":"text/html"}'
-            hx-accept="text/html">
-
+        <div class="card__body" @close-form.window="if ($event.detail.formId === 'snapshot-{{ area_of_life.id }}') openSnapshotForm = null">
+            <div data-snapshot-today hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="load" hx-target="#today-{{ area_of_life.id }}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"></div>
+            <div id="today-{{ area_of_life.id }}"></div>
+            <!-- Display snapshots for the current AOL -->
         </div>
-        <div
-            data-snapshot-today-trigger
-            hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}"
-            hx-trigger="click"
-            hx-target="#today-{{ area_of_life.id }}"
-            hx-headers='{"Content-Type":"text/html"}'
-            hx-accept="text/html">
-        </div>
-
-        <br>
-
-        <div id="today-{{ area_of_life.id }}"></div>
-        <!-- Display snapshots for the current AOL -->
+        <div data-snapshot-today-trigger hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="click" hx-target="#today-{{ area_of_life.id }}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"></div>
     </div>
 
     {% endfor %}
 </div>
 
+<style>
+    .bg-custom-pattern {
+        background-color: #ffffff;
+        background-size: 4px 4px;
+        background-image: repeating-linear-gradient(45deg, #f0f0f0 0, #f0f0f0 0.4px, #ffffff 0, #ffffff 50%);
+    }
+</style>
 <!-- Display the result of the login attempt -->
 <div id="login-result"></div>
 {% endblock %}
