@@ -6,7 +6,7 @@
 	html {
 		color: #475569;
 		font-family: "Source Sans 3", sans-serif;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: 300;
 		line-height: 21px;
 	}
@@ -759,10 +759,14 @@
 
 	/* Cards - General */
 	.card {
-		@apply bg-white rounded-xl border-2 p-5;
+		@apply bg-gray-50/50 rounded-xl border-2 p-0;
 	}
+	
 	.card__header {
-		@apply flex justify-center items-center;
+		@apply bg-white rounded-t-xl border-b border-b-slate-100 p-3;
+	}
+	.card__body {
+		@apply p-3 pb-0 rounded-b-xl bg-transparent;
 	}
 
 	/* Card Layouts */
@@ -819,15 +823,6 @@
 	}
 	.card:nth-child(10) {
 		@apply border-rose-400;
-	}
-	.card__header {
-		@apply w-full relative bg-gray-200 h-[60px] rounded-t-lg;
-	}
-	.card__header .company-profile__logo {
-		@apply w-[86px] h-[86px] absolute top-0 left-1/2 transform -translate-x-1/2;
-	}
-	.card__header .company-profile__logo img {
-		@apply aspect-square object-contain w-[86px] h-[86px];
 	}
 	.card__title {
 		@apply mt-[53px];
