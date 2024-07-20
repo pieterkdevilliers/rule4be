@@ -1,29 +1,39 @@
 {% extends 'rule4be/main.html' %}
 
 {% block content %}
-<h1>Login</h1>
+<div class="page__content mx-auto max-w-2/3 flex flex-col items-center">
+    <h1 class="page__header mx-auto">Page Header</h1>
+    <div class="page__intro mx-auto">Page intro content</div>
+    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
+        <div class="login__container bg-white p-5">
+            <h2>Login</h2>
+            <!-- HTMX form to handle login -->
+            <form hx-post="{% url 'load_login_page' %}" hx-trigger="submit" hx-target="#login-form" id="login-form">
+                {% csrf_token %}
+                <!-- Include the necessary input fields for login -->
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" id="username" required>
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                <div>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+        <div class="signup__container bg-white p-5">
+            <h2>Sign Up</h2>
+            <p>Sign up to create an account</p>
+            <a href="{% url 'signup' %}">Sign Up</a>
+    </div>
+</div>
 
-<!-- HTMX form to handle login -->
-<form hx-post="{% url 'load_login_page' %}" hx-trigger="submit" hx-target="#login-form" id="login-form">
-    {% csrf_token %}
-    <!-- Include the necessary input fields for login -->
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-    </div>
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
 
 <!-- Display the result of the login attempt -->
 <div id="login-result"></div>
 
-<a href="{% url 'signup' %}">Sign Up</a>
 
 {% endblock %}
-```
