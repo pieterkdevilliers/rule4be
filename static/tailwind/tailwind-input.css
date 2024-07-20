@@ -103,6 +103,12 @@
 	.fa-user::before {
 		content: "\f007";
 	}
+	.fa-address-card::before {
+		content: "\f2bb";
+	}
+	.fa-person-to-door::before {
+		content: "\e433";
+	}
 	.fa-video::before {
 		content: "\f03d";
 	}
@@ -198,7 +204,7 @@
 		@apply fa-light fa-xmark;
 	}
 	.icon--back {
-		@apply fa-solid fa-arrow-left me-1 text-blue-500;
+		@apply fa-light fa-arrow-left me-1 text-blue-500;
 	}
 	.icon--add-note {
 		@apply fa-regular fa-note-sticky me-1 text-blue-500;
@@ -254,6 +260,12 @@
 	}
 	.icon--user {
 		@apply fa-light fa-user text-blue-500;
+	}
+	.icon--profile {
+		@apply fa-light fa-address-card text-blue-500;
+	}
+	.icon--logout {
+		@apply fa-light fa-person-to-door text-blue-500;
 	}
 
 	/* Data Attributes */
@@ -500,24 +512,22 @@
 		@apply hidden;
 	}
 
-	/* Breadcrumbs */
-	.breadcrumbs {
-		@apply flex flex-row items-center mt-3 mb-5;
+	/* Nav General */
+
+	a,
+	.menu__item,
+	.text__link {
+		@apply border-b border-transparent hover:text-blue-500 hover:border-blue-500 transition-all;
 	}
-	.breadcrumbs a {
-		@apply text-blue-500 underline underline-offset-4;
-	}
-	.breadcrumbs a:hover {
-		@apply text-green-300 no-underline;
-	}
-	.breadcrumbs i {
-		@apply mx-3 text-xl leading-none;
-	}
-	.breadcrumbs strong {
-		@apply font-medium text-green-300;
+	a,
+	a i,
+	a i[class*="icon--"],
+	.menu__item,
+	.menu__item i[class*="icon--"],
+	.text__link i[class*="icon--"] {
+		@apply text-inherit hover:cursor-pointer;
 	}
 
-	/* Nav General */
 	.button--nav {
 		@apply text-white text-center px-4 py-2 rounded-md w-full transition-all min-w-[130px];
 	}

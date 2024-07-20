@@ -1,26 +1,52 @@
-{% extends 'rule4be/main.html' %}
+<div
+    id="profileContainer"
+    class="mt-12 swap-transition rounded-lg bg-custom-pattern p-5 transition-all opacity-100">
+    <div class="bg-white p-5 rounded-lg">
+        <div class="flex justify-between items-center">
+            <h1 class="font-semibold text-2xl">Your Profile Details</h1>
+            <i
+                data-close-profile-container
+                class="icon--dismiss ms-auto"
+                x-data
+                @click="closeProfileContainer()"></i>
+        </div>
+        <p>Username: {{profile}}</p>
+        <p>Trial Start Date: {{profile.sign_up_date}}</p>
+        <p>Trial End Date: {{profile.trial_end_date}}</p>
+        <p>Account Status: {{profile.account_status}}</p>
+        {% if profile.subscription_activation_date %}
+        <p>Subscription Activation Date: {{profile.subscription_activation_date}}</p>
+        {% endif %}
+        {% if profile.subscription_cancellation_date %}
+        <p>Subscription Cancellation Date: {{profile.subscription_cancellation_date}}</p>
+        {% endif %}
+        
+        <button
+            class="text__link"
+            x-data
+            @click="closeProfileContainer()">
+            <i class="icon--back"></i>
+            <span>Back</span>
+        </button>
 
-{% block content %}
-<h1>Your Profile Details</h1>
-<p>Username: {{profile}}</p>
-<p>Trial Start Date: {{profile.sign_up_date}}</p>
-<p>Trial End Date: {{profile.trial_end_date}}</p>
-<p>Account Status: {{profile.account_status}}</p>
-{% if profile.subscription_activation_date %}
-<p>Subscription Activation Date: {{profile.subscription_activation_date}}</p>
-{% endif %}
-{% if profile.subscription_cancellation_date %}
-<p>Subscription Cancellation Date: {{profile.subscription_cancellation_date}}</p>
-{% endif %}
+    
+        <!--      Go to stripe customer portal to let user manage subscription. -->
+        <form action="{%  url  'direct-to-customer-portal' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="session-id" name="session_id" value="" />
+            <button id="checkout-and-portal-button" type="submit">Manage your billing information</button>
+        </form>
+    </div>
+    <script>
+        HTMLElement.prototype.removeAllClasses = function() {
+            this.className = '';
+        };
 
-<a href="{% url 'load_aols_page' %}">Back</a>
-
-<!--      Go to stripe customer portal to let user manage subscription. -->
-<form action="{%  url  'direct-to-customer-portal' %}" method="POST">
-    {% csrf_token %}
-    <input type="hidden" id="session-id" name="session_id" value="" />
-    <button id="checkout-and-portal-button" type="submit">Manage your billing information</button>
-</form>
-
-{% endblock %}
-```
+        function closeProfileContainer() {
+            const profileContainer = document.getElementById('profileContainer');
+            profileContainer.innerHTML = '';
+            profileContainer.removeAllClasses();
+            profileContainer.classList.add('transition-all', 'opacity-0', 'duration-300', 'ease-in-out');
+        }
+    </script>
+</div>

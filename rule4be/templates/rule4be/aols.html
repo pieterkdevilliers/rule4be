@@ -10,10 +10,44 @@
         </button>
         <div data-modal-form-container id="create-aol-form" class="absolute left-5 z-50" x-transition x-show="open"></div>
     </div>
-    <div class="ms-auto"><a href="{% url 'load_user_profile' %}"><i class="icon--user text-lg"></i></a></div>
+    <div
+        class="ms-auto relative"
+        x-data="{ open: false }">
+        <button @click="open = ! open">
+            <i class="icon--user text-lg"></i>
+        </button>
+        <div
+            id="userDropdownMenu"
+            class="flex flex-col justify-between gap-y-4 bg-white px-6 py-4 rounded-md shadow border border-gray-100 absolute top-6 -right-2 z-50"
+            x-show="open"
+            x-transition
+            @click.away="open = false">
+            <span
+                class="menu__item flex justify-start items-center gap-x-2"
+                hx-get="{% url 'load_user_profile' %}"
+                hx-trigger="click"
+                hx-target="#profileContainer"
+                hx-swap="outerHTML">
+                <i class="icon--profile"></i>
+                <span>Profile</span>
+            </span>
+            <a
+                class="flex justify-start items-center gap-x-2"
+                href="{% url 'logout' %}">
+                <i class="icon--logout"></i>
+                <span>Logout</span></a>
+        </div>
+    </div>
 </div>
-
-<div class="aol-container grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 px-5" x-data="{ openSnapshotForm: null }" @open-snapshot-form.window="openSnapshotForm = $event.detail.snapshotId">
+<div
+    id="profileContainer"
+    class="mt-12 swap-transition"
+></div>
+<div
+    id="aolContainer"
+    class="aol-container grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 px-5"
+    x-data="{ openSnapshotForm: null }"
+    @open-snapshot-form.window="openSnapshotForm = $event.detail.snapshotId">
     {% for area_of_life in aols %}
 
     <div class="aol-item card shadow-md bg-custom-pattern">
@@ -56,13 +90,12 @@
     {% endfor %}
 </div>
 
-<style>
-    .bg-custom-pattern {
-        background-color: #ffffff;
-        background-size: 4px 4px;
-        background-image: repeating-linear-gradient(45deg, #f0f0f0 0, #f0f0f0 0.4px, #ffffff 0, #ffffff 50%);
-    }
-</style>
+
+<script>
+    document.addEventListener('htmx:afterRequest', (event) => {
+        document.body.click();
+    });
+</script>
 <!-- Display the result of the login attempt -->
 <div id="login-result"></div>
 {% endblock %}
