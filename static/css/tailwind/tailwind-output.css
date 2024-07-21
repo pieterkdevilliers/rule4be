@@ -789,14 +789,16 @@ body > main {
   width: 100%;
 }
 
-.modal-form .form__title,
+.form__title,
+	.modal-form .form__title,
 	.card .form__title {
   font-size: 1.25rem;
   line-height: 1.75rem;
   font-weight: 500;
 }
 
-.modal-form .form__title {
+.form__title,
+	.modal-form .form__title {
   max-width: 75%;
 }
 
@@ -934,6 +936,10 @@ form label .required {
   height: 0px;
 }
 
+.form__submit {
+  margin-top: 1.25rem;
+}
+
 button[type="submit"]:disabled {
   opacity: 0.3;
 }
@@ -1066,6 +1072,16 @@ button[type="submit"]:disabled:hover {
   font-size: 1rem;
   line-height: 1.5rem;
   line-height: 1;
+}
+
+.button--outline {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 
 .shadow-button.active {
@@ -1528,10 +1544,6 @@ a:hover,
   margin-top: 1.25rem;
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
-}
-
 .block {
   display: block;
 }
@@ -1580,20 +1592,12 @@ a:hover,
   width: 100%;
 }
 
-.w-96 {
-  width: 24rem;
-}
-
 .min-w-72 {
   min-width: 18rem;
 }
 
 .max-w-\[300px\] {
   max-width: 300px;
-}
-
-.max-w-\[960px\] {
-  max-width: 960px;
 }
 
 .border-collapse {
@@ -1741,6 +1745,11 @@ a:hover,
 
 .text-lg {
   font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
   line-height: 1.75rem;
 }
 
