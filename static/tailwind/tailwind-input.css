@@ -341,10 +341,12 @@
 	.modal-form {
 		@apply w-full;
 	}
+	.form__title,
 	.modal-form .form__title,
 	.card .form__title {
 		@apply text-xl font-medium;
 	}
+	.form__title,
 	.modal-form .form__title {
 		@apply max-w-[75%];
 	}
@@ -487,9 +489,9 @@
 		@apply bg-red-700 text-white transition-all;
 	}
 	.button--outline {
-		@apply border;
+		@apply border border-blue-500 text-blue-500 bg-white;
 	}
-
+	
 	.shadow-button {
 		@apply shadow-md rounded-lg border border-gray-50 p-3 lg:p-5 transition-all;
 	}
