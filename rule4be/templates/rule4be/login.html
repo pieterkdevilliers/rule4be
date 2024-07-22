@@ -73,9 +73,35 @@
         </div>
 
     </div>
-    <div class="page__intro mx-auto">
-        <a class="button button--default button--outline" href="{% url 'signup' %}">Create Your Journal</a>
+    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
+        <div class="login__container bg-white p-5">
+            <h2 class="form__title">Login</h2>
+            <!-- HTMX form to handle login -->
+            <form id="login-form" hx-post="{% url 'load_login_page' %}" hx-trigger="submit" hx-target="#login-form">
+                {% csrf_token %}
+                <!-- Include the necessary input fields for login -->
+                <div class="form__label-field">
+                    <label class="form__label" for="username">Username:</label>
+                    <input class="form__intput" type="text" name="username" id="username" required>
+                </div>
+                <div class="form__label-field">
+                    <label class="form__label" for="password">Password:</label>
+                    <input class="form__intput" type="password" name="password" id="password" required>
+                </div>
+                <div>
+                    <button class="form__submit button button--primary" type="submit">Log In</button>
+                </div>
+            </form>
+        </div>
+        <div class="signup__container bg-white p-5">
+            <h2 class="form__title">Sign Up</h2>
+            <p class="text-xl">Sign up to create an account</p>
+            <a class="button button--default button--outline" href="{% url 'signup' %}">Sign Up</a>
+        </div>
     </div>
+    <footer>
+        <p>&copy; 2024 Rule4.app | Terms & Conditions | Privacy Policy</p>
+    </footer>
 
 
     <!-- Display the result of the login attempt -->
