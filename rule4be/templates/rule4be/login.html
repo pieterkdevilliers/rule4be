@@ -1,18 +1,25 @@
 {% extends 'rule4be/main.html' %}
+{% load static %}
 
 {% block content %}
 <div class="page__content mx-auto max-w-2/3 flex flex-col items-center">
-    <h1 class="page__header mx-auto">Page Header</h1>
-    <div class="page__intro mx-auto">Page intro content</div>
+    <h1 class="page__header mx-auto">A journal to remind you of how far you've come, the progress you've made.</h1>
+    <p class="text-l">Rule 4: Compare yourself to who you were yesterday, not who someone else is today. - Jordan B
+        Peterson.</p>
+    <div class="page__intro mx-auto items-center">
+        <a class="button button--default button--outline" href="{% url 'signup' %}">Create Your Journal</a>
+    </div>
+    <div>
+        <video width="640" height="480" controls>
+            <source src="{% static 'videos/my_video.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
     <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
         <div class="login__container bg-white p-5">
             <h2 class="form__title">Login</h2>
             <!-- HTMX form to handle login -->
-            <form
-                id="login-form"
-                hx-post="{% url 'load_login_page' %}"
-                hx-trigger="submit"
-                hx-target="#login-form">
+            <form id="login-form" hx-post="{% url 'load_login_page' %}" hx-trigger="submit" hx-target="#login-form">
                 {% csrf_token %}
                 <!-- Include the necessary input fields for login -->
                 <div class="form__label-field">
@@ -32,12 +39,47 @@
             <h2 class="form__title">Sign Up</h2>
             <p class="text-xl">Sign up to create an account</p>
             <a class="button button--default button--outline" href="{% url 'signup' %}">Sign Up</a>
+        </div>
     </div>
-</div>
+    <h2 class="form__title">How it works</h2>
+    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
+        <div class="bg-white p-5">
+            <p>Areas of Life</p>
+        </div>
+        <div class="bg-white p-5">
+            <p>Snapshots</p>
+        </div>
+        <div class="bg-white p-5">
+            <p>Reminders</p>
+        </div>
+        <div class="bg-white p-5">
+            <p>Completely Private</p>
+        </div>
+
+    </div>
+    <h2 class="form__title">Testimonials</h2>
+    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
+        <div class="bg-white p-5">
+            <p>Testimonial 1</p>
+        </div>
+        <div class="bg-white p-5">
+            <p>Testimonial 2</p>
+        </div>
+        <div class="bg-white p-5">
+            <p>Testimonial 3</p>
+        </div>
+        <div class="bg-white p-5">
+            <p>Testimonial 4</p>
+        </div>
+
+    </div>
+    <div class="page__intro mx-auto">
+        <a class="button button--default button--outline" href="{% url 'signup' %}">Create Your Journal</a>
+    </div>
 
 
-<!-- Display the result of the login attempt -->
-<div id="login-result"></div>
+    <!-- Display the result of the login attempt -->
+    <div id="login-result"></div>
 
 
-{% endblock %}
+    {% endblock %}
