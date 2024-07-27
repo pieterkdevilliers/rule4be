@@ -18,10 +18,9 @@
     <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
         <div class="login__container bg-white p-5">
             <h2 class="form__title">Login</h2>
-            <!-- HTMX form to handle login -->
-            <form id="login-form" hx-post="{% url 'load_login_page' %}" hx-trigger="submit" hx-target="#login-form">
+            <!-- Standard form to handle login -->
+            <form id="login-form" method="post" action="{% url 'load_login_page' %}">
                 {% csrf_token %}
-                <!-- Include the necessary input fields for login -->
                 <div class="form__label-field">
                     <label class="form__label" for="username">Username:</label>
                     <input class="form__intput" type="text" name="username" id="username" required>
@@ -76,10 +75,9 @@
     <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
         <div class="login__container bg-white p-5">
             <h2 class="form__title">Login</h2>
-            <!-- HTMX form to handle login -->
-            <form id="login-form" hx-post="{% url 'load_login_page' %}" hx-trigger="submit" hx-target="#login-form">
+            <!-- Standard form to handle login -->
+            <form id="login-form" method="post" action="{% url 'load_login_page' %}">
                 {% csrf_token %}
-                <!-- Include the necessary input fields for login -->
                 <div class="form__label-field">
                     <label class="form__label" for="username">Username:</label>
                     <input class="form__intput" type="text" name="username" id="username" required>
@@ -102,10 +100,5 @@
     <footer>
         <p>&copy; 2024 Rule4.app | Terms & Conditions | Privacy Policy</p>
     </footer>
-
-
-    <!-- Display the result of the login attempt -->
-    <div id="login-result"></div>
-
-
-    {% endblock %}
+</div>
+{% endblock %}
