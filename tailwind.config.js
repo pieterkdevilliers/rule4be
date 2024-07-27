@@ -8,6 +8,10 @@ module.exports = {
       "./node_modules/*",
       "./node_modules/alpinejs/**/*.js",
     ],
+    safelist: [
+      'access-page',
+      'main-app',
+    ],
   theme: {
     extend: {
       colors: {
