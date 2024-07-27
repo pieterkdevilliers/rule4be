@@ -2,102 +2,129 @@
 {% load static %}
 
 {% block content %}
-<div class="page__content mx-auto max-w-2/3 flex flex-col items-center">
-    <h1 class="page__header mx-auto">A journal to remind you of how far you've come, the progress you've made.</h1>
-    <p class="text-l">Rule 4: Compare yourself to who you were yesterday, not who someone else is today. - Jordan B
-        Peterson.</p>
-    <div class="page__intro mx-auto items-center">
-        <a class="button button--default button--outline" href="{% url 'signup' %}">Create Your Journal</a>
-    </div>
-    <div>
-        <video width="640" height="480" controls>
+<section class="page__content flex flex-col items-center">
+    <section class="page__intro bg-custom-pattern pb-5">
+        <div class="section__content py-5">
+            <h1 class="page__header mx-auto text-3xl font-medium my-5">A journal to remind you of how far you've come, the progress you've made.</h1>
+            <blockquote class="text-xl my-5 p-5 relative max-w-[55ch] mx-auto">
+                <i class="icon--quote text-4xl opacity-25"></i>
+                <em><strong>Rule 4:</strong> Compare yourself to who you were yesterday, not who someone else is today.</em>
+                <small class="text-right block">- Jordan B Peterson</small>
+            </blockquote>
+            <div class="page__intro mx-auto items-center">
+                <a class="button button--default button--outline w-fit block mx-auto" href="{% url 'signup' %}">Create Your Journal</a>
+            </div>
+        </div>
+    </section>
+    <section class="bg-custom-pattern pb-10">
+        <video class="mx-auto" width="640" height="480" controls>
             <source src="{% static 'videos/my_video.mp4' %}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </div>
-    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
-        <div class="login__container bg-white p-5">
-            <h2 class="form__title">Login</h2>
-            <!-- Standard form to handle login -->
-            <form id="login-form" method="post" action="{% url 'load_login_page' %}">
-                {% csrf_token %}
-                <div class="form__label-field">
-                    <label class="form__label" for="username">Username:</label>
-                    <input class="form__intput" type="text" name="username" id="username" required>
+    </section>
+    <section class="py-5">
+        <div class="section__content">
+            <div class="grid grid-cols-2 gap-8 bg-custom-pattern p-5 mx-auto">
+                <div class="login__container bg-white p-5">
+                    <h2 class="form__title mx-auto">Login</h2>
+                    <!-- Standard form to handle login -->
+                    <form id="login-form" method="post" action="{% url 'load_login_page' %}">
+                        {% csrf_token %}
+                        <div class="form__label-field">
+                            <label class="form__label" for="username">Username:</label>
+                            <input class="form__intput" type="text" name="username" id="username" required>
+                        </div>
+                        <div class="form__label-field">
+                            <label class="form__label" for="password">Password:</label>
+                            <input class="form__intput" type="password" name="password" id="password" required>
+                        </div>
+                        <div>
+                            <button class="form__submit button button--primary" type="submit">Log In</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form__label-field">
-                    <label class="form__label" for="password">Password:</label>
-                    <input class="form__intput" type="password" name="password" id="password" required>
+                <div class="signup__container bg-white p-5">
+                    <h2 class="form__title mx-auto">Sign Up</h2>
+                    <div class="mt-12">
+                        <p class="text-xl my-5">Sign up to create an account</p>
+                        <a class="button button--default button--outline block w-fit mx-auto" href="{% url 'signup' %}">Sign Up</a>
+                    </div>
                 </div>
-                <div>
-                    <button class="form__submit button button--primary" type="submit">Log In</button>
+            </div>
+        </div>
+    </section>
+    <section class="how-it-works bg-custom-pattern py-5">
+        <div class="section__content py-5">
+            <h2 class="form__title mx-auto">How it works</h2>
+            <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
+                <div class="bg-white p-5">
+                    <p>Areas of Life</p>
                 </div>
-            </form>
-        </div>
-        <div class="signup__container bg-white p-5">
-            <h2 class="form__title">Sign Up</h2>
-            <p class="text-xl">Sign up to create an account</p>
-            <a class="button button--default button--outline" href="{% url 'signup' %}">Sign Up</a>
-        </div>
-    </div>
-    <h2 class="form__title">How it works</h2>
-    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
-        <div class="bg-white p-5">
-            <p>Areas of Life</p>
-        </div>
-        <div class="bg-white p-5">
-            <p>Snapshots</p>
-        </div>
-        <div class="bg-white p-5">
-            <p>Reminders</p>
-        </div>
-        <div class="bg-white p-5">
-            <p>Completely Private</p>
-        </div>
-
-    </div>
-    <h2 class="form__title">Testimonials</h2>
-    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
-        <div class="bg-white p-5">
-            <p>Testimonial 1</p>
-        </div>
-        <div class="bg-white p-5">
-            <p>Testimonial 2</p>
-        </div>
-        <div class="bg-white p-5">
-            <p>Testimonial 3</p>
-        </div>
-        <div class="bg-white p-5">
-            <p>Testimonial 4</p>
-        </div>
-
-    </div>
-    <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
-        <div class="login__container bg-white p-5">
-            <h2 class="form__title">Login</h2>
-            <!-- Standard form to handle login -->
-            <form id="login-form" method="post" action="{% url 'load_login_page' %}">
-                {% csrf_token %}
-                <div class="form__label-field">
-                    <label class="form__label" for="username">Username:</label>
-                    <input class="form__intput" type="text" name="username" id="username" required>
+                <div class="bg-white p-5">
+                    <p>Snapshots</p>
                 </div>
-                <div class="form__label-field">
-                    <label class="form__label" for="password">Password:</label>
-                    <input class="form__intput" type="password" name="password" id="password" required>
+                <div class="bg-white p-5">
+                    <p>Reminders</p>
                 </div>
-                <div>
-                    <button class="form__submit button button--primary" type="submit">Log In</button>
+                <div class="bg-white p-5">
+                    <p>Completely Private</p>
                 </div>
-            </form>
+        
+            </div>
         </div>
-        <div class="signup__container bg-white p-5">
-            <h2 class="form__title">Sign Up</h2>
-            <p class="text-xl">Sign up to create an account</p>
-            <a class="button button--default button--outline" href="{% url 'signup' %}">Sign Up</a>
+    </section>
+    <section class="testimonials py-5">
+        <div class="section__content">
+            <h2 class="form__title mx-auto">Testimonials</h2>
+            <div class="grid grid-cols-2 gap-4 mt-12">
+                <div class="bg-white bg-custom-pattern p-5">
+                    <p>Testimonial 1</p>
+                </div>
+                <div class="bg-white bg-custom-pattern p-5">
+                    <p>Testimonial 2</p>
+                </div>
+                <div class="bg-white bg-custom-pattern p-5">
+                    <p>Testimonial 3</p>
+                </div>
+                <div class="bg-white bg-custom-pattern p-5">
+                    <p>Testimonial 4</p>
+                </div>
+        
+            </div>
         </div>
-    </div>
-    <footer>
+    </section>
+    <section class="login-signup bg-custom-pattern">
+        <div class="section__content">
+            <div class="grid grid-cols-2 gap-8 p-5 mt-12">
+                <div class="login__container bg-white p-5">
+                    <h2 class="form__title">Login</h2>
+                    <!-- Standard form to handle login -->
+                    <form id="login-form" method="post" action="{% url 'load_login_page' %}">
+                        {% csrf_token %}
+                        <div class="form__label-field">
+                            <label class="form__label" for="username">Username:</label>
+                            <input class="form__intput" type="text" name="username" id="username" required>
+                        </div>
+                        <div class="form__label-field">
+                            <label class="form__label" for="password">Password:</label>
+                            <input class="form__intput" type="password" name="password" id="password" required>
+                        </div>
+                        <div>
+                            <button class="form__submit button button--primary" type="submit">Log In</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="signup__container bg-white p-5">
+                    <h2 class="form__title mx-auto">Sign Up</h2>
+                    <div class="mt-12">
+                        <p class="text-xl my-5">Sign up to create an account</p>
+                        <a class="button button--default button--outline block w-fit mx-auto" href="{% url 'signup' %}">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="mt-12">
         <p>&copy; 2024 Rule4.app | Terms & Conditions | Privacy Policy</p>
     </footer>
 </div>

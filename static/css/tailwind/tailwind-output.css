@@ -454,7 +454,7 @@ html {
   line-height: 21px;
 }
 
-body > main {
+body.main-app > main {
   margin: 0 auto;
   max-width: 1440px;
 }
@@ -601,6 +601,47 @@ body > main {
   }
 }
 
+/* === Layout === */
+
+/* Access Pages */
+
+.access-page section {
+  width: 100%;
+}
+
+.access-page section > .section__content {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .access-page section > .section__content {
+    width: 66.666667%;
+  }
+}
+
+.access-page .page__intro blockquote::before {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+/* Main App */
+
+.main-app .page-content__container {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .main-app .page-content__container {
+    width: 1440px;
+  }
+}
+
 /* General */
 
 /* Show/Hide */
@@ -723,6 +764,19 @@ body > main {
 
 .icon--logout::before {
   content: "\e433";
+}
+
+.icon--quote {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
+  font-family: "Font Awesome 6 Pro";
+  font-style: normal;
+  font-weight: 900;
+  text-transform: none;
+}
+
+.icon--quote::before {
+  content: "\f10d";
 }
 
 /* Data Attributes */
@@ -1524,6 +1578,16 @@ a:hover,
   margin-bottom: 0.75rem;
 }
 
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .ms-5 {
   margin-inline-start: 1.25rem;
 }
@@ -1542,6 +1606,10 @@ a:hover,
 
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.mt-auto {
+  margin-top: auto;
 }
 
 .block {
@@ -1588,6 +1656,11 @@ a:hover,
   width: 28px;
 }
 
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 .w-full {
   width: 100%;
 }
@@ -1598,6 +1671,14 @@ a:hover,
 
 .max-w-\[300px\] {
   max-width: 300px;
+}
+
+.max-w-\[55ch\] {
+  max-width: 55ch;
+}
+
+.max-w-\[640px\] {
+  max-width: 640px;
 }
 
 .border-collapse {
@@ -1650,6 +1731,10 @@ a:hover,
 
 .gap-4 {
   gap: 1rem;
+}
+
+.gap-8 {
+  gap: 2rem;
 }
 
 .gap-x-2 {
@@ -1729,8 +1814,25 @@ a:hover,
   padding-bottom: 1rem;
 }
 
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.pb-10 {
+  padding-bottom: 2.5rem;
+}
+
+.pb-5 {
+  padding-bottom: 1.25rem;
+}
+
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .text-2xl {
@@ -1741,6 +1843,11 @@ a:hover,
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-lg {
@@ -1772,6 +1879,10 @@ a:hover,
 
 .opacity-100 {
   opacity: 1;
+}
+
+.opacity-25 {
+  opacity: 0.25;
 }
 
 .shadow {
@@ -1857,10 +1968,6 @@ a:hover,
 }
 
 @media (min-width: 1024px) {
-  .lg\:w-\[1440px\] {
-    width: 1440px;
-  }
-
   .lg\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
