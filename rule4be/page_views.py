@@ -74,7 +74,7 @@ def load_login_page(request):
     '''
     Loads the login page for PWA
     '''
-
+    body_class = 'access-page'
     if request.method == 'POST':
 
         username = request.POST.get('username')
@@ -147,7 +147,7 @@ def load_login_page(request):
         # return render(request, 'rule4be/aols.html', context)
     else:
         # return redirect('load_aols_page')
-        return render(request, 'rule4be/login.html')
+        return render(request, 'rule4be/login.html', {'body_class': body_class})
 
 
 def logout_view(request):
@@ -163,6 +163,7 @@ def load_aols_page(request):
     '''
     Loads the AOLs page for PWA
     '''
+    body_class = 'main-app'
     aols = request.user.areaoflife_set.all()
     today = datetime.now().strftime('%Y-%m-%d')
     yesterday = (datetime.now() - timezone.timedelta(days=1)
@@ -203,6 +204,7 @@ def load_aols_page(request):
 
     context = {
         'aols': aols,
+        'body_class': body_class,
     }
 
     return render(request, 'rule4be/aols.html', context)

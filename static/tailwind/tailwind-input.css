@@ -10,7 +10,7 @@
 		font-weight: 300;
 		line-height: 21px;
 	}
-	body > main {
+	body.main-app > main {
 		margin: 0 auto;
 		max-width: 1440px;
 	}
@@ -139,9 +139,29 @@
 	.fa-share-from-square::before {
 		content: "\f14d";
 	}
+	.fa-quote-left::before {
+		content: "\f10d";
+	}
 }
 
 @layer components {
+	/* === Layout === */
+	
+	/* Access Pages */
+	.access-page section {
+		@apply w-full;
+	}
+	.access-page section > .section__content {
+		@apply mx-auto lg:w-2/3 my-5 text-center;
+	}
+	.access-page .page__intro blockquote::before {
+		@apply text-4xl;
+	}
+
+	/* Main App */
+	.main-app .page-content__container {
+		@apply mx-auto lg:w-[1440px] mt-5;
+	}
 	/* General */
 	.divider {
 		@apply w-full bg-gray-400 h-[1px] border-none;
@@ -266,6 +286,9 @@
 	}
 	.icon--logout {
 		@apply fa-light fa-person-to-door text-blue-500;
+	}
+	.icon--quote {
+		@apply fa-solid fa-quote-left text-blue-500;
 	}
 
 	/* Data Attributes */
