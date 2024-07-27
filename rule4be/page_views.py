@@ -1,17 +1,16 @@
 import datetime
-from django.contrib.auth.models import User
-import requests
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-from snapshots.models import Snapshot
-from snapshots.serializers import SnapshotSerializer
+import requests
 import json
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
+from rest_framework_simplejwt.tokens import RefreshToken
+from dateutil.relativedelta import relativedelta
+from snapshots.serializers import SnapshotSerializer
 from snapshots.models import AreaOfLife, Snapshot
 from snapshots.forms import AreaOfLifeForm, SnapshotForm
 from rule4be.ses import send_custom_email
@@ -84,8 +83,12 @@ def load_login_page(request):
 
         user = authenticate(request, username=username, password=password)
         print(user)
-        profile = UserProfile.objects.get(user=user)
-        account_status = profile.account_status
+        try:
+            profile = UserProfile.objects.get(user=user)
+            account_status = profile.account_status
+        except:
+            profile = None
+            account_status = None
         context = {
             'profile': profile,
         }
@@ -124,7 +127,8 @@ def load_login_page(request):
             if account_status == 'expired_trial' or account_status == 'cancelled_subscription':
                 return render(request, 'rule4be/trial_expired.html', context)
             else:
-                return render(request, 'rule4be/aols.html', context)
+                return redirect('load_aols_page')
+                # return render(request, 'rule4be/aols.html', context)
         else:
             return HttpResponse('Login failed')
 
@@ -139,9 +143,10 @@ def load_login_page(request):
             'aols': aols,
         }
 
-        return render(request, 'rule4be/aols.html', context)
+        return redirect('load_aols_page')
+        # return render(request, 'rule4be/aols.html', context)
     else:
-
+        # return redirect('load_aols_page')
         return render(request, 'rule4be/login.html')
 
 
