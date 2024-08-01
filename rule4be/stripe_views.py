@@ -113,7 +113,7 @@ def direct_to_customer_portal(request) -> HttpResponse:
     portal_session = stripe.billing_portal.Session.create(
         customer=checkout_session.customer,
         # Send the user here from the portal.
-        return_url=DOMAIN + reverse('subscribe')
+        return_url=DOMAIN + reverse('load_aols_page')
     )
     return redirect(portal_session.url, code=303)
 

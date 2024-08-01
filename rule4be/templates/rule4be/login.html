@@ -5,14 +5,17 @@
 <section class="page__content flex flex-col items-center">
     <section class="page__intro bg-custom-pattern pb-5">
         <div class="section__content py-5">
-            <h1 class="page__header mx-auto text-3xl font-medium my-5">A journal to remind you of how far you've come, the progress you've made.</h1>
+            <h1 class="page__header mx-auto text-3xl font-medium my-5">A journal to remind you how far you've come, the
+                progress you've made towards your goals.</h1>
             <blockquote class="text-xl my-5 p-5 relative max-w-[55ch] mx-auto">
                 <i class="icon--quote text-4xl opacity-25"></i>
-                <em><strong>Rule 4:</strong> Compare yourself to who you were yesterday, not who someone else is today.</em>
+                <em><strong>Rule 4:</strong> Compare yourself to who you were yesterday, not who someone else is
+                    today.</em>
                 <small class="text-right block">- Jordan B Peterson</small>
             </blockquote>
             <div class="page__intro mx-auto items-center">
-                <a class="button button--default button--outline w-fit block mx-auto" href="{% url 'signup' %}">Create Your Journal</a>
+                <a class="button button--default button--outline w-fit block mx-auto" href="{% url 'signup' %}">Create
+                    Your Journal</a>
             </div>
         </div>
     </section>
@@ -47,7 +50,8 @@
                     <h2 class="form__title mx-auto">Sign Up</h2>
                     <div class="mt-12">
                         <p class="text-xl my-5">Sign up to create an account</p>
-                        <a class="button button--default button--outline block w-fit mx-auto" href="{% url 'signup' %}">Sign Up</a>
+                        <a class="button button--default button--outline block w-fit mx-auto"
+                            href="{% url 'signup' %}">Sign Up</a>
                     </div>
                 </div>
             </div>
@@ -55,21 +59,32 @@
     </section>
     <section class="how-it-works bg-custom-pattern py-5">
         <div class="section__content py-5">
-            <h2 class="form__title mx-auto">How it works</h2>
+            <h2 class="form__title mx-auto text-3xl">How it works</h2>
             <div class="grid grid-cols-2 gap-4 bg-custom-pattern p-5 mt-12">
                 <div class="bg-white p-5">
-                    <p>Areas of Life</p>
+                    <h2 class="text-2xl">Areas of Life</h2>
+                    <p>Set up a feed for each area of life you want to track. This can be goals, like fitness, finance
+                        or a project. Rule4 is not just for goals though, set up personal AOLs just to keep you smiling.
+                    </p>
                 </div>
                 <div class="bg-white p-5">
-                    <p>Snapshots</p>
+                    <h2 class="text-2xl">Snapshots</h2>
+                    <p>You add snapshots to the different AOLs you've set up. This can be text, a photo, a video or a
+                        combination. Whatever provides the information you need for that AOL.</p>
                 </div>
                 <div class="bg-white p-5">
-                    <p>Reminders</p>
+                    <h2 class="text-2xl">Reminders</h2>
+                    <p>Rule4 will remind you of previous snapshots whenver you add a new snapshot. That is the key
+                        though. You can only see past snapshots, by adding one for today. This helps to keep you
+                        focussed on today's events and today's progress.</p>
                 </div>
                 <div class="bg-white p-5">
-                    <p>Completely Private</p>
+                    <h2 class="text-2xl">Completely Private</h2>
+                    <p>There is no share or like buttons here. No notifications. This is for you, about you and your
+                        life. There is no keeping up with everyone else. Rule4 is your space to focus on yourself and
+                        what is truly valuable and important to you.</p>
                 </div>
-        
+
             </div>
         </div>
     </section>
@@ -89,7 +104,7 @@
                 <div class="bg-white bg-custom-pattern p-5">
                     <p>Testimonial 4</p>
                 </div>
-        
+
             </div>
         </div>
     </section>
@@ -118,7 +133,8 @@
                     <h2 class="form__title mx-auto">Sign Up</h2>
                     <div class="mt-12">
                         <p class="text-xl my-5">Sign up to create an account</p>
-                        <a class="button button--default button--outline block w-fit mx-auto" href="{% url 'signup' %}">Sign Up</a>
+                        <a class="button button--default button--outline block w-fit mx-auto"
+                            href="{% url 'signup' %}">Sign Up</a>
                     </div>
                 </div>
             </div>
@@ -127,5 +143,5 @@
     <footer class="mt-12">
         <p>&copy; 2024 Rule4.app | Terms & Conditions | Privacy Policy</p>
     </footer>
-</div>
-{% endblock %}
+    </div>
+    {% endblock %}
