@@ -1,5 +1,3 @@
-
-
 from pathlib import Path
 import dj_database_url
 import datetime
@@ -21,10 +19,6 @@ load_dotenv()  # take environment variables from .env.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -53,21 +47,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    'debug_toolbar',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'whitenoise',
     'storages',
-
-
     "snapshots",
     "rule4be",
     "users",
-
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +68,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
 
@@ -88,6 +77,9 @@ AUTHENTICATION_BACKENDS = [
     # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 # Redirect URLs after login/logout
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -95,11 +87,27 @@ LOGOUT_REDIRECT_URL = '/'
 
 ROOT_URLCONF = "rule4be.urls"
 
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         # Adjust 'templates' if your directory structure is different
+#         'DIRS': [os.path.join(BASE_DIR, 'templates')],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # Adjust 'templates' if your directory structure is different
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -115,22 +123,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "rule4be.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-# db_from_env = dj_database_url.config(conn_max_age=600)
-# DATABASES['default'].update(db_from_env)
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 development = os.environ.get('DEVELOPMENT')
 
 if development:
@@ -182,12 +174,12 @@ USE_TZ = True
 #  AWS S3 settings
 ############################################
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # This is still needed for the collectstatic command to know where to find static files locally
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Adjust the path as necessary
 ]
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 USE_S3 = os.environ.get('USE_S3')
 
