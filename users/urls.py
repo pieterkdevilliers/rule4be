@@ -1,5 +1,5 @@
 from django.urls import path
-import users.password_reset_views as password_reset_views
+from . import views as password_reset_views
 
 urlpatterns = [
 
