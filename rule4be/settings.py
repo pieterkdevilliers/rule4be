@@ -1,5 +1,3 @@
-
-
 from pathlib import Path
 import dj_database_url
 import datetime
@@ -53,7 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    'debug_toolbar',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -80,6 +78,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
 
@@ -88,6 +87,9 @@ AUTHENTICATION_BACKENDS = [
     # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 # Redirect URLs after login/logout
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -95,11 +97,27 @@ LOGOUT_REDIRECT_URL = '/'
 
 ROOT_URLCONF = "rule4be.urls"
 
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         # Adjust 'templates' if your directory structure is different
+#         'DIRS': [os.path.join(BASE_DIR, 'templates')],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # Adjust 'templates' if your directory structure is different
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -166,12 +184,12 @@ USE_TZ = True
 #  AWS S3 settings
 ############################################
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # This is still needed for the collectstatic command to know where to find static files locally
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Adjust the path as necessary
 ]
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 USE_S3 = os.environ.get('USE_S3')
 

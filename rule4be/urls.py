@@ -1,15 +1,16 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from . import page_views, stripe_views, password_reset_views
+from . import page_views, stripe_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('__debug__/', include('debug_toolbar.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('snapshots/', include('snapshots.urls')),
+    path('users/', include('users.urls')),
     path('api/v1/', include('snapshots.urls')),
     path('', page_views.load_login_page, name='load_login_page'),
     path('signup/', page_views.load_signup_page, name='signup'),
@@ -42,18 +43,18 @@ urlpatterns = [
     path('collect-stripe-webhook/', stripe_views.collect_stripe_webhook,
          name='collect-stripe-webhook'),
 
-    ##############################
-    # Stripe Payment Integration #
-    ##############################
+    #     ##############################
+    #     # Password Reset #
+    #     ##############################
 
-    path('password-reset/', password_reset_views.CustomPasswordResetView.as_view(),
-         name='password_reset'),
-    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(),
-         name='password-reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(),
-         name='password-reset_confirm'),
-    path('reset/done/', password_reset_views.CustomPasswordResetConfirmView.as_view(),
-         name='password_reset_complete'),
+    #     path('password-reset/', password_reset_views.CustomPasswordResetView.as_view(),
+    #          name='password_reset'),
+    #     path('password-reset/done/', password_reset_views.CustomPasswordResetDoneView.as_view(),
+    #          name='password_reset_done'),
+    #     path('reset/<uidb64>/<token>/', password_reset_views.CustomPasswordResetConfirmView.as_view(),
+    #          name='password_reset_confirm'),
+    #     path('reset/done/', password_reset_views.CustomPasswordResetCompleteView.as_view(),
+    #          name='password_reset_complete'),
 
 ]
 if settings.DEBUG:
