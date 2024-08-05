@@ -383,3 +383,18 @@ def create_snapshot(request, aol_id):
         form = SnapshotForm()
 
     return render(request, 'rule4be/create_snapshot.html', {'form': form, 'aol_id': aol_id})
+
+
+############################################################################################################
+# Terms and Provacy Policy
+############################################################################################################
+
+
+def terms_and_conditions(request):
+    '''Loads the terms and conditions page'''
+    return render(request, 'rule4be/terms_and_conditions.html')
+
+
+def privacy_policy(request):
+    '''Loads the privacy policy page'''
+    return render(request, 'rule4be/privacy_policy.html')
