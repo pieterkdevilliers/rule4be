@@ -42,18 +42,10 @@ urlpatterns = [
     path('collect-stripe-webhook/', stripe_views.collect_stripe_webhook,
          name='collect-stripe-webhook'),
 
-    #     ##############################
-    #     # Password Reset #
-    #     ##############################
-
-    #     path('password-reset/', password_reset_views.CustomPasswordResetView.as_view(),
-    #          name='password_reset'),
-    #     path('password-reset/done/', password_reset_views.CustomPasswordResetDoneView.as_view(),
-    #          name='password_reset_done'),
-    #     path('reset/<uidb64>/<token>/', password_reset_views.CustomPasswordResetConfirmView.as_view(),
-    #          name='password_reset_confirm'),
-    #     path('reset/done/', password_reset_views.CustomPasswordResetCompleteView.as_view(),
-    #          name='password_reset_complete'),
+    path('privacy-policy/', page_views.privacy_policy,
+         name='privacy_policy'),
+    path('terms-and-conditions/', page_views.terms_and_conditions,
+         name='terms_and_conditions'),
 
 ]
 if settings.DEBUG:
