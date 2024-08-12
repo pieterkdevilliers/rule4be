@@ -427,7 +427,7 @@
 		@apply border rounded-lg px-2 py-1 w-full;
 	}
 	.form__label-field .form__input {
-		@apply relative border-gray-400  text-gray-600 focus:text-slate-800 focus:border-gray-800;
+		@apply relative  text-gray-600 focus:text-slate-800 focus:border-gray-800;
 	}
 	form label {
 		@apply flex w-full items-end;
