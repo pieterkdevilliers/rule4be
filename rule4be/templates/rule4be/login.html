@@ -47,12 +47,17 @@
                     </form>
                     <a href="{% url 'password_reset' %}">Forgot your password?</a>
                 </div>
-                <div class="signup__container bg-white p-5">
+                <div id="signUpContainer" class="signup__container bg-white p-5">
                     <h2 class="form__title mx-auto">Sign Up</h2>
                     <div class="mt-12">
                         <p class="text-xl my-5">Sign up to create an account</p>
-                        <a class="button button--default button--outline block w-fit mx-auto"
-                            href="{% url 'signup' %}">Sign Up</a>
+                        <button
+                            class="button button--default button--outline block w-fit mx-auto"
+                            hx-get="{% url 'signup' %}"
+                            hx-trigger="click"
+                            hx-target="#signUpContainer"
+                            hx-swap="innerHTML"
+                            >Sign Up</button>
                     </div>
                 </div>
             </div>
