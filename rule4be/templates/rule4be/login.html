@@ -28,24 +28,36 @@
     <section class="py-5">
         <div class="section__content">
             <div class="grid grid-cols-2 gap-8 bg-custom-pattern p-5 mx-auto">
-                <div class="login__container bg-white p-5">
+                <div id="loginContainerTop" class="login__container bg-white p-5">
                     <h2 class="form__title mx-auto">Login</h2>
                     <!-- Standard form to handle login -->
-                    <form id="login-form" method="post" action="{% url 'load_login_page' %}">
+                    <form
+                        id="login-form"
+                        method="post"
+                        action="{% url 'load_login_page' %}"
+                        x-data="formValidator()"
+                        x-init="requiredFieldIndicator()">
                         {% csrf_token %}
                         <div class="form__label-field">
                             <label class="form__label" for="username">Username:</label>
                             <input class="form__intput" type="text" name="username" id="username" required>
+                            <div data-invalid-feedback class="invalid-feedback"></div>
                         </div>
                         <div class="form__label-field">
                             <label class="form__label" for="password">Password:</label>
                             <input class="form__intput" type="password" name="password" id="password" required>
+                            <div data-invalid-feedback class="invalid-feedback"></div>
                         </div>
                         <div>
                             <button class="form__submit button button--primary" type="submit">Log In</button>
                         </div>
                     </form>
-                    <a href="{% url 'password_reset' %}">Forgot your password?</a>
+                    <button
+                        class="button--text"
+                        hx-get="{% url 'password_reset' %}"
+                        hx-trigger="click"
+                        hx-target="#loginContainerTop"
+                        hx-swap="innerHTML">Forgot your password?</button>
                 </div>
                 <div id="signUpContainer" class="signup__container bg-white p-5">
                     <h2 class="form__title mx-auto">Sign Up</h2>
@@ -120,7 +132,7 @@
                 <div class="login__container bg-white p-5">
                     <h2 class="form__title">Login</h2>
                     <!-- Standard form to handle login -->
-                    <form id="login-form" method="post" action="{% url 'load_login_page' %}">
+                    <!-- <form id="login-form" method="post" action="{% url 'load_login_page' %}">
                         {% csrf_token %}
                         <div class="form__label-field">
                             <label class="form__label" for="username">Username:</label>
@@ -133,7 +145,7 @@
                         <div>
                             <button class="form__submit button button--primary" type="submit">Log In</button>
                         </div>
-                    </form>
+                    </form> -->
                     <a href="{% url 'password_reset' %}">Forgot your password?</a>
                 </div>
                 <div class="signup__container bg-white p-5">
