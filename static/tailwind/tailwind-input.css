@@ -436,7 +436,7 @@
 		@apply text-red-500 text-sm ms-auto me-2;
 	}
 	.form__label-field .invalid-feedback {
-		@apply text-red-500 text-sm h-4 empty:h-0 mt-2 mb-3 transition-all;
+		@apply text-red-500 text-sm text-left h-4 empty:h-0 mt-2 mb-3 transition-all;
 	}
 	.form__submit {
 		@apply mt-5;
