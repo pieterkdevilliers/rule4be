@@ -75,6 +75,15 @@ def load_login_page(request):
     Loads the login page for PWA
     '''
     body_class = 'access-page'
+
+    return render(request, 'rule4be/login.html', {'body_class': body_class})
+
+
+def load_login_form(request):
+    '''
+    Loads the login form for PWA
+    '''
+    body_class = 'access-page'
     if request.method == 'POST':
 
         username = request.POST.get('username')
@@ -92,9 +101,6 @@ def load_login_page(request):
         context = {
             'profile': profile,
         }
-        # if account_status == 'expired_trial' or account_status == 'cancelled_subscription':
-        #     return render(request, 'rule4be/trial_expired.html', context)
-        # else:
 
         if user is not None:
             login(request, user)
@@ -147,7 +153,7 @@ def load_login_page(request):
         # return render(request, 'rule4be/aols.html', context)
     else:
         # return redirect('load_aols_page')
-        return render(request, 'rule4be/login.html', {'body_class': body_class})
+        return render(request, 'rule4be/login_form.html', {'body_class': body_class})
 
 
 def logout_view(request):
