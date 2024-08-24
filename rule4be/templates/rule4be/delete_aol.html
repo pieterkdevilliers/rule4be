@@ -1,12 +1,27 @@
 <div class="card-form__container border rounded-md p-3 shadow-inner bg-white min-w-72">
-    <h1>Confirm Deletion</h1>
-    <p>Are you sure you want to delete the Area of Life: "{{ aol.name }}"?</p>
+    <div
+        data-delete-aol-form
+        data-aol-id="{{ aol_id }}"
+        class="card-form__form">
+        <div class="form__header flex items-center">
+            <h1 class="form__title">Confirm Deletion</h1>
+            <i
+            data-close-crud-modal
+            class="icon--dismiss ms-auto text-lg cursor-pointer"
+            @click="clearAolCrudContainer()"
+            ></i>
+        </div>
+    </div>
+    <p class="mt-5">Are you sure you want to delete the Area of Life: "{{ aol.name }}"?</p>
     
     <form hx-post="{% url 'delete_aol' aol.id %}" hx-trigger="submit" hx-target="#delete-result" id="delete-form">
         {% csrf_token %}
-        <div>
-            <button type="submit">Yes, Delete</button>
-            <a href="{% url 'load_login_page' %}">Cancel</a>
+        <div class="flex justify-between mt-5">
+            <button class="button button--danger" type="submit">Yes, Delete</button>
+            <span
+                class="ms-auto button button--outline"
+                x-data
+                @click="clearAolCrudContainer()">Cancel</span>
         </div>
     </form>
 </div>

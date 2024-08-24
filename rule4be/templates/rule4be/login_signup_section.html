@@ -1,0 +1,28 @@
+
+{% block content %}
+<div class="grid grid-cols-2 gap-8 bg-custom-pattern p-5 mx-auto">
+    <div
+        id="loginContainer"
+        class="login__container bg-white p-5"
+        hx-get="{% url 'load_login_form' %}"
+        hx-trigger="load"
+        hx-target="this"
+        hx-swap="innerHTML"
+    ></div>
+
+    <div id="signUpContainer" class="signup__container bg-white p-5">
+        <h2 class="form__title mx-auto">Sign Up</h2>
+        <div class="mt-12">
+            <p class="text-xl my-5">Sign up to create an account</p>
+            <button
+                class="button button--default button--outline block w-fit mx-auto"
+                hx-get="{% url 'signup' %}"
+                hx-trigger="click"
+                hx-target="#signUpContainer"
+                hx-swap="innerHTML"
+            >Sign Up</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -70,6 +70,13 @@ def load_signup_page(request):
         return render(request, 'rule4be/signup.html')
 
 
+def load_login_signup_section(request):
+    '''
+    Loads the login/signup section for PWA
+    '''
+
+    return render(request, 'rule4be/login_signup_section.html')
+
 def load_login_page(request):
     '''
     Loads the login page for PWA
@@ -136,6 +143,7 @@ def load_login_form(request):
                 return redirect('load_aols_page')
                 # return render(request, 'rule4be/aols.html', context)
         else:
+            print('Login failed')
             return HttpResponse('Login failed')
 
     elif request.session.get('access_token'):
