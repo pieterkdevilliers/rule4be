@@ -1,16 +1,28 @@
-<!-- rule4be/login_form.html -->
-<h2 class="form__title mx-auto">Sign Up</h2>
-<form method="post">
+<h2 class="form__title mx-auto">Login</h2>
+<form
+    id="login-form"
+    method="post"
+    action="{% url 'load_login_form' %}"
+    x-data="formValidator()"
+    x-init="requiredFieldIndicator()">
     {% csrf_token %}
     <div class="form__label-field">
         <label class="form__label" for="username">Username:</label>
-        <input class="form__input" type="text" id="username" name="username" required>
+        <input class="form__intput" type="text" name="username" id="username" required>
+        <div data-invalid-feedback class="invalid-feedback"></div>
     </div>
-
     <div class="form__label-field">
         <label class="form__label" for="password">Password:</label>
-        <input class="form__input" type="password" id="password" name="password" required>
+        <input class="form__intput" type="password" name="password" id="password" required>
+        <div data-invalid-feedback class="invalid-feedback"></div>
     </div>
-
-    <button class="form__submit button button--primary" type="submit">Login</button>
+    <div>
+        <button class="form__submit button button--primary" type="submit">Log In</button>
+    </div>
+    <button
+        class="button--text"
+        hx-get="{% url 'password_reset' %}"
+        hx-trigger="click"
+        hx-target="#loginContainer"
+        hx-swap="innerHTML">Forgot your password?</button>
 </form>

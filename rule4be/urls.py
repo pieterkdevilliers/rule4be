@@ -12,6 +12,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('api/v1/', include('snapshots.urls')),
     path('', page_views.load_login_page, name='load_login_page'),
+    path('login-signup-section', page_views.load_login_signup_section, name='load_login_signup_section'),
     path('login-form', page_views.load_login_form, name='load_login_form'),
     path('signup/', page_views.load_signup_page, name='signup'),
     path('logout/', page_views.logout_view, name='logout_view'),

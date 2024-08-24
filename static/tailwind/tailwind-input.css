@@ -506,10 +506,10 @@
 		@apply text-base leading-none;
 	}
 	.button--danger {
-		@apply bg-red-300;
+		@apply bg-red-700 border border-red-700;
 	}
 	.button--danger:hover {
-		@apply bg-red-700 text-white transition-all;
+		@apply bg-white text-red-700 transition-all;
 	}
 	.button--outline {
 		@apply border border-blue-500 text-blue-500 bg-white;

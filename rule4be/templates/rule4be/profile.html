@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <div
     id="profileContainer"
     class="mt-12 swap-transition rounded-lg bg-custom-pattern p-5 transition-all opacity-100">
@@ -10,15 +11,15 @@
                 x-data
                 @click="closeProfileContainer()"></i>
         </div>
-        <p>Username: {{profile}}</p>
-        <p>Trial Start Date: {{profile.sign_up_date}}</p>
-        <p>Trial End Date: {{profile.trial_end_date}}</p>
-        <p>Account Status: {{profile.account_status}}</p>
+        <p class="mb-3 mt-5"><strong>Username: </strong>{{profile}}</p>
+        <p class="mb-3"><strong>Trial Start Date: </strong>{{profile.sign_up_date}}</p>
+        <p class="mb-3"><strong>Trial End Date: </strong>{{profile.trial_end_date}}</p>
+        <p class="mb-3"><strong>Account Status: </strong>{{ profile.account_status|custom_title }}</p>
         {% if profile.subscription_activation_date %}
-        <p>Subscription Activation Date: {{profile.subscription_activation_date}}</p>
+        <p class="mb-3"><strong>Subscription Activation Date: </strong>{{profile.subscription_activation_date}}</p>
         {% endif %}
         {% if profile.subscription_cancellation_date %}
-        <p>Subscription Cancellation Date: {{profile.subscription_cancellation_date}}</p>
+        <p class="mb-3"><strong>Subscription Cancellation Date: </strong>{{profile.subscription_cancellation_date}}</p>
         {% endif %}
         
         <button

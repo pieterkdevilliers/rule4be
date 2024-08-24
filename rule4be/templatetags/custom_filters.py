@@ -25,3 +25,7 @@ def relative_date(value):
         return "Last Year"
     else:
         return value
+    
+@register.filter(name='custom_title')
+def custom_title(value):
+    return value.replace('_', ' ').title()
