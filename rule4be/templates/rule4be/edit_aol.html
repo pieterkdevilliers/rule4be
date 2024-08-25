@@ -14,6 +14,7 @@
         <form
             data-aol-id="{{ aol_id }}"
             id="edit-form"
+            class="modal-form"
             hx-post="{% url 'edit_aol' aol_id %}"
             hx-trigger="submit"
             hx-target=".status__message"
@@ -55,6 +56,7 @@
         // Bind htmx:afterOnLoad event listener to the form
         $('[data-edit-aol-form]').on('htmx:afterOnLoad', function() {
             const formAolId = $(this).data('aol-id');
+            $(this).html('');
 
             // Opens the toast
             $('[data-status-toast-' + formAolId + ']').fadeIn(300, function() {

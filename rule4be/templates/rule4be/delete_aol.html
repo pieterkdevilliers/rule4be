@@ -11,19 +11,64 @@
             @click="clearAolCrudContainer()"
             ></i>
         </div>
+        <p class="mt-5">Are you sure you want to delete the Area of Life: "{{ aol.name }}"?</p>
+        
+        <form
+            data-aol-id="{{ aol_id }}"
+            id="delete-form"
+            class="modal-form"
+            hx-post="{% url 'delete_aol' aol.id %}"
+            hx-trigger="submit"
+            hx-target=".status__message">
+            {% csrf_token %}
+            <div class="flex justify-between mt-5">
+                <button class="button button--danger" type="submit">Yes, Delete</button>
+                <span
+                    class="ms-auto button button--outline hover:cursor-pointer hover:text-white hover:bg-blue-500"
+                    x-data
+                    @click="clearAolCrudContainer()">Cancel</span>
+            </div>
+        </form>
     </div>
-    <p class="mt-5">Are you sure you want to delete the Area of Life: "{{ aol.name }}"?</p>
-    
-    <form hx-post="{% url 'delete_aol' aol.id %}" hx-trigger="submit" hx-target="#delete-result" id="delete-form">
-        {% csrf_token %}
-        <div class="flex justify-between mt-5">
-            <button class="button button--danger" type="submit">Yes, Delete</button>
-            <span
-                class="ms-auto button button--outline"
-                x-data
-                @click="clearAolCrudContainer()">Cancel</span>
+    <div
+        data-status-toast-{{ aol_id }}
+        id="statusToast"
+        class="status__message toast-container bg-green-50 text-lg font-medium text-center rounded-lg p-3 w-full max-w-[300px] hidden">
+        <div class="toast copy-text-toast bg-green-50" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body text-center fs-4 p-3">
+                {% if message %}
+                {{ message }}
+                {% endif %}
+            </div>
         </div>
-    </form>
+    </div>
 </div>
 
-<div id="delete-result"></div>
+<!-- Handle statusToast -->
+<script>
+    $(document).ready(function() {
+        // Bind htmx:afterOnLoad event listener to the form
+        $('[data-delete-aol-form]').on('htmx:afterOnLoad', function() {
+            const formAolId = $(this).data('aol-id');
+            $(this).html('');
+
+            // Opens the toast
+            $('[data-status-toast-' + formAolId + ']').fadeIn(300, function() {
+                console.log('toast opened');
+                $(this).removeClass('hidden');
+            });
+
+            // Closes the toast after 2 seconds & then reloads the page
+            setTimeout(function() {
+                $('[data-status-toast-' + formAolId + ']').fadeOut(300, function() {
+                    $(this).addClass('hidden');
+                    console.log('toast closed');
+                    location.reload();
+                });
+            }, 2000);
+        });
+
+        // htmx.logAll();
+    });
+</script>
+
