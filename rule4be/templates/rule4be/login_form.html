@@ -19,10 +19,5 @@
     <div>
         <button class="form__submit button button--primary" type="submit">Log In</button>
     </div>
-    <button
-        class="button--text"
-        hx-get="{% url 'password_reset' %}"
-        hx-trigger="click"
-        hx-target="#loginContainer"
-        hx-swap="innerHTML">Forgot your password?</button>
+    <a class="button--text" href="{% url 'password_reset' %}">Forgot your password?</a>
 </form>

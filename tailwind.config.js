@@ -10,6 +10,7 @@ module.exports = {
     ],
     safelist: [
       'access-page',
+      'password-reset-page',
       'main-app',
     ],
   theme: {

@@ -12,7 +12,16 @@
                 <small class="text-right block">- Jordan B Peterson</small>
             </blockquote>
             <div class="page__intro mx-auto items-center">
-                <a class="button button--default button--outline w-fit block mx-auto" href="{% url 'signup' %}">Create Your Journal</a>
+                <div id="createJournalContainer" class="lg:w-1/2 mx-auto">
+                    <!-- <a class="button button--default button--outline w-fit block mx-auto" href="{% url 'signup' %}">Create Your Journal</a> -->
+                    <button
+                        class="button button--default button--outline block w-fit mx-auto"
+                        hx-get="{% url 'signup' %}"
+                        hx-trigger="click"
+                        hx-target="#createJournalContainer"
+                        hx-swap="innerHTML"
+                    >Create Your Journal</button>
+                </div>
             </div>
         </div>
     </section>
