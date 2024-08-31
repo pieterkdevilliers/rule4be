@@ -184,38 +184,74 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+// function requiredFieldIndicator() {
+//     console.log('requiredFieldIndicator() called...')
+//     $('input[required], textarea[required]').each(function(){
+//         if ($(this).val() == '') {
+//             $('button[type="submit"]').prop('disabled', true);
+//         }
+//         $(this).keyup(() => {
+//             if ($(this).val() == '') {
+//                 $('button[type="submit"]').prop('disabled', true);
+//             } else {
+//                 $('button[type="submit"]').prop('disabled', false);
+//             }
+//         });
+//         var form = this.form;
+//         var $label;
+//         if(this.tagName.toLowerCase() === 'textarea') {
+//             $label = $(this).parent().prev('label');
+//         } else if (this.type === 'file') {
+//             $label = $(this).closest('.form__label-field').children('label');
+//         } else {
+//             $label = $(this).siblings('label');
+//         }
+//         $label.append('<span class="required">required</span>');
+//         $(this).on('blur', function(event) {
+//             validator.validateRequiredField(event);
+//             if (this.type === 'date') {
+//                 validator.validateDateField(event);
+//             }
+//             validator.checkAllFieldsFilled(form);
+//         });
+//     });
+// };
 function requiredFieldIndicator() {
-    console.log('requiredFieldIndicator() called...')
+    console.log('requiredFieldIndicator() called...');
     $('input[required], textarea[required]').each(function(){
-        if ($(this).val() == '') {
-            $('button[type="submit"]').prop('disabled', true);
-        }
-        $(this).keyup(() => {
+        if (!$(this).data('required-field-initialized')) {
+            $(this).data('required-field-initialized', true);
             if ($(this).val() == '') {
                 $('button[type="submit"]').prop('disabled', true);
+            }
+            $(this).keyup(() => {
+                if ($(this).val() == '') {
+                    $('button[type="submit"]').prop('disabled', true);
+                } else {
+                    $('button[type="submit"]').prop('disabled', false);
+                }
+            });
+            var form = this.form;
+            var $label;
+            if (this.tagName.toLowerCase() === 'textarea') {
+                $label = $(this).parent().prev('label');
+            } else if (this.type === 'file') {
+                $label = $(this).closest('.form__label-field').children('label');
             } else {
-                $('button[type="submit"]').prop('disabled', false);
+                $label = $(this).siblings('label');
             }
-        });
-        var form = this.form;
-        var $label;
-        if(this.tagName.toLowerCase() === 'textarea') {
-            $label = $(this).parent().prev('label');
-        } else if (this.type === 'file') {
-            $label = $(this).closest('.form__label-field').children('label');
-        } else {
-            $label = $(this).siblings('label');
+            $label.append('<span class="required">required</span>');
+            $(this).on('blur', function(event) {
+                validator.validateRequiredField(event);
+                if (this.type === 'date') {
+                    validator.validateDateField(event);
+                }
+                validator.checkAllFieldsFilled(form);
+            });
         }
-        $label.append('<span class="required">required</span>');
-        $(this).on('blur', function(event) {
-            validator.validateRequiredField(event);
-            if (this.type === 'date') {
-                validator.validateDateField(event);
-            }
-            validator.checkAllFieldsFilled(form);
-        });
     });
-};
+}
+
 
 function customFileUpload() {
     $('.image-upload-button').on('click', function() {

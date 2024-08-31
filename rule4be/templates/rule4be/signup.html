@@ -1,20 +1,35 @@
 <!-- rule4be/signup.html -->
 <h2 class="form__title mx-auto">Sign Up</h2>
-<form method="post">
+<form
+    id="signup-form"
+    method="post"
+    action="{% url 'signup' %}"
+    x-data="formValidator()"
+    x-model="email"
+    x-init="requiredFieldIndicator()">
     {% csrf_token %}
     <div class="form__label-field">
         <label class="form__label" for="username">Username:</label>
         <input class="form__input" type="text" id="username" name="username" required>
+        <div data-invalid-feedback class="invalid-feedback"></div>
     </div>
 
     <div class="form__label-field">
         <label class="form__label" for="password">Password:</label>
         <input class="form__input" type="password" id="password" name="password" required>
+        <div data-invalid-feedback class="invalid-feedback"></div>
     </div>
 
     <div class="form__label-field">
         <label class="form__label" for="email">Email:</label>
-        <input class="form__input" type="email" id="email" name="email" required>
+        <input
+            id="email"
+            class="form__input"
+            x-on:keyup="delayedValidateEmail"
+            type="email"
+            name="email"
+            required>
+        <div data-invalid-feedback class="invalid-feedback" x-text="emailError"></div>
     </div>
 
     <button

@@ -158,6 +158,11 @@
 		@apply text-4xl;
 	}
 
+	/* Password Reset */
+	.password-reset-page section.content-container {
+		@apply lg:w-1/3 mx-auto;
+	}
+
 	/* Main App */
 	.main-app .page-content__container {
 		@apply mx-auto lg:w-[1440px] mt-5;
