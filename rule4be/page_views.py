@@ -84,8 +84,6 @@ def load_login_page(request):
     If the user is already authenticated, redirects to a different page.
     '''
     if request.user.is_authenticated:
-        # Redirect authenticated users to a different page, e.g., the home page
-        # replace 'home_page_url_name' with your actual URL name
         return redirect('load_aols_page')
 
     body_class = 'access-page'
