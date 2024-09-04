@@ -11,8 +11,8 @@
 		line-height: 21px;
 	}
 	body.main-app > main {
-		margin: 0 auto;
-		max-width: 1440px;
+		/* margin: 0 auto;
+		max-width: 1440px; */
 	}
 
 }
@@ -164,8 +164,11 @@
 	}
 
 	/* Main App */
+	.main-app main {
+		@apply px-5;
+	}
 	.main-app .page-content__container {
-		@apply mx-auto lg:w-[1440px] mt-5;
+		@apply mx-auto w-full xl:max-w-[1440px] mt-5;
 	}
 	/* General */
 	.divider {
@@ -796,6 +799,10 @@
 	#page-content {
 		@apply mt-10;
 	}
+	.page__content section {
+		@apply px-5 md:px-0;
+	}
+
 
 	/* Cards - General */
 	.card {
@@ -828,40 +835,47 @@
 		@apply mx-auto sm:mx-3;
 	}
 
-	.card:not(:first-of-type) {
-		@apply mt-5 sm:mt-0;
-	}
 	.card:hover {
 		@apply bg-white;
 	}
-	.card:nth-child(1) {
+	.card:nth-child(1),
+	#aolNavMobile button:nth-child(1) {
 		@apply border-blue-200;
 	}
-	.card:nth-child(2) {
+	.card:nth-child(2),
+	#aolNavMobile button:nth-child(2) {
 		@apply border-orange-200;
 	}
-	.card:nth-child(3) {
+	.card:nth-child(3),
+	#aolNavMobile button:nth-child(3) {
 		@apply border-green-200;
 	}
-	.card:nth-child(4) {
+	.card:nth-child(4),
+	#aolNavMobile button:nth-child(4) {
 		@apply border-amber-200;
 	}
-	.card:nth-child(5) {
+	.card:nth-child(5),
+	#aolNavMobile button:nth-child(5) {
 		@apply border-slate-300;
 	}
-	.card:nth-child(6) {
+	.card:nth-child(6),
+	#aolNavMobile button:nth-child(6) {
 		@apply border-red-200;
 	}
-	.card:nth-child(7) {
+	.card:nth-child(7),
+	#aolNavMobile button:nth-child(7) {
 		@apply border-slate-400;
 	}
-	.card:nth-child(8) {
+	.card:nth-child(8),
+	#aolNavMobile button:nth-child(8) {
 		@apply border-purple-300;
 	}
-	.card:nth-child(9) {
+	.card:nth-child(9),
+	#aolNavMobile button:nth-child(9) {
 		@apply border-yellow-300;
 	}
-	.card:nth-child(10) {
+	.card:nth-child(10),
+	#aolNavMobile button:nth-child(10) {
 		@apply border-rose-400;
 	}
 	.card__title {
@@ -924,6 +938,14 @@
 	}
 	.cookie-group__table .td {
 		@apply text-left md:ms-3;
+	}
+
+	/* === Mobile === */
+	#aolNavMobile button {
+		@apply border rounded-lg rounded-b-none px-3 py-1;
+	}
+	#aolNavMobile button.active {
+		@apply border-b-4;
 	}
 
 	/* === Error Pages === */

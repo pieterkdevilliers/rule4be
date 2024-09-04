@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="flex justify-start items-center">
+<div class="w-full max-w-full flex justify-start items-center">
     <h1 class="font-semibold text-3xl">Areas of Life</h1>
     <div class="ms-5 relative" x-data="{ open: false }" @close-form.window="if ($event.detail.formId === 'create-aol') open = false">
         <button data-open-crud-modal @click="open = ! open" hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#create-aol-form" hx-swap="innerHTML">
@@ -26,10 +26,27 @@
         </div>
     </div>
 </div>
-<div id="profileContainer" class="mt-12 swap-transition"></div>
-<div id="aolContainer" class="aol-container grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 px-5" x-data="{ openSnapshotForm: null }" @open-snapshot-form.window="openSnapshotForm = $event.detail.snapshotId">
+<div
+    id="aolNavMobile"
+    class="sm:hidden w-full overflow-x-scroll flex mt-5">
     {% for area_of_life in aols %}
-    <div class="aol-item card shadow-md bg-custom-pattern">
+        <button
+            data-aol-anchor="aol-anchor-{{ area_of_life.id }}"
+            x-data
+            @click="showAolOnAnchorClick(event)"
+            class="font-semibold text-xl text-center min-w-[120px]">{{ area_of_life.name }}</button>
+    {% endfor %}
+</div>
+<div id="profileContainer" class="sm:mt-12 swap-transition"></div>
+<div
+    id="aolContainer"
+    class="aol-container w-full grid grid-cols-4 gap-4 relative mt-12 h-screen sm:mt-0"
+    x-data="{ openSnapshotForm: null }"
+    @open-snapshot-form.window="openSnapshotForm = $event.detail.snapshotId">
+    {% for area_of_life in aols %}
+    <div
+        id="aol-anchor-{{ area_of_life.id }}"
+        class="aol-item card shadow-md bg-custom-pattern absolute left-0 top-0 right-0 bottom-0 flex flex-col z-0 h-full sm:h-auto sm:relative">
         <div class="card__header">
             <div class="flex justify-between items-start">
                 <div class="aol-details">
@@ -79,10 +96,37 @@
     });
 
     function clearAolCrudContainer() {
-            // const aolCrudContainer = document.getElementById('aolCrudContainer');
-            const aolCrudContainer = event.target.closest('[data-aol-crud-form-container]');
-            aolCrudContainer.innerHTML = '';
-            document.body.click();
-        }
+        const aolCrudContainer = event.target.closest('[data-aol-crud-form-container]');
+        aolCrudContainer.innerHTML = '';
+        document.body.click();
+    }
+
+    function showAolOnAnchorClick(event) {
+        document.querySelectorAll('.aol-item').forEach(aol => {
+            aol.style.zIndex = 0;
+        });
+        const aolNavMobileButtons = document.querySelectorAll('[data-aol-anchor]');
+        aolNavMobileButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        const aolId = event.target.getAttribute('data-aol-anchor').replace('#', '');
+        console.log('aolId: ', aolId);
+        const aolAnchor = document.getElementById(aolId);
+        console.log(aolAnchor);
+        aolAnchor.style.zIndex = 1;
+        aolAnchor.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const aolNavMobileButtons = document.querySelectorAll('[data-aol-anchor]');
+        aolNavMobileButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+        let firstAolNavButton = aolNavMobileButtons[0];
+        firstAolNavButton.classList.add('active');
+        firstAolNavButton.click();
+        
+    });
 </script>
 {% endblock %}
