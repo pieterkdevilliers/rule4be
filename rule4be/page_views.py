@@ -77,12 +77,18 @@ def load_login_signup_section(request):
 
     return render(request, 'rule4be/login_signup_section.html')
 
+
 def load_login_page(request):
     '''
-    Loads the login page for PWA
+    Loads the login page for PWA.
+    If the user is already authenticated, redirects to a different page.
     '''
-    body_class = 'access-page'
+    if request.user.is_authenticated:
+        # Redirect authenticated users to a different page, e.g., the home page
+        # replace 'home_page_url_name' with your actual URL name
+        return redirect('load_aols_page')
 
+    body_class = 'access-page'
     return render(request, 'rule4be/login.html', {'body_class': body_class})
 
 
