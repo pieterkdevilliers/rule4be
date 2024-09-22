@@ -1,14 +1,15 @@
 {% extends 'rule4be/main.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
-<div class="w-full max-w-full flex justify-start items-center">
+<div class="w-full max-w-full flex justify-start items-center relative" x-data="{ open: false }" @close-form.window="if ($event.detail.formId === 'create-aol') open = false">
     <h1 class="font-semibold text-3xl">Areas of Life</h1>
-    <div class="ms-5 relative" x-data="{ open: false }" @close-form.window="if ($event.detail.formId === 'create-aol') open = false">
+    <div class="ms-5">
         <button data-open-crud-modal @click="open = ! open" hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#create-aol-form" hx-swap="innerHTML">
             <i class="icon icon--add text-lg"></i>
         </button>
-        <div data-modal-form-container id="create-aol-form" class="absolute left-5 z-50" x-transition x-show="open"></div>
+        <div data-modal-form-container id="create-aol-form" class="absolute left-0 right-0 z-50 max-w-96" x-transition.duration.100ms x-show="open"></div>
     </div>
     <div class="ms-auto relative" x-data="{ open: false }">
         <button @click="open = ! open">
@@ -34,7 +35,7 @@
             data-aol-anchor="aol-anchor-{{ area_of_life.id }}"
             x-data
             @click="showAolOnAnchorClick(event)"
-            class="font-semibold text-xl text-center min-w-[120px]">{{ area_of_life.name }}</button>
+            class="font-semibold text-xl text-center min-w-[60px]">{{ area_of_life.name|first_letter }}</button>
     {% endfor %}
 </div>
 <div id="profileContainer" class="sm:mt-12 swap-transition"></div>
@@ -46,7 +47,7 @@
     {% for area_of_life in aols %}
     <div
         id="aol-anchor-{{ area_of_life.id }}"
-        class="aol-item card shadow-md bg-custom-pattern absolute left-0 top-0 right-0 bottom-0 flex flex-col z-0 h-full sm:h-auto sm:relative">
+        class="aol-item card bg-custom-pattern absolute left-0 top-0 right-0 bottom-0 flex flex-col z-0 h-[600px] overflow-y-auto sm:relative">
         <div class="card__header">
             <div class="flex justify-between items-start">
                 <div class="aol-details">
