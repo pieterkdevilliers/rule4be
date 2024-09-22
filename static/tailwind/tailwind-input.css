@@ -806,7 +806,7 @@
 
 	/* Cards - General */
 	.card {
-		@apply bg-gray-50/50 rounded-xl border-2 p-0;
+		@apply bg-gray-50/50 rounded-xl border-4 p-0;
 	}
 	
 	.card__header {
@@ -941,11 +941,14 @@
 	}
 
 	/* === Mobile === */
+	#aolNavMobile {
+		@apply sm:hidden flex flex-row items-center justify-start gap-5 pb-5 border-b border-gray-200;
+	}
 	#aolNavMobile button {
-		@apply border rounded-lg rounded-b-none px-3 py-1;
+		@apply border-4 rounded-full aspect-square;
 	}
 	#aolNavMobile button.active {
-		@apply border-b-4;
+		@apply border-8;
 	}
 
 	/* === Error Pages === */
