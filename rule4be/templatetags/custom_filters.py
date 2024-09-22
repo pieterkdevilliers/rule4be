@@ -29,3 +29,7 @@ def relative_date(value):
 @register.filter(name='custom_title')
 def custom_title(value):
     return value.replace('_', ' ').title()
+
+@register.filter
+def first_letter(value):
+    return value[0] if value else ''

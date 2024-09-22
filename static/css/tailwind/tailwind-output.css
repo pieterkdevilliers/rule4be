@@ -1404,7 +1404,7 @@ a:hover,
 
 .card {
   border-radius: 0.75rem;
-  border-width: 2px;
+  border-width: 4px;
   background-color: rgb(249 250 251 / 0.5);
   padding: 0px;
 }
@@ -1555,19 +1555,32 @@ a:hover,
 
 /* === Mobile === */
 
+#aolNavMobile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.25rem;
+  border-bottom-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  padding-bottom: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  #aolNavMobile {
+    display: none;
+  }
+}
+
 #aolNavMobile button {
-  border-radius: 0.5rem;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-  border-width: 1px;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  border-width: 4px;
 }
 
 #aolNavMobile button.active {
-  border-bottom-width: 4px;
+  border-width: 8px;
 }
 
 /* === Error Pages === */
@@ -1630,10 +1643,6 @@ a:hover,
 
 .left-0 {
   left: 0px;
-}
-
-.left-5 {
-  left: 1.25rem;
 }
 
 .right-0 {
@@ -1759,6 +1768,18 @@ a:hover,
   height: 100vh;
 }
 
+.h-\[812px\] {
+  height: 812px;
+}
+
+.h-\[600px\] {
+  height: 600px;
+}
+
+.max-h-\[812px\] {
+  max-height: 812px;
+}
+
 .min-h-72 {
   min-height: 18rem;
 }
@@ -1784,8 +1805,12 @@ a:hover,
   min-width: 18rem;
 }
 
-.min-w-\[120px\] {
-  min-width: 120px;
+.min-w-\[60px\] {
+  min-width: 60px;
+}
+
+.max-w-96 {
+  max-width: 24rem;
 }
 
 .max-w-\[300px\] {
@@ -1872,6 +1897,10 @@ a:hover,
 
 .gap-y-4 {
   row-gap: 1rem;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .overflow-x-scroll {
