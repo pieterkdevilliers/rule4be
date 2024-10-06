@@ -1665,6 +1665,42 @@ a:hover,
   top: 1.5rem;
 }
 
+.top-12 {
+  top: 3rem;
+}
+
+.right-4 {
+  right: 1rem;
+}
+
+.right-2 {
+  right: 0.5rem;
+}
+
+.right-6 {
+  right: 1.5rem;
+}
+
+.-top-4 {
+  top: -1rem;
+}
+
+.-top-3 {
+  top: -0.75rem;
+}
+
+.-top-2 {
+  top: -0.5rem;
+}
+
+.top-4 {
+  top: 1rem;
+}
+
+.top-8 {
+  top: 2rem;
+}
+
 .z-0 {
   z-index: 0;
 }
@@ -1756,28 +1792,20 @@ a:hover,
   height: 28px;
 }
 
-.h-dvh {
-  height: 100dvh;
+.h-\[600px\] {
+  height: 600px;
 }
 
-.h-full {
-  height: 100%;
+.h-dvh {
+  height: 100dvh;
 }
 
 .h-screen {
   height: 100vh;
 }
 
-.h-\[812px\] {
-  height: 812px;
-}
-
-.h-\[600px\] {
-  height: 600px;
-}
-
-.max-h-\[812px\] {
-  max-height: 812px;
+.max-h-\[500px\] {
+  max-height: 500px;
 }
 
 .min-h-72 {
@@ -1792,6 +1820,10 @@ a:hover,
   width: 28px;
 }
 
+.w-auto {
+  width: auto;
+}
+
 .w-fit {
   width: -moz-fit-content;
   width: fit-content;
@@ -1801,12 +1833,24 @@ a:hover,
   width: 100%;
 }
 
+.w-\[300px\] {
+  width: 300px;
+}
+
 .min-w-72 {
   min-width: 18rem;
 }
 
 .min-w-\[60px\] {
   min-width: 60px;
+}
+
+.min-w-\[300px\] {
+  min-width: 300px;
+}
+
+.min-w-\[340px\] {
+  min-width: 340px;
 }
 
 .max-w-96 {
@@ -1839,10 +1883,6 @@ a:hover,
 
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -1897,6 +1937,15 @@ a:hover,
 
 .gap-y-4 {
   row-gap: 1rem;
+}
+
+.gap-x-3 {
+  -moz-column-gap: 0.75rem;
+       column-gap: 0.75rem;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
 }
 
 .overflow-y-auto {
@@ -2154,6 +2203,14 @@ a:hover,
     position: relative;
   }
 
+  .sm\:right-2 {
+    right: 0.5rem;
+  }
+
+  .sm\:right-3 {
+    right: 0.75rem;
+  }
+
   .sm\:mt-0 {
     margin-top: 0px;
   }
@@ -2166,8 +2223,8 @@ a:hover,
     display: none;
   }
 
-  .sm\:h-auto {
-    height: auto;
+  .sm\:min-w-\[340px\] {
+    min-width: 340px;
   }
 
   .sm\:grid-cols-2 {
@@ -2176,6 +2233,10 @@ a:hover,
 }
 
 @media (min-width: 768px) {
+  .md\:-right-4 {
+    right: -1rem;
+  }
+
   .md\:mt-12 {
     margin-top: 3rem;
   }
@@ -2197,5 +2258,11 @@ a:hover,
 @media (min-width: 1024px) {
   .lg\:w-1\/2 {
     width: 50%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:right-3 {
+    right: 0.75rem;
   }
 }
