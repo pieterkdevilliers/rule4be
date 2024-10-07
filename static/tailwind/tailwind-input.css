@@ -326,7 +326,7 @@
 
 	/* Modal form success message */
 	.modal__body .form-success-message {
-		@apply flex flex-col justify-center items-center text-2xl text-black-700 bg-green-50 rounded-lg w-full h-full min-h-[200px] px-6;
+		@apply flex flex-col justify-center items-center text-2xl text-slate-800 bg-green-50 rounded-lg w-full h-full min-h-[200px] px-6;
 	}
 
 	/* Form required fields */
