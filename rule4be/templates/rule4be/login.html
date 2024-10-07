@@ -80,7 +80,7 @@
         <div id="loginSignupSectionBtm" class="section__content"></div>
     </section>
     <footer class="mt-12">
-        <p>&copy; 2024 Rule4.app | <a href="{% url 'terms_and_conditions' %}">Terms & Conditions</a> | <a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
+        <p>&copy; 2024 Rule4.app | <span data-open-crud-modal hx-get="{% url 'terms_and_conditions' %}" hx-target="#crudModalContent" hx-swap="outerHTML">Terms & Conditions</span> | <span data-open-crud-modal hx-get="{% url 'privacy_policy' %}" hx-target="#crudModalContent" hx-swap="outerHTML">Privacy Policy</span></p>
     </footer>
 
     <div
@@ -117,4 +117,5 @@
             createObserver('#loginSignupSectionBtm', '#loginSignupSectionBtm');
         });
     </script>
+
 {% endblock %}
