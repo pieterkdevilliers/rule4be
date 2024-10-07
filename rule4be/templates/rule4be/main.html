@@ -35,7 +35,7 @@
 </head>
 
 
-<body class="bg-white {{ body_class }}">
+<body class="bg-white {{ body_class }} relative">
     <main class="min-h-screen flex flex-col mx-auto">
         <div id="pageContent" class="page-content__container">
             {% block content %}
@@ -61,5 +61,54 @@
             background-image: repeating-linear-gradient(45deg, #f0f0f0 0, #f0f0f0 0.4px, #ffffff 0, #ffffff 50%);
         }
     </style>
+    <!-- Modal -->
+    <div
+        id="crudModal"
+        class="modal fixed inset-0 flex items-center justify-center p-6 bg-black bg-opacity-50 transform scale-0 opacity-0 transition-all duration-300 ease-in-out z-50">
+        <div class="bg-white modal__dialog">
+            <i data-close-crud-modal class="modal__close icon--dismiss"></i>
+            <div class="modal__body">
+                <div id="crudModalContent" class="modal__content swap-transition overflow-y-auto max-h-[750px]">
+                    {% include './loading-spinner.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function bindModalButtons() {
+            $('[data-open-crud-modal]').off('click').on('click', function() {
+                console.log("CRUD Modal Opened");
+                $('#crudModal').removeClass('scale-0 opacity-0').addClass('scale-100 opacity-100');
+                $('body').css('overflow', 'hidden');  // disable scrolling
+            });
+            $('[data-close-crud-modal]').off('click').on('click', function() {
+                $('#crudModal').removeClass('scale-100 opacity-100');
+                setTimeout(function() {
+                    $('#crudModal').addClass('scale-0 opacity-0');
+                }, 300);
+                $('body').css('overflow', 'auto');  // enable scrolling
+            });
+    
+            $('#crudModal').off('click').on('click', function(event) {
+                if (event.target === this) {
+                    $(this).removeClass('scale-100 opacity-100');
+                    setTimeout(function() {
+                        $('#crudModalContent').html('');
+                        $('#crudModal').addClass('scale-0 opacity-0');
+                    }, 300);
+                    $('body').css('overflow', 'auto');  // enable scrolling
+                }
+            });
+        }
+    
+        $(document).ready(function() {
+            bindModalButtons();
+        });
+    
+        // Listen for htmx:afterOnLoad event and bind modal buttons again
+        // document.body.addEventListener('htmx:afterOnLoad', function() {
+        //     bindModalButtons();
+        // });
+    </script>
 </body>
 </html>
