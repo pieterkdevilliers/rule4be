@@ -23,10 +23,12 @@
             <div class="form__label-field">
                 <label class="form__label" for="name">Name:</label>
                 <input class="form__input" type="text" name="name" id="name" required autofocus>
+                <div data-invalid-feedback class="invalid-feedback"></div>
             </div>
             <div class="form__label-field">
                 <label class="form__label" for="description">Description:</label>
-                <textarea class="form__input" type="text" name="description" id="description" required></textarea>
+                <textarea class="form__input" name="description" id="description" required></textarea>
+                <div data-invalid-feedback class="invalid-feedback"></div>
             </div>
             <div class="mt-5 flex justify-between items-center">
                 <button class="ms-auto button button--primary" type="submit">Add AOL</button>

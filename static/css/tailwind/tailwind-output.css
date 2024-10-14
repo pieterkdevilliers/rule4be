@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.9 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -675,30 +675,6 @@ body.main-app > main {
 
 /* Icon Buttons */
 
-.icon-btn {
-  border-radius: 0.375rem;
-  border-width: 1px;
-  border-color: transparent;
-  padding: 0.5rem;
-  text-align: center;
-  line-height: 1;
-}
-
-.icon-btn:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-.icon-btn:hover i {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
 /* Lists */
 
 /* Icons */
@@ -768,19 +744,6 @@ body.main-app > main {
 
 .icon--back:before {
   content: "\f060";
-}
-
-.icon--prev {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
-  font-family: "Font Awesome 6 Pro";
-  font-style: normal;
-  font-weight: 300;
-  text-transform: none;
-}
-
-.icon--prev::before {
-  content: "\f137";
 }
 
 .icon--user {
@@ -1822,8 +1785,8 @@ a:hover,
   margin-bottom: 0.75rem;
 }
 
-.me-2 {
-  margin-inline-end: 0.5rem;
+.mb-5 {
+  margin-bottom: 1.25rem;
 }
 
 .ms-5 {
@@ -1848,10 +1811,6 @@ a:hover,
 
 .mt-5 {
   margin-top: 1.25rem;
-}
-
-.mb-5 {
-  margin-bottom: 1.25rem;
 }
 
 .block {
@@ -1914,10 +1873,6 @@ a:hover,
   max-height: 500px;
 }
 
-.max-h-\[700px\] {
-  max-height: 700px;
-}
-
 .max-h-\[750px\] {
   max-height: 750px;
 }
@@ -1973,6 +1928,10 @@ a:hover,
 
 .max-w-full {
   max-width: 100%;
+}
+
+.max-w-\[340px\] {
+  max-width: 340px;
 }
 
 .border-collapse {
@@ -2227,6 +2186,10 @@ a:hover,
   font-weight: 600;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 .text-blue-500 {
   --tw-text-opacity: 1;
   color: rgb(59 130 246 / var(--tw-text-opacity));
@@ -2291,6 +2254,14 @@ a:hover,
 
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
 .transition-all {

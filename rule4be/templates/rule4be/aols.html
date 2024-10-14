@@ -1,133 +1,242 @@
 {% extends 'rule4be/main.html' %}
 {% load static %}
 {% load custom_filters %}
-
 {% block content %}
-<div class="w-full max-w-full flex justify-start items-center relative" x-data="{ open: false }" @close-form.window="if ($event.detail.formId === 'create-aol') open = false">
-    <h1 class="font-semibold text-3xl">Areas of Life</h1>
-    <div class="ms-5">
-        <button data-open-crud-modal @click="open = ! open" hx-get="{% url 'create_aol' %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#create-aol-form" hx-swap="innerHTML">
-            <i class="icon icon--add text-lg"></i>
-        </button>
-        <div data-modal-form-container id="create-aol-form" class="absolute left-0 right-0 z-50 max-w-96" x-transition.duration.100ms x-show="open"></div>
-    </div>
-    <div class="ms-auto relative" x-data="{ open: false }">
-        <button @click="open = ! open">
-            <i class="icon--user text-lg"></i>
-        </button>
-        <div id="userDropdownMenu" class="flex flex-col justify-between gap-y-4 bg-white px-6 py-4 rounded-md shadow border border-gray-100 absolute top-6 -right-2 z-50" x-show="open" x-transition @click.away="open = false">
-            <span class="menu__item flex justify-start items-center gap-x-2" hx-get="{% url 'load_user_profile' %}" hx-trigger="click" hx-target="#profileContainer" hx-swap="outerHTML">
-                <i class="icon--profile"></i>
-                <span>Profile</span>
-            </span>
-            <a class="flex justify-start items-center gap-x-2" href="{% url 'logout' %}">
-                <i class="icon--logout"></i>
-                <span>Logout</span>
-            </a>
-        </div>
-    </div>
-</div>
 <div
-    id="aolNavMobile"
-    class="sm:hidden w-full overflow-x-scroll flex mt-5">
-    {% for area_of_life in aols %}
-        <button
-            data-aol-anchor="aol-anchor-{{ area_of_life.id }}"
-            x-data
-            @click="showAolOnAnchorClick(event)"
-            class="font-semibold text-xl text-center min-w-[60px]">{{ area_of_life.name|first_letter }}</button>
-    {% endfor %}
+	class="w-full max-w-full flex justify-start items-center relative"
+	x-data="{ open: false }"
+	@close-form.window="if ($event.detail.formId === 'create-aol') open = false"
+>
+	<h1 class="font-semibold text-3xl">Areas of Life</h1>
+	<div class="ms-5">
+		<button
+			@click="open = ! open"
+			hx-get="{% url 'create_aol' %}"
+			hx-headers='{"Content-Type":"text/html"}'
+			hx-accept="text/html"
+			hx-trigger="click"
+			hx-target="#create-aol-form"
+			hx-swap="innerHTML"
+		>
+			<i class="icon icon--add text-lg"></i>
+		</button>
+		<div
+			data-modal-form-container
+			id="create-aol-form"
+			class="absolute left-0 right-0 z-50 max-w-96"
+			x-transition.duration.100ms
+			x-show="open"
+		></div>
+	</div>
+	<div class="ms-auto relative" x-data="{ open: false }">
+		<button @click="open = ! open">
+			<i class="icon--user text-lg"></i>
+		</button>
+		<div
+			id="userDropdownMenu"
+			class="flex flex-col justify-between gap-y-4 bg-white px-6 py-4 rounded-md shadow border border-gray-100 absolute top-6 -right-2 z-50"
+			x-show="open"
+			x-transition
+			@click.away="open = false"
+		>
+			<span
+				class="menu__item flex justify-start items-center gap-x-2"
+				hx-get="{% url 'load_user_profile' %}"
+				hx-trigger="click"
+				hx-target="#profileContainer"
+				hx-swap="outerHTML"
+			>
+				<i class="icon--profile"></i>
+				<span>Profile</span>
+			</span>
+			<a
+				class="flex justify-start items-center gap-x-2"
+				href="{% url 'logout' %}"
+			>
+				<i class="icon--logout"></i>
+				<span>Logout</span>
+			</a>
+		</div>
+	</div>
+</div>
+<div id="aolNavMobile" class="sm:hidden w-full overflow-x-scroll flex mt-5">
+	{% for area_of_life in aols %}
+	<button
+		data-aol-anchor="aol-anchor-{{ area_of_life.id }}"
+		x-data
+		@click="showAolOnAnchorClick(event)"
+		class="font-semibold text-xl text-center min-w-[60px]"
+	>
+		{{ area_of_life.name|first_letter }}
+	</button>
+	{% endfor %}
 </div>
 <div id="profileContainer" class="sm:mt-12 swap-transition"></div>
 <div
-    id="aolContainer"
-    class="aol-container w-full overflow-x-auto flex justify-between gap-x-3 relative mt-12 h-screen sm:mt-0"
-    x-data="{ openSnapshotForm: null }"
-    @open-snapshot-form.window="openSnapshotForm = $event.detail.snapshotId">
-    {% for area_of_life in aols %}
-    <div
-        id="aol-anchor-{{ area_of_life.id }}"
-        class="aol-item card bg-custom-pattern absolute left-0 top-0 right-0 bottom-0 flex flex-col z-0 h-[600px] sm:min-w-[340px] sm:relative">
-        <div class="card__header">
-            <div class="flex justify-between items-start">
-                <div class="aol-details">
-                    <h1 class="font-semibold text-2xl">{{ area_of_life.name }}</h1>
-                    <p>{{ area_of_life.description }}</p>
-                </div>
-                <div class="aol-tools relative" x-data="{ open: false }" @click.outside="open = false">
-                    <button @click="open = ! open">
-                        <i class="fa-regular fa-ellipsis-vertical text-lg text-blue-500"></i>
-                    </button>
-                    <div class="aol-tools__buttons flex flex-col justify-between gap-x-4 bg-white p-2 rounded-md shadow border border-gray-100 absolute top-8 right-0 z-50" x-show="open" x-transition>
-                        <div class="flex justify-end items-center gap-x-4">
-                            <button class="ms-auto" @click.stop hx-get="{% url 'edit_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#aolCrudFormContainer-{{ area_of_life.id }}" hx-swap="innerHTML">
-                                <i class="icon icon--edit"></i>
-                            </button>
-                            <button @click.stop hx-get="{% url 'delete_aol' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#aolCrudFormContainer-{{ area_of_life.id }}" hx-swap="innerHTML">
-                                <i class="icon icon--delete"></i>
-                            </button>
-                        </div>
-                        <div data-aol-crud-form-container id="aolCrudFormContainer-{{ area_of_life.id }}"></div>
-                    </div>
-                </div>
-            </div>
-            <button data-load-snapshot-form data-button-aol-id="{{ area_of_life.id }}" id="create-snapshot-{{ area_of_life.id }}" class="create-snapshot-button bg-white aspect-square w-[28px] h-[28px] p-2 rounded-full border border-gray-100 flex justify-center items-center mt-4 shadow-sm hover:shadow-none transition-all" @click="$dispatch('open-snapshot-form', { snapshotId: openSnapshotForm === {{ area_of_life.id }} ? null : {{ area_of_life.id }} }); " hx-get="{% url 'create_snapshot' area_of_life.id %}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html" hx-trigger="click" hx-target="#create-form-{{ area_of_life.id }}" hx-swap="innerHTML">
-                <i class="icon icon--add m-0 aspect-square"></i>
-            </button>
-            <div id="create-form-{{ area_of_life.id }}" x-show="openSnapshotForm === {{ area_of_life.id }}" x-transition></div>
-        </div>
-        <div class="card__body max-h-[500px] overflow-y-auto" @close-form.window="if ($event.detail.formId === 'snapshot-{{ area_of_life.id }}') openSnapshotForm = null">
-            <div data-snapshot-today hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="load" hx-target="#today-{{ area_of_life.id }}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"></div>
-            <div id="today-{{ area_of_life.id }}"></div>
-            <!-- Display snapshots for the current AOL -->
-        </div>
-        <div data-snapshot-today-trigger hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}" hx-trigger="click" hx-target="#today-{{ area_of_life.id }}" hx-headers='{"Content-Type":"text/html"}' hx-accept="text/html"></div>
-    </div>
-    {% endfor %}
+	id="aolContainer"
+	class="aol-container w-full overflow-x-auto flex justify-start gap-x-3 relative mt-12 h-screen sm:mt-0"
+	x-data="{ openSnapshotForm: null }"
+	@open-snapshot-form.window="openSnapshotForm = $event.detail.snapshotId"
+>
+	{% for area_of_life in aols %}
+	<div
+		id="aol-anchor-{{ area_of_life.id }}"
+		class="aol-item card bg-custom-pattern absolute left-0 top-0 right-0 bottom-0 flex flex-col z-0 h-[600px] max-w-[340px] sm:min-w-[340px] sm:relative"
+	>
+		<div class="card__header">
+			<div class="flex justify-between items-start">
+				<div class="aol-details">
+					<h1 class="font-semibold text-2xl">
+						{{ area_of_life.name }}
+					</h1>
+					<p>{{ area_of_life.description }}</p>
+				</div>
+				<div
+					class="aol-tools relative"
+					x-data="{ open: false }"
+					@click.outside="open = false"
+				>
+					<button @click="open = ! open">
+						<i
+							class="fa-regular fa-ellipsis-vertical text-lg text-blue-500"
+						></i>
+					</button>
+					<div
+						class="aol-tools__buttons flex flex-col justify-between gap-x-4 bg-white p-2 rounded-md shadow border border-gray-100 absolute top-8 right-0 z-50"
+						x-show="open"
+						x-transition
+					>
+						<div class="flex justify-end items-center gap-x-4">
+							<button
+								class="ms-auto"
+								@click.stop
+								hx-get="{% url 'edit_aol' area_of_life.id %}"
+								hx-headers='{"Content-Type":"text/html"}'
+								hx-accept="text/html"
+								hx-trigger="click"
+								hx-target="#aolCrudFormContainer-{{ area_of_life.id }}"
+								hx-swap="innerHTML"
+							>
+								<i class="icon icon--edit"></i>
+							</button>
+							<button
+								@click.stop
+								hx-get="{% url 'delete_aol' area_of_life.id %}"
+								hx-headers='{"Content-Type":"text/html"}'
+								hx-accept="text/html"
+								hx-trigger="click"
+								hx-target="#aolCrudFormContainer-{{ area_of_life.id }}"
+								hx-swap="innerHTML"
+							>
+								<i class="icon icon--delete"></i>
+							</button>
+						</div>
+						<div
+							data-aol-crud-form-container
+							id="aolCrudFormContainer-{{ area_of_life.id }}"
+						></div>
+					</div>
+				</div>
+			</div>
+			<button
+				data-load-snapshot-form
+				data-button-aol-id="{{ area_of_life.id }}"
+				id="create-snapshot-{{ area_of_life.id }}"
+				class="create-snapshot-button bg-white aspect-square w-[28px] h-[28px] p-2 rounded-full border border-gray-100 flex justify-center items-center mt-4 shadow-sm hover:shadow-none transition-all"
+				@click="$dispatch('open-snapshot-form', { snapshotId: openSnapshotForm === {{ area_of_life.id }} ? null : {{ area_of_life.id }} }); "
+				hx-get="{% url 'create_snapshot' area_of_life.id %}"
+				hx-headers='{"Content-Type":"text/html"}'
+				hx-accept="text/html"
+				hx-trigger="click"
+				hx-target="#create-form-{{ area_of_life.id }}"
+				hx-swap="innerHTML"
+			>
+				<i class="icon icon--add m-0 aspect-square"></i>
+			</button>
+			<div
+				id="create-form-{{ area_of_life.id }}"
+				x-show="openSnapshotForm === {{ area_of_life.id }}"
+				x-transition
+			></div>
+		</div>
+		<div
+			class="card__body max-h-[500px] overflow-y-auto"
+			@close-form.window="if ($event.detail.formId === 'snapshot-{{ area_of_life.id }}') openSnapshotForm = null"
+		>
+			<div
+				data-snapshot-today
+				hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}"
+				hx-trigger="load"
+				hx-target="#today-{{ area_of_life.id }}"
+				hx-headers='{"Content-Type":"text/html"}'
+				hx-accept="text/html"
+			></div>
+			<div id="today-{{ area_of_life.id }}"></div>
+			<!-- Display snapshots for the current AOL -->
+		</div>
+		<div
+			data-snapshot-today-trigger
+			hx-get="{% url 'load_today_snapshot_page' area_of_life.id %}"
+			hx-trigger="click"
+			hx-target="#today-{{ area_of_life.id }}"
+			hx-headers='{"Content-Type":"text/html"}'
+			hx-accept="text/html"
+		></div>
+	</div>
+	{% endfor %}
 </div>
 
 <script>
-    document.addEventListener('click', function(event) {
-        const elements = document.querySelectorAll('[x-data] [x-show="open"]');
-        elements.forEach(element => {
-            if (!element.contains(event.target) && element.__x && element.__x.$data.open !== undefined) {
-                element.__x.$data.open = false;
-            }
-        });
-    });
+	document.addEventListener('click', function (event) {
+		const elements = document.querySelectorAll('[x-data] [x-show="open"]');
+		elements.forEach((element) => {
+			if (
+				!element.contains(event.target) &&
+				element.__x &&
+				element.__x.$data.open !== undefined
+			) {
+				element.__x.$data.open = false;
+			}
+		});
+	});
 
-    function clearAolCrudContainer() {
-        const aolCrudContainer = event.target.closest('[data-aol-crud-form-container]');
-        aolCrudContainer.innerHTML = '';
-        document.body.click();
-    }
+	function clearAolCrudContainer() {
+		const aolCrudContainer = event.target.closest(
+			'[data-aol-crud-form-container]'
+		);
+		aolCrudContainer.innerHTML = '';
+		document.body.click();
+	}
 
-    function showAolOnAnchorClick(event) {
-        document.querySelectorAll('.aol-item').forEach(aol => {
-            aol.style.zIndex = 0;
-        });
-        const aolNavMobileButtons = document.querySelectorAll('[data-aol-anchor]');
-        aolNavMobileButtons.forEach(button => {
-            button.classList.remove('active');
-        });
-        event.target.classList.add('active');
-        const aolId = event.target.getAttribute('data-aol-anchor').replace('#', '');
-        console.log('aolId: ', aolId);
-        const aolAnchor = document.getElementById(aolId);
-        console.log(aolAnchor);
-        aolAnchor.style.zIndex = 1;
-        aolAnchor.classList.add('active');
-    }
+	function showAolOnAnchorClick(event) {
+		document.querySelectorAll('.aol-item').forEach((aol) => {
+			aol.style.zIndex = 0;
+		});
+		const aolNavMobileButtons =
+			document.querySelectorAll('[data-aol-anchor]');
+		aolNavMobileButtons.forEach((button) => {
+			button.classList.remove('active');
+		});
+		event.target.classList.add('active');
+		const aolId = event.target
+			.getAttribute('data-aol-anchor')
+			.replace('#', '');
+		console.log('aolId: ', aolId);
+		const aolAnchor = document.getElementById(aolId);
+		console.log(aolAnchor);
+		aolAnchor.style.zIndex = 1;
+		aolAnchor.classList.add('active');
+	}
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const aolNavMobileButtons = document.querySelectorAll('[data-aol-anchor]');
-        aolNavMobileButtons.forEach(button => {
-            button.classList.remove('active');
-        });
-        let firstAolNavButton = aolNavMobileButtons[0];
-        firstAolNavButton.classList.add('active');
-        firstAolNavButton.click();
-        
-    });
+	document.addEventListener('DOMContentLoaded', () => {
+		const aolNavMobileButtons =
+			document.querySelectorAll('[data-aol-anchor]');
+		aolNavMobileButtons.forEach((button) => {
+			button.classList.remove('active');
+		});
+		let firstAolNavButton = aolNavMobileButtons[0];
+		firstAolNavButton.classList.add('active');
+		firstAolNavButton.click();
+	});
 </script>
 {% endblock %}

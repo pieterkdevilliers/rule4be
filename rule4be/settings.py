@@ -31,10 +31,12 @@ ALLOWED_HOSTS = [
     'localhost',
     'rule4.app',
     '192.168.68.120',
+    '41.13.133.59',  # IP Address South Africa
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://rule4.app',
+    'http://localhost:8000',
 ]
 
 
