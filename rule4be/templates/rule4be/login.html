@@ -1,63 +1,94 @@
-{% extends 'rule4be/main.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'rule4be/main.html' %} {% load static %} {% block content %}
 <section class="page__content flex flex-col items-center">
-    <section class="page__intro bg-custom-pattern pb-5">
-        <div class="section__content md:py-5">
-            <h1 class="page__header mx-auto text-3xl font-medium my-5">A journal to remind you how far you've come, the progress you've made towards your goals.</h1>
-            <blockquote class="text-xl my-5 p-5 relative max-w-[55ch] mx-auto">
-                <i class="icon--quote text-4xl opacity-25"></i>
-                <em><strong>Rule 4:</strong> Compare yourself to who you were yesterday, not who someone else is today.</em>
-                <small class="text-right block">- Jordan B Peterson</small>
-            </blockquote>
-            <div class="page__intro mx-auto items-center">
-                <div id="createJournalContainer" class="lg:w-1/2 mx-auto">
-                    <!-- <a class="button button--default button--outline w-fit block mx-auto" href="{% url 'signup' %}">Create Your Journal</a> -->
-                    <button
-                        class="button button--default button--outline block w-fit mx-auto"
-                        hx-get="{% url 'signup' %}"
-                        hx-trigger="click"
-                        hx-target="#createJournalContainer"
-                        hx-swap="innerHTML"
-                    >Create Your Journal</button>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="bg-custom-pattern pb-10">
-        <video class="mx-auto" width="640" height="480" controls autoplay muted>
-            <source src="{% static 'videos/rule4_rough_intro_hb.mp4' %}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </section>
-    <section class="py-5">
-        <div id="loginSignupSectionTop" class="section__content"></div>
-    </section>
-    <section class="how-it-works bg-custom-pattern py-5">
-        <div class="section__content py-5">
-            <h2 class="form__title mx-auto text-3xl">How it works</h2>
-            <div class="grid md:grid-cols-2 gap-4 bg-custom-pattern p-5 md:mt-12">
-                <div class="bg-white p-5">
-                    <h2 class="text-2xl">Areas of Life</h2>
-                    <p>Set up a feed for each area of life you want to track. This can be goals, like fitness, finance or a project. Rule4 is not just for goals though, set up personal AOLs just to keep you smiling.</p>
-                </div>
-                <div class="bg-white p-5">
-                    <h2 class="text-2xl">Snapshots</h2>
-                    <p>You add snapshots to the different AOLs you've set up. This can be text, a photo, a video or a combination. Whatever provides the information you need for that AOL.</p>
-                </div>
-                <div class="bg-white p-5">
-                    <h2 class="text-2xl">Reminders</h2>
-                    <p>Rule4 will remind you of previous snapshots whenever you add a new snapshot. That is the key though. You can only see past snapshots, by adding one for today. This helps to keep you focused on today's events and today's progress.</p>
-                </div>
-                <div class="bg-white p-5">
-                    <h2 class="text-2xl">Completely Private</h2>
-                    <p>There is no share or like buttons here. No notifications. This is for you, about you and your life. There is no keeping up with everyone else. Rule4 is your space to focus on yourself and what is truly valuable and important to you.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- <section class="testimonials py-5">
+	<section class="page__intro bg-custom-pattern pb-5">
+		<div class="section__content md:py-5">
+			<h1 class="page__header mx-auto text-3xl font-medium my-5">
+				A journal to remind you how far you've come, the progress you've
+				made towards your goals.
+			</h1>
+			<blockquote class="text-xl my-5 p-5 relative max-w-[55ch] mx-auto">
+				<i class="icon--quote text-4xl opacity-25"></i>
+				<em
+					><strong>Rule 4:</strong> Compare yourself to who you were
+					yesterday, not who someone else is today.</em
+				>
+				<small class="text-right block">- Jordan B Peterson</small>
+			</blockquote>
+			<div class="page__intro mx-auto items-center">
+				<div id="createJournalContainer" class="lg:w-1/2 mx-auto">
+					<!-- <a class="button button--default button--outline w-fit block mx-auto" href="{% url 'signup' %}">Create Your Journal</a> -->
+					<button
+						class="button button--default button--outline block w-fit mx-auto"
+						hx-get="{% url 'signup' %}"
+						hx-trigger="click"
+						hx-target="#createJournalContainer"
+						hx-swap="innerHTML"
+					>
+						Create Your Journal
+					</button>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="bg-custom-pattern pb-10">
+		<video class="mx-auto" width="640" height="480" controls autoplay muted>
+			<source
+				src="{% static 'videos/rule4_rough_intro_hb.mp4' %}"
+				type="video/mp4"
+			/>
+			Your browser does not support the video tag.
+		</video>
+	</section>
+	<section class="py-5">
+		<div id="loginSignupSectionTop" class="section__content"></div>
+	</section>
+	<section class="how-it-works bg-custom-pattern py-5">
+		<div class="section__content py-5">
+			<h2 class="form__title mx-auto text-3xl">How it works</h2>
+			<div
+				class="grid md:grid-cols-2 gap-4 bg-custom-pattern p-5 md:mt-12"
+			>
+				<div class="bg-white p-5">
+					<h2 class="text-2xl">Areas of Life</h2>
+					<p>
+						Set up a feed for each area of life you want to track.
+						This can be goals, like fitness, finance or a project.
+						Rule4 is not just for goals though, set up personal AOLs
+						just to keep you smiling.
+					</p>
+				</div>
+				<div class="bg-white p-5">
+					<h2 class="text-2xl">Snapshots</h2>
+					<p>
+						You add snapshots to the different AOLs you've set up.
+						This can be text, a photo, a video or a combination.
+						Whatever provides the information you need for that AOL.
+					</p>
+				</div>
+				<div class="bg-white p-5">
+					<h2 class="text-2xl">Reminders</h2>
+					<p>
+						Rule4 will remind you of previous snapshots whenever you
+						add a new snapshot. That is the key though. You can only
+						see past snapshots, by adding one for today. This helps
+						to keep you focused on today's events and today's
+						progress.
+					</p>
+				</div>
+				<div class="bg-white p-5">
+					<h2 class="text-2xl">Completely Private</h2>
+					<p>
+						There is no share or like buttons here. No
+						notifications. This is for you, about you and your life.
+						There is no keeping up with everyone else. Rule4 is your
+						space to focus on yourself and what is truly valuable
+						and important to you.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- <section class="testimonials py-5">
         <div class="section__content">
             <h2 class="form__title mx-auto">Testimonials</h2>
             <div class="grid md:grid-cols-2 gap-4 mt-12">
@@ -76,46 +107,83 @@
             </div>
         </div>
     </section> -->
-    <section class="login-signup bg-custom-pattern">
-        <div id="loginSignupSectionBtm" class="section__content"></div>
-    </section>
-    <footer class="mt-12">
-        <p>&copy; 2024 Rule4.app | <span data-open-crud-modal hx-get="{% url 'terms_and_conditions' %}" hx-target="#crudModalContent" hx-swap="outerHTML">Terms & Conditions</span> | <span data-open-crud-modal hx-get="{% url 'privacy_policy' %}" hx-target="#crudModalContent" hx-swap="outerHTML">Privacy Policy</span></p>
-    </footer>
+	<section class="login-signup bg-custom-pattern">
+		<div id="loginSignupSectionBtm" class="section__content"></div>
+	</section>
+	<footer class="mt-12 mb-5">
+		<p>
+			&copy; 2024 Rule4.app |
+			<span
+				data-open-crud-modal
+				hx-get="{% url 'terms_and_conditions' %}"
+				hx-target="#crudModalContent"
+				hx-swap="outerHTML"
+				>Terms & Conditions</span
+			>
+			|
+			<span
+				data-open-crud-modal
+				hx-get="{% url 'privacy_policy' %}"
+				hx-target="#crudModalContent"
+				hx-swap="outerHTML"
+				>Privacy Policy</span
+			>
+		</p>
+	</footer>
 
-    <div
-        id="loginSignupSectionTrigger"
-        class="hidden"
-        hx-get="{% url 'load_login_signup_section' %}"
-        hx-trigger="click"
-        hx-swap="innerHTML"
-    >login/signup section trigger</div>
+	<div
+		id="loginSignupSectionTrigger"
+		class="hidden"
+		hx-get="{% url 'load_login_signup_section' %}"
+		hx-trigger="click"
+		hx-swap="innerHTML"
+	>
+		login/signup section trigger
+	</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            function createObserver(selector, targetId) {
-                const container = document.querySelector(selector);
-                const observer = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            console.log('in view');
-                            // Load component when it's in view
-                            const trigger = document.getElementById('loginSignupSectionTrigger');
-                            trigger.setAttribute('hx-target', targetId);
-                            trigger.click();
-                        } else {
-                            console.log('out of view');
-                            // Unload component when it's out of view
-                            container.innerHTML = ''; // or any other unloading logic
-                        }
-                    });
-                });
-                observer.observe(container);
-            }
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			function createObserver(selector, targetId) {
+				const container = document.querySelector(selector);
+				const observer = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							console.log('in view');
+							// Load component when it's in view
+							const trigger = document.getElementById(
+								'loginSignupSectionTrigger'
+							);
+							trigger.setAttribute('hx-target', targetId);
+							trigger.click();
+						} else {
+							console.log('out of view');
+							// Unload component when it's out of view
+							container.innerHTML = ''; // or any other unloading logic
+						}
+					});
+				});
+				observer.observe(container);
+			}
 
-            createObserver('#loginSignupSectionTop', '#loginSignupSectionTop');
-            createObserver('#loginSignupSectionBtm', '#loginSignupSectionBtm');
-        });
-    </script>
+			createObserver('#loginSignupSectionTop', '#loginSignupSectionTop');
+			createObserver('#loginSignupSectionBtm', '#loginSignupSectionBtm');
+		});
 
-{% endblock %}
+		// Pause video when out of view
+		document.addEventListener('DOMContentLoaded', () => {
+			const video = document.querySelector('video');
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						video.play();
+					} else {
+						video.pause();
+					}
+				});
+			});
+			observer.observe(video);
+		});
+	</script>
+
+	{% endblock %}
+</section>
