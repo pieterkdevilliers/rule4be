@@ -182,7 +182,8 @@ def load_aols_page(request):
     Loads the AOLs page for PWA
     '''
     body_class = 'main-app'
-    aols = request.user.areaoflife_set.all()
+    aols = request.user.areaoflife_set.filter(is_archived=False)
+    archived_aols_count = request.user.areaoflife_set.filter(is_archived=True).count()
     today = datetime.now().strftime('%Y-%m-%d')
     yesterday = (datetime.now() - timezone.timedelta(days=1)
                  ).strftime('%Y-%m-%d')
@@ -223,6 +224,7 @@ def load_aols_page(request):
     context = {
         'aols': aols,
         'body_class': body_class,
+        'archived_aols_count': archived_aols_count,
     }
 
     return render(request, 'rule4be/aols.html', context)
@@ -299,6 +301,45 @@ def load_today_snapshot_page(request, pk):
     else:
         context = {'today_snapshot': today_snapshot}
         return render(request, 'rule4be/today.html', context)
+    
+
+@login_required
+def load_archived_aols_page(request):
+    '''
+    Loads the archived AOLs page for PWA
+    '''
+    body_class = 'main-app'
+    aols = request.user.areaoflife_set.filter(is_archived=True)
+
+    context = {
+        'aols': aols,
+        'body_class': body_class,
+    }
+
+    return render(request, 'rule4be/archived_aols.html', context)
+
+
+@login_required
+def load_archived_aol_snapshots(request, aol_id):
+    '''
+    Loads the snapshots for an archived AOL
+    '''
+    aol = AreaOfLife.objects.get(id=aol_id)
+    snapshots = Snapshot.objects.filter(area_of_life=aol).order_by('-created')
+
+    serialized_data = []
+    for snapshot in snapshots:
+        snapshot_data = SnapshotSerializer(snapshot).data
+        created_date = snapshot.created
+        serialized_data.append(snapshot_data)
+
+    context = {
+        'aol': aol,
+        'snapshots': snapshots,
+        'api_data': serialized_data
+    }
+
+    return render(request, 'rule4be/archived_aol_snapshots.html', context)
 
 
 @login_required
