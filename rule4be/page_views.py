@@ -182,7 +182,7 @@ def load_aols_page(request):
     Loads the AOLs page for PWA
     '''
     body_class = 'main-app'
-    aols = request.user.areaoflife_set.all()
+    aols = request.user.areaoflife_set.filter(is_archived=False)
     today = datetime.now().strftime('%Y-%m-%d')
     yesterday = (datetime.now() - timezone.timedelta(days=1)
                  ).strftime('%Y-%m-%d')

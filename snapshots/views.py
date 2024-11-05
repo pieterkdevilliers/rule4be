@@ -100,7 +100,7 @@ def today_snapshot_list(request, pk):
     last_month = today - relativedelta(months=1)
     last_year = today - relativedelta(years=1)
 
-    today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk)
+    today_snapshot = Snapshot.objects.filter(created__in=[today], area_of_life=pk, area_of_life__is_archived=False)
 
     if today_snapshot:
         queryset = Snapshot.objects.filter(created__in=[today, yesterday, last_week, last_month, last_year], area_of_life=pk, owner=request.user)
