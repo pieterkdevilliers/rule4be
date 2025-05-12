@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'rule4be-fc4445b7e11b.herokuapp.com',
     '127.0.0.1',
+    '0.0.0.0',
     'localhost',
     'rule4.app',
     '192.168.68.120',

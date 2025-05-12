@@ -49,4 +49,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # CMD provides the default command that entrypoint.sh will 'exec'
 # This should be your Gunicorn command
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "rule4be.wsgi:application"] # Verify wsgi path!
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "rule4be.wsgi:application"]
