@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml # Or other compose files
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env # IMPORTANT: Never commit secrets
+
+# IDE / OS files
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# Static / Media (if served externally or collected into a volume)
+# /staticfiles # If you mount a volume for static instead of collecting in image
+# /mediafiles  # Media should almost always be external storage
+
+# Test reports, logs, etc.
+htmlcov/
+.coverage
+*.log
