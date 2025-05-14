@@ -38,8 +38,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # --- Static Files ---
-# REMOVE THIS: We will run collectstatic at runtime via entrypoint.sh
-# RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput --clear
 
 # --- Runtime Configuration ---
 EXPOSE 8000

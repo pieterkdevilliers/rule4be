@@ -203,8 +203,9 @@ if USE_S3 == 'True':
     AWS_QUERYSTRING_EXPIRE = 3600
 
     # S3 static settings
+    AWS_LOCATION = 'static'
     STATIC_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
     # S3 media settings
