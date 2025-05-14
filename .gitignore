@@ -8,6 +8,7 @@ media/
 staticfiles/
 static_root/
 static/fontawesome/
+static/
 
 # C extensions
 *.so
