@@ -25,18 +25,11 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      # --- Debug: Echo the GCP Secret Name ---
-      - name: Debug GCP Secret Name
-        run: |
-          echo "Attempting to use GCP Secret Name: '${{ secrets.GCP_DB_URL_SECRET_NAME }}'"
-          echo "Project ID: '${{ secrets.GCP_PROJECT_ID }}'"
-
       # --- Fetch Secret from GCP Secret Manager ---
       - name: Get DATABASE_URL from Secret Manager
         id: db_url_secret # Give it an ID to reference its outputs
         uses: google-github-actions/get-secretmanager-secrets@v2
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
           secrets: |- # Use |- for multi-line input if fetching multiple secrets
             DB_URL_FROM_GCP:${{ secrets.GCP_DB_URL_SECRET_NAME }}
 
@@ -69,6 +62,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha # Enable GitHub Actions cache for Docker layers
           cache-to: type=gha,mode=max # Write to GitHub Actions cache
+          build-args: | 
+            DATABASE_URL_ARG=${{ steps.db_url_secret.outputs.DB_URL_FROM_GCP }}
 
       - name: Print Image URL
         run: |
