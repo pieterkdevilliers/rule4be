@@ -53,6 +53,10 @@ jobs:
             type=sha,prefix= # Git commit SHA as tag
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/rule4-k8s' }}
 
+      - name: Debug Build Arg Value
+        run: |
+          echo "Value for DATABASE_URL_ARG will be: '${{ steps.db_url_secret.outputs.DB_URL_FROM_GCP }}'"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
