@@ -25,6 +25,12 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
+      # --- Debug: Echo the GCP Secret Name ---
+      - name: Debug GCP Secret Name
+        run: |
+          echo "Attempting to use GCP Secret Name: '${{ secrets.GCP_DB_URL_SECRET_NAME }}'"
+          echo "Project ID: '${{ secrets.GCP_PROJECT_ID }}'"
+
       # --- Fetch Secret from GCP Secret Manager ---
       - name: Get DATABASE_URL from Secret Manager
         id: db_url_secret # Give it an ID to reference its outputs
