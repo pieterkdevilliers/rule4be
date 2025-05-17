@@ -1,3 +1,6 @@
+# Declare the build argument that will receive the secret
+ARG DATABASE_URL_ARG
+
 # --- Base Image ---
 ARG PYTHON_VERSION=3.10
 FROM python:${PYTHON_VERSION}-slim-buster
@@ -36,6 +39,9 @@ RUN /root/.local/bin/uv pip install --system --no-cache -r requirements.txt
 COPY . .
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Set the DATABASE_URL environment variable FROM the build argument
+ENV DATABASE_URL=${DATABASE_URL_ARG}
 
 # --- Static Files ---
 RUN python manage.py collectstatic --noinput --clear
