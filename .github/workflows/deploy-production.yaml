@@ -32,7 +32,7 @@ jobs:
         with:
           secrets: |- # Use |- for multi-line input if fetching multiple secrets
             DB_URL_FROM_GCP:${{ secrets.GCP_DB_URL_SECRET_NAME }}
-            AWS_ACCESS_KEY_ID_FROM_GCP:${{ secrets.GCP_DB_AWS_ACCESS_KEY_ID }}
+            AWS_ACCESS_KEY_ID_FROM_GCP:${{ secrets.GCP_AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY_FROM_GCP:${{ secrets.GCP_AWS_SECRET_ACCESS_KEY }}
             AWS_STORAGE_BUCKET_NAME_FROM_GCP:${{ secrets.GCP_AWS_STORAGE_BUCKET_NAME }}
             AWS_S3_REGION_NAME_FROM_GCP:${{ secrets.GCP_DB_AWS_S3_REGION_NAME }}
