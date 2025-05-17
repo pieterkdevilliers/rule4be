@@ -47,8 +47,9 @@ COPY . .
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Set the DATABASE_URL environment variable FROM the build argument
+# Set the  environment variable FROM the build argument
 ENV DATABASE_URL=${DATABASE_URL_ARG}
+ENV Use_S3=True
 ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_ARG}
 ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_ARG}
 ENV AWS_STORAGE_BUCKET_NAME=${AWS_STORAGE_BUCKET_NAME_ARG}
