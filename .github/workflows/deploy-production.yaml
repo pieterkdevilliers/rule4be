@@ -30,6 +30,7 @@ jobs:
         id: db_url_secret # Give it an ID to reference its outputs
         uses: google-github-actions/get-secretmanager-secrets@v2
         with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           secrets: |- # Use |- for multi-line input if fetching multiple secrets
             DB_URL_FROM_GCP:${{ secrets.GCP_DB_URL_SECRET_NAME }}
 
