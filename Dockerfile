@@ -1,12 +1,3 @@
-# Declare the build argument that will receive the secret
-# ARG DATABASE_URL_ARG
-# ARG AWS_ACCESS_KEY_ID_ARG
-# ARG AWS_SECRET_ACCESS_KEY_ARG
-# ARG AWS_STORAGE_BUCKET_NAME_ARG
-# ARG AWS_S3_REGION_NAME_ARG
-# ARG AWS_S3_CUSTOM_DOMAIN_ARG
-# ARG AWS_CLOUDFRONT_KEY_ID_ARG
-# ARG AWS_CLOUDFRONT_KEY_ARG
 
 # --- Base Image ---
 ARG PYTHON_VERSION=3.10
@@ -46,20 +37,6 @@ RUN /root/.local/bin/uv pip install --system --no-cache -r requirements.txt
 COPY . .
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-# Set the  environment variable FROM the build argument
-# ENV DATABASE_URL=${DATABASE_URL_ARG}
-# ENV Use_S3=True
-# ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_ARG}
-# ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_ARG}
-# ENV AWS_STORAGE_BUCKET_NAME=${AWS_STORAGE_BUCKET_NAME_ARG}
-# ENV AWS_S3_REGION_NAME=${AWS_S3_REGION_NAME_ARG}
-# ENV AWS_S3_CUSTOM_DOMAIN=${AWS_S3_CUSTOM_DOMAIN_ARG}
-# ENV AWS_CLOUDFRONT_KEY_ID=${AWS_CLOUDFRONT_KEY_ID_ARG}
-# ENV AWS_CLOUDFRONT_KEY=${AWS_CLOUDFRONT_KEY_ARG}
-
-# --- Static Files ---
-# RUN python manage.py collectstatic --noinput --clear
 
 # --- Runtime Configuration ---
 EXPOSE 8000
