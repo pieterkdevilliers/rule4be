@@ -25,20 +25,20 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      # --- Fetch Secret from GCP Secret Manager ---
-      - name: Get DATABASE_URL from Secret Manager
-        id: db_url_secret # Give it an ID to reference its outputs
-        uses: google-github-actions/get-secretmanager-secrets@v2
-        with:
-          secrets: |- # Use |- for multi-line input if fetching multiple secrets
-            DB_URL_FROM_GCP:${{ secrets.GCP_DB_URL_SECRET_NAME }}
-            AWS_ACCESS_KEY_ID_FROM_GCP:${{ secrets.GCP_AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY_FROM_GCP:${{ secrets.GCP_AWS_SECRET_ACCESS_KEY }}
-            AWS_STORAGE_BUCKET_NAME_FROM_GCP:${{ secrets.GCP_AWS_STORAGE_BUCKET_NAME }}
-            AWS_S3_REGION_NAME_FROM_GCP:${{ secrets.GCP_AWS_S3_REGION_NAME }}
-            AWS_S3_CUSTOM_DOMAIN_FROM_GCP:${{ secrets.GCP_AWS_S3_CUSTOM_DOMAIN }}
-            AWS_CLOUDFRONT_KEY_ID_FROM_GCP:${{ secrets.GCP_AWS_CLOUDFRONT_KEY_ID }}
-            AWS_CLOUDFRONT_KEY_FROM_GCP:${{ secrets.GCP_AWS_CLOUDFRONT_KEY }}
+      # # --- Fetch Secret from GCP Secret Manager ---
+      # - name: Get DATABASE_URL from Secret Manager
+      #   id: db_url_secret # Give it an ID to reference its outputs
+      #   uses: google-github-actions/get-secretmanager-secrets@v2
+      #   with:
+      #     secrets: |- # Use |- for multi-line input if fetching multiple secrets
+      #       DB_URL_FROM_GCP:${{ secrets.GCP_DB_URL_SECRET_NAME }}
+      #       AWS_ACCESS_KEY_ID_FROM_GCP:${{ secrets.GCP_AWS_ACCESS_KEY_ID }}
+      #       AWS_SECRET_ACCESS_KEY_FROM_GCP:${{ secrets.GCP_AWS_SECRET_ACCESS_KEY }}
+      #       AWS_STORAGE_BUCKET_NAME_FROM_GCP:${{ secrets.GCP_AWS_STORAGE_BUCKET_NAME }}
+      #       AWS_S3_REGION_NAME_FROM_GCP:${{ secrets.GCP_AWS_S3_REGION_NAME }}
+      #       AWS_S3_CUSTOM_DOMAIN_FROM_GCP:${{ secrets.GCP_AWS_S3_CUSTOM_DOMAIN }}
+      #       AWS_CLOUDFRONT_KEY_ID_FROM_GCP:${{ secrets.GCP_AWS_CLOUDFRONT_KEY_ID }}
+      #       AWS_CLOUDFRONT_KEY_FROM_GCP:${{ secrets.GCP_AWS_CLOUDFRONT_KEY }}
 
 
       - name: Set up Cloud SDK
@@ -69,15 +69,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha # Enable GitHub Actions cache for Docker layers
           cache-to: type=gha,mode=max # Write to GitHub Actions cache
-          build-args: | 
-            DATABASE_URL_ARG=${{ steps.db_url_secret.outputs.DB_URL_FROM_GCP }}
-            AWS_ACCESS_KEY_ID_ARG=${{ steps.db_url_secret.outputs.AWS_ACCESS_KEY_ID_FROM_GCP }}
-            AWS_SECRET_ACCESS_KEY_ARG=${{ steps.db_url_secret.outputs.AWS_SECRET_ACCESS_KEY_FROM_GCP }}
-            AWS_STORAGE_BUCKET_NAME_ARG=${{ steps.db_url_secret.outputs.AWS_STORAGE_BUCKET_NAME_FROM_GCP }}
-            AWS_S3_REGION_NAME_ARG=${{ steps.db_url_secret.outputs.AWS_S3_REGION_NAME_FROM_GCP }}
-            AWS_S3_CUSTOM_DOMAIN_ARG=${{ steps.db_url_secret.outputs.AWS_S3_CUSTOM_DOMAIN_FROM_GCP }}
-            AWS_CLOUDFRONT_KEY_ID_ARG=${{ steps.db_url_secret.outputs.AWS_CLOUDFRONT_KEY_ID_FROM_GCP }}
-            AWS_CLOUDFRONT_KEY_ARG=${{ steps.db_url_secret.outputs.AWS_CLOUDFRONT_KEY_FROM_GCP }}
+          # build-args: | 
+          #   DATABASE_URL_ARG=${{ steps.db_url_secret.outputs.DB_URL_FROM_GCP }}
+          #   AWS_ACCESS_KEY_ID_ARG=${{ steps.db_url_secret.outputs.AWS_ACCESS_KEY_ID_FROM_GCP }}
+          #   AWS_SECRET_ACCESS_KEY_ARG=${{ steps.db_url_secret.outputs.AWS_SECRET_ACCESS_KEY_FROM_GCP }}
+          #   AWS_STORAGE_BUCKET_NAME_ARG=${{ steps.db_url_secret.outputs.AWS_STORAGE_BUCKET_NAME_FROM_GCP }}
+          #   AWS_S3_REGION_NAME_ARG=${{ steps.db_url_secret.outputs.AWS_S3_REGION_NAME_FROM_GCP }}
+          #   AWS_S3_CUSTOM_DOMAIN_ARG=${{ steps.db_url_secret.outputs.AWS_S3_CUSTOM_DOMAIN_FROM_GCP }}
+          #   AWS_CLOUDFRONT_KEY_ID_ARG=${{ steps.db_url_secret.outputs.AWS_CLOUDFRONT_KEY_ID_FROM_GCP }}
+          #   AWS_CLOUDFRONT_KEY_ARG=${{ steps.db_url_secret.outputs.AWS_CLOUDFRONT_KEY_FROM_GCP }}
 
       - name: Print Image URL
         run: |
