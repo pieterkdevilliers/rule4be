@@ -6,12 +6,12 @@ on:
       - rule4-k8s # Trigger on pushes to this branch
 
 env:
-  IMAGE_NAME: rule4be # Use a more specific base image name if desired
+  IMAGE_NAME: rule4 # Use a more specific base image name if desired
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_ARTIFACT_REGISTRY_REGION: ${{ secrets.GCP_ARTIFACT_REGISTRY_REGION }} # e.g., us-central1
   GCP_ARTIFACT_REPOSITORY: ${{ secrets.GCP_ARTIFACT_REPOSITORY }}     # e.g., my-docker-repo
   GKE_CLUSTER_NAME: 'rule4'                             # Your GKE cluster name
-  GKE_CLUSTER_LOCATION: 'eurpoe-west2'                           # Your GKE cluster region/zone
+  GKE_CLUSTER_LOCATION: 'europe-west2'                           # Your GKE cluster region/zone
 
 jobs:
   build-and-push:
