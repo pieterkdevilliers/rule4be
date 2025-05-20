@@ -3,35 +3,31 @@ name: Build, Push, and Deploy to GKE
 on:
   push:
     branches:
-      - rule4-k8s # Trigger on pushes to this branch
+      - rule4-k8s
 
 env:
-  IMAGE_NAME: rule4 # Use a more specific base image name if desired
+  IMAGE_NAME: rule4be
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCP_ARTIFACT_REGISTRY_REGION: ${{ secrets.GCP_ARTIFACT_REGISTRY_REGION }} # e.g., us-central1
-  GCP_ARTIFACT_REPOSITORY: ${{ secrets.GCP_ARTIFACT_REPOSITORY }}     # e.g., my-docker-repo
-  GKE_CLUSTER_NAME: 'rule4'                             # Your GKE cluster name
-  GKE_CLUSTER_LOCATION: 'europe-west2'                           # Your GKE cluster region/zone
+  GCP_ARTIFACT_REGISTRY_REGION: ${{ secrets.GCP_ARTIFACT_REGISTRY_REGION }}
+  GCP_ARTIFACT_REPOSITORY: ${{ secrets.GCP_ARTIFACT_REPOSITORY }}
+  GKE_CLUSTER_NAME: 'rule4'
+  GKE_CLUSTER_LOCATION: 'europe-west2'
 
 jobs:
-  build-and-push:
+  build-push-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'
 
-    outputs:
-      full_image_path_sha: ${{ steps.docker_meta_sha.outputs.tags }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # --- Authentication to GCP (for Artifact Registry) ---
       - name: Authenticate to Google Cloud (SA Key)
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }} # Ensure this SA has Artifact Registry Writer and GKE Admin/Developer roles
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -42,22 +38,19 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # We'll get the SHA-based tag specifically for deployment
-      - name: Docker meta for SHA tag
-        id: docker_meta_sha
+      # This step now generates ONLY the SHA-based tag for deployment purposes
+      - name: Docker meta for SHA tag (for deployment)
+        id: docker_meta_deploy_tag
         uses: docker/metadata-action@v5
         with:
           images: |
             ${{ env.GCP_ARTIFACT_REGISTRY_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=sha,prefix= # Git commit SHA as tag, e.g., prefix-1a2b3c4
+            type=sha,prefix= # Only the SHA tag
 
-      - name: Debug Docker Meta SHA Output
-        run: echo "Docker Meta SHA Tags Output ${{ steps.docker_meta_sha.outputs.tags }}"
-
-      # Docker meta for other tags like 'latest' if needed (optional for this deployment flow)
-      - name: Docker meta for other tags
-        id: docker_meta_others
+      # This step generates other tags like 'latest' if you also want to push them
+      - name: Docker meta for additional tags (e.g., latest)
+        id: docker_meta_additional_tags
         uses: docker/metadata-action@v5
         with:
           images: |
@@ -71,88 +64,213 @@ jobs:
         with:
           context: .
           push: true
-          # Push both the SHA tag and any other tags (like 'latest')
+          # Concatenate tags from both meta steps
           tags: |
-            ${{ steps.docker_meta_sha.outputs.tags }}
-            ${{ steps.docker_meta_others.outputs.tags }}
-          labels: ${{ steps.docker_meta_sha.outputs.labels }} # Use labels from one of the meta steps
+            ${{ steps.docker_meta_deploy_tag.outputs.tags }}
+            ${{ steps.docker_meta_additional_tags.outputs.tags }}
+          labels: ${{ steps.docker_meta_deploy_tag.outputs.labels }} # Labels from one is fine
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Print Image URLs Pushed
         run: |
-          echo "SHA-tagged Image: ${{ steps.docker_meta_sha.outputs.tags }}"
-          echo "Other Images: ${{ steps.docker_meta_others.outputs.tags }}"
-
-  deploy-to-gke:
-    needs: build-and-push # Depends on the build job
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read' # To checkout the repo for manifests
-      id-token: 'write' # For GKE authentication via WIF (if used)
-
-    steps:
-      - name: Checkout code (to access k8s manifest templates)
-        uses: actions/checkout@v4
-
-      # --- Authentication to GCP (for GKE) ---
-      # Use the same authentication method as the build job
-      - name: Authenticate to Google Cloud (SA Key)
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }} # Ensure this SA has GKE Admin/Developer roles
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Install gke-gcloud-auth-plugin
-        run: |
-          gcloud components install gke-gcloud-auth-plugin --quiet
+          echo "Deployment Image: ${{ steps.docker_meta_deploy_tag.outputs.tags }}"
+          echo "Additional Images Pushed: ${{ steps.docker_meta_additional_tags.outputs.tags }}"
 
       - name: Get GKE Credentials
-        run: |
-          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER_NAME }} \
-            --project ${{ env.GCP_PROJECT_ID }} \
-            --location ${{ env.GKE_CLUSTER_LOCATION }}
+        # ... (same as before) ...
+      - name: Install gke-gcloud-auth-plugin
+        # ... (same as before) ...
 
-      - name: DEBUG - Inspect 'needs' context
+      - name: Substitute image tag in deployment manifest and Apply
         run: |
-          echo "--- DEBUG: needs context ---"
-          echo "needs.build-and-push.outputs.full_image_path_sha: ${{ needs.build-and-push.outputs.full_image_path_sha }}"
-          echo "--- END DEBUG ---"
+          # Now we reliably use the output from the specific SHA tag meta step
+          FULL_IMAGE_TO_DEPLOY="${{ steps.docker_meta_deploy_tag.outputs.tags }}"
 
-      - name: Substitute image tag in deployment manifest
-        run: |
-          # The full image path with SHA tag comes from the build job's output
-          FULL_IMAGE_TO_DEPLOY="${{ needs.build-and-push.outputs.full_image_path_sha }}"
           echo "Deploying image: $FULL_IMAGE_TO_DEPLOY"
 
-          # Define the path to your template and the processed file
-          TEMPLATE_FILE="rule4be/k8s/production/deployment.yaml" # Assuming this is your template file name now
-          PROCESSED_FILE="deployment-processed.yaml" # Temporary processed file
+          if [ -z "$FULL_IMAGE_TO_DEPLOY" ]; then
+            echo "Error: FULL_IMAGE_TO_DEPLOY is empty. Output from docker_meta_deploy_tag was empty."
+            exit 1
+          fi
+          # ... (rest of the sed, cat, kubectl apply logic is the same) ...
+          TEMPLATE_FILE="rule4be/k8s/production/deployment.yaml"
+          PROCESSED_FILE="deployment-processed.yaml"
 
-          # Check if template file exists
           if [ ! -f "$TEMPLATE_FILE" ]; then
             echo "Error: Template file $TEMPLATE_FILE not found!"
             exit 1
           fi
 
           cp "$TEMPLATE_FILE" "$PROCESSED_FILE"
-
-          # Use sed for substitution. Using '|' as delimiter because image path contains '/'
-          # This replaces __IMAGE_NAME_WITH_TAG__ with the actual image path
           sed -i "s|__IMAGE_NAME_WITH_TAG__|${FULL_IMAGE_TO_DEPLOY}|g" "$PROCESSED_FILE"
 
           echo "--- Processed deployment.yaml ---"
           cat "$PROCESSED_FILE"
           echo "---------------------------------"
 
-      - name: Apply Kubernetes manifest to GKE
-        run: |
-          PROCESSED_FILE="deployment-processed.yaml"
           kubectl apply -f "$PROCESSED_FILE" -n production --record
 
-          # Optional: Wait for rollout to complete and check status
           echo "Waiting for deployment rollout to complete..."
           kubectl rollout status deployment/rule4-prod -n production --timeout=5m
           echo "Deployment status checked."
+
+
+# name: Build, Push, and Deploy to GKE
+
+# on:
+#   push:
+#     branches:
+#       - rule4-k8s # Trigger on pushes to this branch
+
+# env:
+#   IMAGE_NAME: rule4 # Use a more specific base image name if desired
+#   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+#   GCP_ARTIFACT_REGISTRY_REGION: ${{ secrets.GCP_ARTIFACT_REGISTRY_REGION }} # e.g., us-central1
+#   GCP_ARTIFACT_REPOSITORY: ${{ secrets.GCP_ARTIFACT_REPOSITORY }}     # e.g., my-docker-repo
+#   GKE_CLUSTER_NAME: 'rule4'                             # Your GKE cluster name
+#   GKE_CLUSTER_LOCATION: 'europe-west2'                           # Your GKE cluster region/zone
+
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: 'read'
+#       id-token: 'write'
+
+#     outputs:
+#       full_image_path_sha: ${{ steps.docker_meta_sha.outputs.tags }}
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       # --- Authentication to GCP (for Artifact Registry) ---
+#       - name: Authenticate to Google Cloud (SA Key)
+#         uses: google-github-actions/auth@v2
+#         with:
+#           credentials_json: ${{ secrets.GCP_SA_KEY }} # Ensure this SA has Artifact Registry Writer and GKE Admin/Developer roles
+
+#       - name: Set up Cloud SDK
+#         uses: google-github-actions/setup-gcloud@v2
+
+#       - name: Configure Docker for GCP Artifact Registry
+#         run: gcloud auth configure-docker ${{ env.GCP_ARTIFACT_REGISTRY_REGION }}-docker.pkg.dev
+
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v3
+
+#       # We'll get the SHA-based tag specifically for deployment
+#       - name: Docker meta for SHA tag
+#         id: docker_meta_sha
+#         uses: docker/metadata-action@v5
+#         with:
+#           images: |
+#             ${{ env.GCP_ARTIFACT_REGISTRY_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }}
+#           tags: |
+#             type=sha,prefix= # Git commit SHA as tag, e.g., prefix-1a2b3c4
+
+#       - name: Debug Docker Meta SHA Output
+#         run: echo "Docker Meta SHA Tags Output ${{ steps.docker_meta_sha.outputs.tags }}"
+
+#       # Docker meta for other tags like 'latest' if needed (optional for this deployment flow)
+#       - name: Docker meta for other tags
+#         id: docker_meta_others
+#         uses: docker/metadata-action@v5
+#         with:
+#           images: |
+#             ${{ env.GCP_ARTIFACT_REGISTRY_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REPOSITORY }}/${{ env.IMAGE_NAME }}
+#           tags: |
+#             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/rule4-k8s' }}
+
+#       - name: Build and push Docker image
+#         id: build_and_push
+#         uses: docker/build-push-action@v5
+#         with:
+#           context: .
+#           push: true
+#           # Push both the SHA tag and any other tags (like 'latest')
+#           tags: |
+#             ${{ steps.docker_meta_sha.outputs.tags }}
+#             ${{ steps.docker_meta_others.outputs.tags }}
+#           labels: ${{ steps.docker_meta_sha.outputs.labels }} # Use labels from one of the meta steps
+#           cache-from: type=gha
+#           cache-to: type=gha,mode=max
+
+#       - name: Print Image URLs Pushed
+#         run: |
+#           echo "SHA-tagged Image: ${{ steps.docker_meta_sha.outputs.tags }}"
+#           echo "Other Images: ${{ steps.docker_meta_others.outputs.tags }}"
+
+#   deploy-to-gke:
+#     needs: build-and-push # Depends on the build job
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: 'read' # To checkout the repo for manifests
+#       id-token: 'write' # For GKE authentication via WIF (if used)
+
+#     steps:
+#       - name: Checkout code (to access k8s manifest templates)
+#         uses: actions/checkout@v4
+
+#       # --- Authentication to GCP (for GKE) ---
+#       # Use the same authentication method as the build job
+#       - name: Authenticate to Google Cloud (SA Key)
+#         uses: google-github-actions/auth@v2
+#         with:
+#           credentials_json: ${{ secrets.GCP_SA_KEY }} # Ensure this SA has GKE Admin/Developer roles
+
+#       - name: Set up Cloud SDK
+#         uses: google-github-actions/setup-gcloud@v2
+
+#       - name: Install gke-gcloud-auth-plugin
+#         run: |
+#           gcloud components install gke-gcloud-auth-plugin --quiet
+
+#       - name: Get GKE Credentials
+#         run: |
+#           gcloud container clusters get-credentials ${{ env.GKE_CLUSTER_NAME }} \
+#             --project ${{ env.GCP_PROJECT_ID }} \
+#             --location ${{ env.GKE_CLUSTER_LOCATION }}
+
+#       - name: DEBUG - Inspect 'needs' context
+#         run: |
+#           echo "--- DEBUG: needs context ---"
+#           echo "needs.build-and-push.outputs.full_image_path_sha: ${{ needs.build-and-push.outputs.full_image_path_sha }}"
+#           echo "--- END DEBUG ---"
+
+#       - name: Substitute image tag in deployment manifest
+#         run: |
+#           # The full image path with SHA tag comes from the build job's output
+#           FULL_IMAGE_TO_DEPLOY="${{ needs.build-and-push.outputs.full_image_path_sha }}"
+#           echo "Deploying image: $FULL_IMAGE_TO_DEPLOY"
+
+#           # Define the path to your template and the processed file
+#           TEMPLATE_FILE="rule4be/k8s/production/deployment.yaml" # Assuming this is your template file name now
+#           PROCESSED_FILE="deployment-processed.yaml" # Temporary processed file
+
+#           # Check if template file exists
+#           if [ ! -f "$TEMPLATE_FILE" ]; then
+#             echo "Error: Template file $TEMPLATE_FILE not found!"
+#             exit 1
+#           fi
+
+#           cp "$TEMPLATE_FILE" "$PROCESSED_FILE"
+
+#           # Use sed for substitution. Using '|' as delimiter because image path contains '/'
+#           # This replaces __IMAGE_NAME_WITH_TAG__ with the actual image path
+#           sed -i "s|__IMAGE_NAME_WITH_TAG__|${FULL_IMAGE_TO_DEPLOY}|g" "$PROCESSED_FILE"
+
+#           echo "--- Processed deployment.yaml ---"
+#           cat "$PROCESSED_FILE"
+#           echo "---------------------------------"
+
+#       - name: Apply Kubernetes manifest to GKE
+#         run: |
+#           PROCESSED_FILE="deployment-processed.yaml"
+#           kubectl apply -f "$PROCESSED_FILE" -n production --record
+
+#           # Optional: Wait for rollout to complete and check status
+#           echo "Waiting for deployment rollout to complete..."
+#           kubectl rollout status deployment/rule4-prod -n production --timeout=5m
+#           echo "Deployment status checked."
