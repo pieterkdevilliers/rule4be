@@ -53,7 +53,7 @@ jobs:
             type=sha,prefix= # Git commit SHA as tag, e.g., prefix-1a2b3c4
 
       - name: Debug Docker Meta SHA Output
-        run: echo "Docker Meta SHA Tags Output: ${{ steps.docker_meta_sha.outputs.tags }}"
+        run: echo "Docker Meta SHA Tags Output ${{ steps.docker_meta_sha.outputs.tags }}"
 
       # Docker meta for other tags like 'latest' if needed (optional for this deployment flow)
       - name: Docker meta for other tags
