@@ -112,15 +112,21 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          gcloud components install gke-gcloud-auth-plugin --quiet
+          
       - name: Get GKE Credentials
         run: |
           gcloud container clusters get-credentials ${{ env.GKE_CLUSTER_NAME }} \
             --project ${{ env.GCP_PROJECT_ID }} \
             --location ${{ env.GKE_CLUSTER_LOCATION }}
 
-      - name: Install gke-gcloud-auth-plugin
+      - name: DEBUG - Inspect 'needs' context
         run: |
-          gcloud components install gke-gcloud-auth-plugin --quiet
+          echo "--- DEBUG: needs context ---"
+          echo "needs.build-and-push.outputs.full_image_path_sha: ${{ needs.build-and-push.outputs.full_image_path_sha }}"
+          echo "--- END DEBUG ---"
 
       - name: Substitute image tag in deployment manifest
         run: |
