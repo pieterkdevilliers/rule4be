@@ -94,14 +94,17 @@ jobs:
 
       - name: Substitute image tag in deployment manifest
         run: |
+          SHA_TAGGED_IMAGE="${{ steps.docker_meta_sha.outputs.tags }}"
 
-          FULL_IMAGE_TO_DEPLOY=$(echo "${{ steps.docker_meta.outputs.tags }}" | grep -v ":latest" | head -n 1)
-          echo "Deploying image: $FULL_IMAGE_TO_DEPLOY"
+          # Debug: Print what we got from the docker_meta_sha step
+          echo "Raw SHA_TAGGED_IMAGE from docker_meta_sha: '$SHA_TAGGED_IMAGE'"
 
-          echo "Deploying image: $FULL_IMAGE_TO_DEPLOY"
+
+          FULL_IMAGE_TO_DEPLOY="$SHA_TAGGED_IMAGE"
+          echo "Deploying image: '$FULL_IMAGE_TO_DEPLOY'"
 
           if [ -z "$FULL_IMAGE_TO_DEPLOY" ]; then
-            echo "Error: Could not determine FULL_IMAGE_TO_DEPLOY from tags: ${{ steps.docker_meta.outputs.tags }}"
+            echo "Error: FULL_IMAGE_TO_DEPLOY is empty. Check output from 'docker_meta_sha' step and its assignment."
             exit 1
           fi
 
@@ -114,6 +117,7 @@ jobs:
           fi
 
           cp "$TEMPLATE_FILE" "$PROCESSED_FILE"
+          # Using '|' as delimiter for sed because image path can contain '/'
           sed -i "s|__IMAGE_NAME_WITH_TAG__|${FULL_IMAGE_TO_DEPLOY}|g" "$PROCESSED_FILE"
 
           echo "--- Processed deployment.yaml ---"
