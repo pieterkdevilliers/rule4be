@@ -108,6 +108,10 @@ jobs:
             --project ${{ env.GCP_PROJECT_ID }} \
             --location ${{ env.GKE_CLUSTER_LOCATION }}
 
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          gcloud components install gke-gcloud-auth-plugin --quiet
+          
       - name: Substitute image tag in deployment manifest
         run: |
           # The full image path with SHA tag comes from the build job's output
