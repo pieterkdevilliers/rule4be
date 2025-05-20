@@ -7,6 +7,6 @@ metadata:
     app: rule4
     env: production
 data:
-  USE_S3: "true"
+  USE_S3: "True"
   DEBUG: "false"
   DEVELOPMENT: "false"
