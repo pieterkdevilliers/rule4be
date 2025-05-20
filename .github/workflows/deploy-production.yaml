@@ -52,6 +52,9 @@ jobs:
           tags: |
             type=sha,prefix= # Git commit SHA as tag, e.g., prefix-1a2b3c4
 
+      - name: Debug Docker Meta SHA Output
+        run: echo "Docker Meta SHA Tags Output: ${{ steps.docker_meta_sha.outputs.tags }}"
+
       # Docker meta for other tags like 'latest' if needed (optional for this deployment flow)
       - name: Docker meta for other tags
         id: docker_meta_others
@@ -111,7 +114,7 @@ jobs:
       - name: Install gke-gcloud-auth-plugin
         run: |
           gcloud components install gke-gcloud-auth-plugin --quiet
-          
+
       - name: Substitute image tag in deployment manifest
         run: |
           # The full image path with SHA tag comes from the build job's output
