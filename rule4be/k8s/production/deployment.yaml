@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: rule4-prod
-        image: __IMAGE_NAME_WITH_TAG__ 
+        image: __IMAGE_NAME_WITH_TAG__
         ports:
         - containerPort: 8000
         envFrom:

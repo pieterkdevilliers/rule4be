@@ -21,7 +21,7 @@ jobs:
       id-token: 'write'
 
     outputs:
-      full_image_path_sha: ${{ steps.docker_meta_sha.outputs.tags }}
+      full_image_path_sha: ${{ steps.set_image_output.outputs.full_image_path_sha }}
 
     steps:
       - name: Checkout code
@@ -54,6 +54,13 @@ jobs:
 
       - name: Debug Docker Meta SHA Output
         run: echo "Docker Meta SHA Tags Output ${{ steps.docker_meta_sha.outputs.tags }}"
+
+      - name: Set image path output
+        id: set_image_output # Give this step an ID
+        run: |
+          IMAGE_PATH_SHA="${{ steps.docker_meta_sha.outputs.tags }}"
+          echo "Image path to output: $IMAGE_PATH_SHA"
+          echo "full_image_path_sha=$IMAGE_PATH_SHA" >> $GITHUB_OUTPUT
 
       # Docker meta for other tags like 'latest' if needed (optional for this deployment flow)
       - name: Docker meta for other tags
