@@ -8,6 +8,9 @@ media/
 staticfiles/
 static_root/
 static/fontawesome/
+static/
+cloud-sql-proxy
+latest.dump
 
 # C extensions
 *.so

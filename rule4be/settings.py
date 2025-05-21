@@ -4,6 +4,7 @@ import datetime
 import os
 import logging
 import environ
+import stripe
 import logging.config
 from django.core.mail.backends.console import EmailBackend
 from dotenv import load_dotenv
@@ -28,10 +29,14 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'rule4be-fc4445b7e11b.herokuapp.com',
     '127.0.0.1',
+    '0.0.0.0',
     'localhost',
     'rule4.app',
+    'www.rule4.app',
     '192.168.68.120',
     '41.13.133.59',  # IP Address South Africa
+    '35.242.172.181',  # IP Address GKE LB
+    'health.rule4.app',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -39,6 +44,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
 ]
 
+# settings.py
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -202,8 +211,9 @@ if USE_S3 == 'True':
     AWS_QUERYSTRING_EXPIRE = 3600
 
     # S3 static settings
+    AWS_LOCATION = 'static'
     STATIC_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
     # S3 media settings
@@ -268,7 +278,8 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
 
-
+DOMAIN = os.environ.get('DOMAIN', 'http://localhost:8000')
+stripe.api_key = os.environ['STRIPE_SECRET_KEY']
 # # Configure logging
 # LOGGING = {
 #     'version': 1,

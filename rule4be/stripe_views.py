@@ -9,11 +9,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from users.models import UserProfile, CheckoutSessionRecord
 
-
-# Move this to your settings file or environment variable for production.
 DOMAIN = os.environ.get('DOMAIN', 'http://localhost:8000')
-stripe.api_key = os.environ['STRIPE_SECRET_KEY']
-
 
 def subscribe(request) -> HttpResponse:
     """

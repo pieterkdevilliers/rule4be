@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rule4-prod
+  namespace: production
+  labels:
+    app: rule4
+    env: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rule4
+      env: production
+  template:
+    metadata:
+      labels:
+        app: rule4
+        env: production
+    spec:
+      containers:
+      - name: rule4-prod
+        image: __IMAGE_NAME_WITH_TAG__
+        ports:
+        - containerPort: 8000
+        envFrom:
+          - secretRef:
+              name: rule4-prod-secrets
+          - configMapRef:
+              name: rule4-prod
+
+        # --- IMPORTANT: Add Probes! ---
+        # readinessProbe:
+        #   httpGet:
+        #     path: /healthz/readiness/ # Replace with your app's readiness endpoint
+        #     port: 8000
+        #   initialDelaySeconds: 15
+        #   periodSeconds: 10
+        #   timeoutSeconds: 5
+        #   failureThreshold: 3
+        # livenessProbe:
+        #   httpGet:
+        #     path: /healthz/liveness/ # Replace with your app's liveness endpoint
+        #     port: 8000
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 20
+        #   timeoutSeconds: 5
+        #   failureThreshold: 3
+        # --- Resource Requests and Limits (Highly Recommended for Production) ---
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "250m" # 0.25 CPU core
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "500m" # 0.5 CPU core
