@@ -31,10 +31,10 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     'localhost',
     'rule4.app',
+    'www.rule4.app',
     '192.168.68.120',
     '41.13.133.59',  # IP Address South Africa
     '35.242.172.181',  # IP Address GKE LB
-    '10.109.128.25',  # IP Address GKE LB (SSL)
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -42,6 +42,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
 ]
 
+# settings.py
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
