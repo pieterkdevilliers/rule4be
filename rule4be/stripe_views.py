@@ -9,6 +9,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from users.models import UserProfile, CheckoutSessionRecord
 
+DOMAIN = os.environ.get('DOMAIN', 'http://localhost:8000')
 
 def subscribe(request) -> HttpResponse:
     """
@@ -73,9 +74,9 @@ def create_checkout_session(request) -> HttpResponse:
                 # You could add differently priced services here, e.g., standard, business, first-class.
             ],
             mode='subscription',
-            success_url=settings.DOMAIN + \
+            success_url=DOMAIN + \
             reverse('success') + '?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=settings.DOMAIN + reverse('cancel')
+            cancel_url=DOMAIN + reverse('cancel')
         )
 
         # We connect the checkout session to the user who initiated the checkout.
@@ -108,7 +109,7 @@ def direct_to_customer_portal(request) -> HttpResponse:
     portal_session = stripe.billing_portal.Session.create(
         customer=checkout_session.customer,
         # Send the user here from the portal.
-        return_url=settings.DOMAIN + reverse('load_aols_page')
+        return_url=DOMAIN + reverse('load_aols_page')
     )
     return redirect(portal_session.url, code=303)
 
