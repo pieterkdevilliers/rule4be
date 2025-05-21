@@ -8,5 +8,5 @@ metadata:
     env: production
 data:
   USE_S3: "True"
-  DEBUG: "false"
-  DEVELOPMENT: "false"
+  DEBUG: ""
+  DEVELOPMENT: ""
