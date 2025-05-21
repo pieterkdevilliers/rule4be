@@ -1,6 +1,5 @@
 import os
 import json
-import settings
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
