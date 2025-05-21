@@ -10,4 +10,4 @@ data:
   USE_S3: "True"
   DEBUG: ""
   DEVELOPMENT: ""
-  DOMAIN: "rule4.app"
+  DOMAIN: "https://rule4.app"
