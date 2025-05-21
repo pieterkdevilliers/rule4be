@@ -1,0 +1,9 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: rule4-app-cert
+  namespace: production
+spec:
+  domains:
+    - rule4.app
+    - www.rule4.app

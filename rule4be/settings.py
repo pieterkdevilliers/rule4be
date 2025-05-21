@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
     '192.168.68.120',
     '41.13.133.59',  # IP Address South Africa
     '35.242.172.181',  # IP Address GKE LB
+    '10.109.128.25',  # IP Address GKE LB (SSL)
 ]
 
 CSRF_TRUSTED_ORIGINS = [
