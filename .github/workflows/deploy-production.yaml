@@ -4,7 +4,7 @@ name: Build, Push, and Deploy to GKE
 on:
   push:
     branches:
-      - rule4-k8s # Trigger on pushes to this branch
+      - main # Trigger on pushes to this branch
 
 env:
   IMAGE_NAME: rule4 # Use a more specific base image name if desired
