@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: rule4-app-stage-cert
+  namespace: stage
+spec:
+  domains:
+    - stage.rule4.app
