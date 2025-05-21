@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rule4-ingress
+  namespace: production
+  annotations:
+    networking.gke.io/managed-certificates: "rule4-app-cert"
+    # kubernetes.io/ingress.class: "gce" # Usually default on GKE
+    # Optional: To use a static IP you've reserved in GCP
+    # kubernetes.io/ingress.global-static-ip-name: "your-reserved-static-ip-name"
+spec:
+  rules:
+  - host: rule4.app
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific # Or Prefix
+        backend:
+          service:
+            name: rule4-prod-service # The K8s service for your Django app
+            port:
+              number: 80 # The port your K8s service exposes (which maps to targetPort 8000 on pods)
+  - host: www.rule4.app # Optional
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: rule4-prod-service
+            port:
+              number: 80
+  # defaultBackend: # If you want a default for requests not matching any host/path
+  #   service:
+  #     name: rule4-prod-service
+  #     port:
+  #       number: 80
