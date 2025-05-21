@@ -4,6 +4,7 @@ import datetime
 import os
 import logging
 import environ
+import stripe
 import logging.config
 from django.core.mail.backends.console import EmailBackend
 from dotenv import load_dotenv
@@ -277,7 +278,8 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
 
-
+DOMAIN = os.environ.get('DOMAIN', 'http://localhost:8000')
+stripe.api_key = os.environ['STRIPE_SECRET_KEY']
 # # Configure logging
 # LOGGING = {
 #     'version': 1,
