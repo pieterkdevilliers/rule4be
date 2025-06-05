@@ -1,0 +1,19 @@
+version: '3.8' # Or your preferred version
+
+services:
+  web:
+    build: . # Tells Docker Compose to build an image from the Dockerfile in the current directory
+    container_name: rule4local # Optional: a friendly name for your container
+    command: python manage.py runserver 0.0.0.0:8000 # Command to start Django dev server
+    volumes:
+      - .:/app  # Mounts your current directory (.) on the host to /app in the container
+                # This is key for hot-reloading. Ensure WORKDIR in Dockerfile is /app
+    ports:
+      - "8000:8000" # Maps port 8000 on your host to port 8000 in the container
+    env_file:
+      - .env      # Tells Docker Compose to load environment variables from the .env file
+    environment:
+      # You can add or override .env variables here if needed, but usually not necessary for this setup
+      - PYTHONUNBUFFERED=1 # Ensures Python output (like print statements) is sent straight to terminal
+      - DJANGO_SETTINGS_MODULE=rule4be.settings # Often good to explicitly set if not in .env
+                                                  # Replace 'myproject' with your project's name
