@@ -15,3 +15,21 @@ services:
     environment:
       - PYTHONUNBUFFERED=1 
       - DJANGO_SETTINGS_MODULE=rule4be.settings 
+
+
+# NOTE: If there is an issue writing to the local DB:
+
+# 1 - CD into the directory where db.sqlite3 is located.
+# 2 - Run the following commands to ensure the directory and file permissions are set correctly.
+# Make the current directory (where db.sqlite3 resides if it's in the root)
+# writable by the group and others.
+# This allows the container's appuser (even if its GID doesn't match a host group)
+# to write if the "others" permission is set.
+
+#  Command 1: sudo chmod g+w .
+#  Command 2: sudo chmod o+w .
+
+# Make the db.sqlite3 file itself writable (if it already exists)
+
+#  Command 3: sudo chmod g+w db.sqlite3
+#  Command 4: sudo chmod o+w db.sqlite3
