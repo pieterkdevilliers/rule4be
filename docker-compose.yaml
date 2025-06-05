@@ -2,18 +2,34 @@ version: '3.8' # Or your preferred version
 
 services:
   web:
-    build: . # Tells Docker Compose to build an image from the Dockerfile in the current directory
-    container_name: rule4local # Optional: a friendly name for your container
-    command: python manage.py runserver 0.0.0.0:8000 # Command to start Django dev server
+    build: . 
+    container_name: rule4local 
+    command: python manage.py runserver 0.0.0.0:8000 
     volumes:
-      - .:/app  # Mounts your current directory (.) on the host to /app in the container
-                # This is key for hot-reloading. Ensure WORKDIR in Dockerfile is /app
+      - .:/app
+      - ./db.sqlite3:/app/db.sqlite3
     ports:
-      - "8000:8000" # Maps port 8000 on your host to port 8000 in the container
+      - "8000:8000" 
     env_file:
-      - .env      # Tells Docker Compose to load environment variables from the .env file
+      - .env      
     environment:
-      # You can add or override .env variables here if needed, but usually not necessary for this setup
-      - PYTHONUNBUFFERED=1 # Ensures Python output (like print statements) is sent straight to terminal
-      - DJANGO_SETTINGS_MODULE=rule4be.settings # Often good to explicitly set if not in .env
-                                                  # Replace 'myproject' with your project's name
+      - PYTHONUNBUFFERED=1 
+      - DJANGO_SETTINGS_MODULE=rule4be.settings 
+
+
+# NOTE: If there is an issue writing to the local DB:
+
+# 1 - CD into the directory where db.sqlite3 is located.
+# 2 - Run the following commands to ensure the directory and file permissions are set correctly.
+# Make the current directory (where db.sqlite3 resides if it's in the root)
+# writable by the group and others.
+# This allows the container's appuser (even if its GID doesn't match a host group)
+# to write if the "others" permission is set.
+
+#  Command 1: sudo chmod g+w .
+#  Command 2: sudo chmod o+w .
+
+# Make the db.sqlite3 file itself writable (if it already exists)
+
+#  Command 3: sudo chmod g+w db.sqlite3
+#  Command 4: sudo chmod o+w db.sqlite3
