@@ -50,8 +50,8 @@ spec:
         # --- Resource Requests and Limits (Highly Recommended for Production) ---
         resources:
           requests:
-            memory: "64Mi"
+            memory: "128Mi"
             cpu: "62.5m" # 0.0625 CPU core
           limits:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "125m" # 0.125 CPU core
