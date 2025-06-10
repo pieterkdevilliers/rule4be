@@ -54,4 +54,4 @@ spec:
             cpu: "62.5m" # 0.0625 CPU core
           limits:
             memory: "256Mi"
-            cpu: "50m" # 0.05 CPU core
+            cpu: "125m" # 0.125 CPU core
