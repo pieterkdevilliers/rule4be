@@ -1,35 +1,41 @@
-version: '3.8' # Or your preferred version
+version: '3.8'
 
 services:
   web:
-    build: . 
-    container_name: rule4local 
-    command: python manage.py runserver 0.0.0.0:8000 
+    build: .
+    container_name: rule4local
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-      - ./db.sqlite3:/app/db.sqlite3
     ports:
-      - "8000:8000" 
+      - "8010:8000"
     env_file:
-      - .env      
+      - .env
     environment:
-      - PYTHONUNBUFFERED=1 
-      - DJANGO_SETTINGS_MODULE=rule4be.settings 
+      # These are read from the .env file, but we can list them
+      # explicitly if we want to be clear about what the app needs.
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SETTINGS_MODULE=rule4be.settings
+      - DATABASE_URL # This variable is passed through from the .env file
+    depends_on:
+      - db
 
+  db:
+    image: postgres:17
+    restart: always
+    environment:
+      # --- CHANGED: Now reading from variables ---
+      # Docker Compose will replace ${...} with values from the .env file
+      - POSTGRES_DB=${LOCAL_DB_NAME}
+      - POSTGRES_USER=${LOCAL_DB_USER}
+      - POSTGRES_PASSWORD=${LOCAL_DB_PASS}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Note: We don't expose the db port to the host anymore.
+    # The 'web' service can reach it directly over the internal Docker network.
+    # You can add the ports section back if you want to connect with a local psql client.
+    ports:
+     - "5433:5432"
 
-# NOTE: If there is an issue writing to the local DB:
-
-# 1 - CD into the directory where db.sqlite3 is located.
-# 2 - Run the following commands to ensure the directory and file permissions are set correctly.
-# Make the current directory (where db.sqlite3 resides if it's in the root)
-# writable by the group and others.
-# This allows the container's appuser (even if its GID doesn't match a host group)
-# to write if the "others" permission is set.
-
-#  Command 1: sudo chmod g+w .
-#  Command 2: sudo chmod o+w .
-
-# Make the db.sqlite3 file itself writable (if it already exists)
-
-#  Command 3: sudo chmod g+w db.sqlite3
-#  Command 4: sudo chmod o+w db.sqlite3
+volumes:
+  pgdata: {}
