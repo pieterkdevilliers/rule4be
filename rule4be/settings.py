@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
     '41.13.133.59',  # IP Address South Africa
     '35.242.172.181',  # IP Address GKE LB
     'health.rule4.app',
+    'linuxlaptop.tail078e0b.ts.net'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
