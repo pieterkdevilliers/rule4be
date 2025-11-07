@@ -26,6 +26,12 @@ def load_signup_page(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         email = request.POST.get('email')
+        honeypot = request.POST.get('user_email')
+        print("honeypot:", honeypot)
+
+        if honeypot:
+            print("Honeypot triggered, not creating user.")
+            return HttpResponse(status=200)
 
         if not User.objects.filter(username=username).exists():
             user = User.objects.create_user(
